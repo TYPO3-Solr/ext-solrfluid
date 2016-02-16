@@ -1,9 +1,9 @@
 plugin.tx_solr {
 
 	view {
-		layoutRootPaths.0 = EXT:solrfluid/Resources/Private/Layouts/Frontend/
-		partialRootPaths.0 = EXT:solrfluid/Resources/Private/Partials/Frontend/
-		templateRootPaths.0 = EXT:solrfluid/Resources/Private/Templates/Frontend/
+		layoutRootPaths.10 = EXT:solrfluid/Resources/Private/Frontend/Layouts/
+		partialRootPaths.10 = EXT:solrfluid/Resources/Private/Frontend/Partials/
+		templateRootPaths.10 = EXT:solrfluid/Resources/Private/Frontend/Templates/
 
 		# important! else linkbuilding will fail
 		pluginNamespace = tx_solr
