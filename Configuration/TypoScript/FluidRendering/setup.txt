@@ -1,0 +1,11 @@
+plugin.tx_solr {
+
+	view {
+		layoutRootPaths.0 = EXT:solrfluid/Resources/Private/Layouts/Frontend/
+		partialRootPaths.0 = EXT:solrfluid/Resources/Private/Partials/Frontend/
+		templateRootPaths.0 = EXT:solrfluid/Resources/Private/Templates/Frontend/
+
+		# important! else linkbuilding will fail
+		pluginNamespace = tx_solr
+	}
+}
