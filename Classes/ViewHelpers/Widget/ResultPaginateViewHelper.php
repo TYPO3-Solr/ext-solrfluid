@@ -18,23 +18,24 @@ use ApacheSolrForTypo3\Solrfluid\Widget\AbstractWidgetViewHelper;
 /**
  * Class ResultPaginateViewHelper
  */
-class ResultPaginateViewHelper extends AbstractWidgetViewHelper {
+class ResultPaginateViewHelper extends AbstractWidgetViewHelper
+{
 
-	/**
-	 * @var \ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\Controller\ResultPaginateController
-	 * @inject
-	 */
-	protected $controller;
+    /**
+     * @var \ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\Controller\ResultPaginateController
+     * @inject
+     */
+    protected $controller;
 
-	/**
-	 * @param \Tx_Solr_Search $search
-	 * @param string $as
-	 * @param array $configuration
-	 * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface
-	 * @throws \TYPO3\CMS\Fluid\Core\Widget\Exception\MissingControllerException
-	 */
-	public function render(\Tx_Solr_Search $search, $as = 'documents', array $configuration = array('insertAbove' => TRUE, 'insertBelow' => TRUE, 'maximumNumberOfLinks' => 10)) {
-		return $this->initiateSubRequest();
-	}
-
+    /**
+     * @param \Tx_Solr_Search $search
+     * @param string $as
+     * @param array $configuration
+     * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface
+     * @throws \TYPO3\CMS\Fluid\Core\Widget\Exception\MissingControllerException
+     */
+    public function render(\Tx_Solr_Search $search, $as = 'documents', array $configuration = array('insertAbove' => true, 'insertBelow' => true, 'maximumNumberOfLinks' => 10))
+    {
+        return $this->initiateSubRequest();
+    }
 }

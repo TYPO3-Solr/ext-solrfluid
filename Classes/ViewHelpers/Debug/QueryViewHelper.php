@@ -19,32 +19,35 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 /**
  * Class QueryViewHelper
  */
-class QueryViewHelper extends AbstractViewHelper {
+class QueryViewHelper extends AbstractViewHelper
+{
 
-	/**
-	 * @var \Tx_Solr_Search
-	 */
-	protected $search;
+    /**
+     * @var \Tx_Solr_Search
+     */
+    protected $search;
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		$this->search = GeneralUtility::makeInstance('Tx_Solr_Search');
-	}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->search = GeneralUtility::makeInstance('Tx_Solr_Search');
+    }
 
-	/**
-	 * Get parsed query debug output
-	 * only visible for logged in BE users
-	 *
-	 * @return string
-	 */
-	public function render() {
-		$content = '';
-		if (!empty($GLOBALS['TSFE']->beUserLogin)) {
-			$content = '<br><strong>Parsed Query:</strong><br>' .
-				$this->search->getDebugResponse()->parsedquery;
-		}
-		return $content;
-	}
+    /**
+     * Get parsed query debug output
+     * only visible for logged in BE users
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $content = '';
+        if (!empty($GLOBALS['TSFE']->beUserLogin)) {
+            $content = '<br><strong>Parsed Query:</strong><br>' .
+                $this->search->getDebugResponse()->parsedquery;
+        }
+        return $content;
+    }
 }

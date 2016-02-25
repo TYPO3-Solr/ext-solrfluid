@@ -1,17 +1,18 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\Controller;
 
-
 use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
-class SearchController extends AbstractBaseController {
+class SearchController extends AbstractBaseController
+{
 
     /**
      * Results
      */
-    public function resultsAction() {
+    public function resultsAction()
+    {
         if ($this->solrAvailable) {
             // perform the current search.
             /** @var $searchService \ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService */
@@ -20,7 +21,7 @@ class SearchController extends AbstractBaseController {
             $searchRequest = $this->buildSearchRequest();
             $searchResultSet = $searchService->search($searchRequest);
 
-            if($searchResultSet->getUsedQuery() == null) {
+            if ($searchResultSet->getUsedQuery() == null) {
                 $this->redirect('form');
             }
             $this->view->assignMultiple(array(
@@ -48,7 +49,8 @@ class SearchController extends AbstractBaseController {
     /**
      * Form
      */
-    public function formAction() {
+    public function formAction()
+    {
         $this->view->assignMultiple(array(
             'search' => $this->search,
             'additionalFilters' => $this->additionalFilters,
@@ -58,7 +60,7 @@ class SearchController extends AbstractBaseController {
     /**
      * Frequently Searched
      */
-    public function frequentlySearchedAction() {
-
+    public function frequentlySearchedAction()
+    {
     }
 }

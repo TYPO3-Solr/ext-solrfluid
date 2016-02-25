@@ -19,26 +19,26 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 /**
  * Class RelevanceViewHelper
  */
-class RelevanceViewHelper extends AbstractViewHelper {
+class RelevanceViewHelper extends AbstractViewHelper
+{
 
-	/**
-	 * Get document relevance percentage
-	 *
-	 * @param \Tx_Solr_Search $search
-	 * @param \Apache_Solr_Document $document
-	 * @return int
-	 */
-	public function render(\Tx_Solr_Search $search, \Apache_Solr_Document $document) {
-
-		$maximumScore = $document->__solr_grouping_groupMaximumScore ?: $search->getMaximumResultScore();
-		$documentScore = $document->getScore();
-		$content = 0;
-		if ($maximumScore > 0) {
-			$score = floatval($documentScore);
-			$scorePercentage = round($score * 100 / $maximumScore);
-			$content = $scorePercentage;
-		}
-		return $content;
-	}
-
+    /**
+     * Get document relevance percentage
+     *
+     * @param \Tx_Solr_Search $search
+     * @param \Apache_Solr_Document $document
+     * @return int
+     */
+    public function render(\Tx_Solr_Search $search, \Apache_Solr_Document $document)
+    {
+        $maximumScore = $document->__solr_grouping_groupMaximumScore ?: $search->getMaximumResultScore();
+        $documentScore = $document->getScore();
+        $content = 0;
+        if ($maximumScore > 0) {
+            $score = floatval($documentScore);
+            $scorePercentage = round($score * 100 / $maximumScore);
+            $content = $scorePercentage;
+        }
+        return $content;
+    }
 }

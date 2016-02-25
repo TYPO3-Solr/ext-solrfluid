@@ -18,15 +18,17 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 /**
  * Class ArrayViewHelper
  */
-class ArrayViewHelper extends AbstractViewHelper {
+class ArrayViewHelper extends AbstractViewHelper
+{
 
-	/**
-	 * Make sure values is a array else convert
-	 *
-	 * @param string|array $value
-	 * @return array
-	 */
-	public function render($value) {
-		return (array)$value;
-	}
+    /**
+     * Make sure values is a array else convert
+     *
+     * @param string|array $value
+     * @return array
+     */
+    public function render($value)
+    {
+        return (array)$value;
+    }
 }

@@ -21,55 +21,57 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 /**
  * Class facetOptionLabelViewHelper
  */
-class FacetOptionLabelViewHelper extends AbstractViewHelper implements SingletonInterface {
+class FacetOptionLabelViewHelper extends AbstractViewHelper implements SingletonInterface
+{
 
-	/**
-	 * @var array
-	 */
-	protected $configuration = array();
+    /**
+     * @var array
+     */
+    protected $configuration = array();
 
-	/**
-	 * @var ContentObjectRenderer
-	 */
-	protected $contentObjectRenderer;
+    /**
+     * @var ContentObjectRenderer
+     */
+    protected $contentObjectRenderer;
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		// todo: fetch from ControllerContext
-		$this->configuration = \Tx_Solr_Util::getSolrConfiguration();
-		$this->contentObjectRenderer = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
-	}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        // todo: fetch from ControllerContext
+        $this->configuration = \Tx_Solr_Util::getSolrConfiguration();
+        $this->contentObjectRenderer = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
+    }
 
-	/**
-	 * Get facet option label
-	 *
-	 * @param \Tx_Solr_Facet_Facet $facet
-	 * @param string $optionValue
-	 * @return string
-	 */
-	public function render(\Tx_Solr_Facet_Facet $facet, $optionValue = NULL) {
-		if ($optionValue === NULL) {
-			$optionValue = $this->renderChildren();
-		}
+    /**
+     * Get facet option label
+     *
+     * @param \Tx_Solr_Facet_Facet $facet
+     * @param string $optionValue
+     * @return string
+     */
+    public function render(\Tx_Solr_Facet_Facet $facet, $optionValue = null)
+    {
+        if ($optionValue === null) {
+            $optionValue = $this->renderChildren();
+        }
 
-		/** @var \Tx_Solr_Facet_FacetOption $facetOption */
-		$facetOption = GeneralUtility::makeInstance('Tx_Solr_Facet_FacetOption',
-			$facet->getName(),
-			$optionValue
-		);
+        /** @var \Tx_Solr_Facet_FacetOption $facetOption */
+        $facetOption = GeneralUtility::makeInstance('Tx_Solr_Facet_FacetOption',
+            $facet->getName(),
+            $optionValue
+        );
 
-		// FIXME decouple this
-		if ($this->configuration['search.']['faceting.']['facets.'][$facet->getName() . '.']['type'] == 'hierarchy') {
-			$filterEncoder = GeneralUtility::makeInstance('Tx_Solr_Query_FilterEncoder_Hierarchy');
-			$facetRenderer = GeneralUtility::makeInstance('Tx_Solr_Facet_HierarchicalFacetRenderer', $facet);
-			$optionValueLabel = $facetRenderer->getLastPathSegmentFromHierarchicalFacetOption($filterEncoder->decodeFilter($optionValue));
-		} else {
-			$optionValueLabel = $facetOption->render();
-		}
+        // FIXME decouple this
+        if ($this->configuration['search.']['faceting.']['facets.'][$facet->getName() . '.']['type'] == 'hierarchy') {
+            $filterEncoder = GeneralUtility::makeInstance('Tx_Solr_Query_FilterEncoder_Hierarchy');
+            $facetRenderer = GeneralUtility::makeInstance('Tx_Solr_Facet_HierarchicalFacetRenderer', $facet);
+            $optionValueLabel = $facetRenderer->getLastPathSegmentFromHierarchicalFacetOption($filterEncoder->decodeFilter($optionValue));
+        } else {
+            $optionValueLabel = $facetOption->render();
+        }
 
-		return $optionValueLabel;
-	}
-
+        return $optionValueLabel;
+    }
 }

@@ -10,15 +10,17 @@ namespace ApacheSolrForTypo3\Solrfluid\Widget;
 /**
  * Class WidgetRequest
  */
-class WidgetRequest extends \TYPO3\CMS\Fluid\Core\Widget\WidgetRequest {
+class WidgetRequest extends \TYPO3\CMS\Fluid\Core\Widget\WidgetRequest
+{
 
-	/**
-	 * Returns the unique URI namespace for this widget in the format pluginNamespace[widgetIdentifier]
-	 *
-	 * @return string
-	 */
-	public function getArgumentPrefix() {
-		// we skip the [@widget] part
-		return $this->widgetContext->getParentPluginNamespace();
-	}
+    /**
+     * Returns the unique URI namespace for this widget in the format pluginNamespace[widgetIdentifier]
+     *
+     * @return string
+     */
+    public function getArgumentPrefix()
+    {
+        // we skip the [@widget] part
+        return $this->widgetContext->getParentPluginNamespace();
+    }
 }

@@ -21,38 +21,40 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 /**
  * Class facetOptionLabelViewHelper
  */
-class FacetLabelViewHelper extends AbstractViewHelper implements SingletonInterface {
+class FacetLabelViewHelper extends AbstractViewHelper implements SingletonInterface
+{
 
-	/**
-	 * @var array
-	 */
-	protected $configuration = array();
+    /**
+     * @var array
+     */
+    protected $configuration = array();
 
-	/**
-	 * @var ContentObjectRenderer
-	 */
-	protected $contentObjectRenderer;
+    /**
+     * @var ContentObjectRenderer
+     */
+    protected $contentObjectRenderer;
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		// todo: fetch from ControllerContext
-		$this->configuration = \Tx_Solr_Util::getSolrConfiguration();
-		$this->contentObjectRenderer = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
-	}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        // todo: fetch from ControllerContext
+        $this->configuration = \Tx_Solr_Util::getSolrConfiguration();
+        $this->contentObjectRenderer = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
+    }
 
-	/**
-	 * @param \Tx_Solr_Facet_Facet $facet
-	 * @return string
-	 */
-	public function render(\Tx_Solr_Facet_Facet $facet) {
-		$facetLabel = $this->contentObjectRenderer->stdWrap(
-			$this->configuration['search.']['faceting.']['facets.'][$facet->getName() . '.']['label'],
-			$this->configuration['search.']['faceting.']['facets.'][$facet->getName() . '.']['label.']
-		);
+    /**
+     * @param \Tx_Solr_Facet_Facet $facet
+     * @return string
+     */
+    public function render(\Tx_Solr_Facet_Facet $facet)
+    {
+        $facetLabel = $this->contentObjectRenderer->stdWrap(
+            $this->configuration['search.']['faceting.']['facets.'][$facet->getName() . '.']['label'],
+            $this->configuration['search.']['faceting.']['facets.'][$facet->getName() . '.']['label.']
+        );
 
-		return $facetLabel ?: $facet->getName();
-	}
-
+        return $facetLabel ?: $facet->getName();
+    }
 }

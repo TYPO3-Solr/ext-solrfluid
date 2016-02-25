@@ -19,28 +19,30 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 /**
  * Class HighlightResultViewHelper
  */
-class HighlightResultViewHelper extends AbstractViewHelper {
+class HighlightResultViewHelper extends AbstractViewHelper
+{
 
-	/**
-	 * Get high lighted field
-	 *
-	 * @param \Apache_Solr_Document $document
-	 * @param string $field
-	 * @return string
-	 */
-	public function render(\Apache_Solr_Document $document, $field) {
-		/** @var \Tx_Solr_Search $search */
-		$search = GeneralUtility::makeInstance('Tx_Solr_Search');
-		$configuration = \Tx_Solr_Util::getSolrConfiguration();
-		$content = call_user_func(array($document, 'get' . $field));
+    /**
+     * Get high lighted field
+     *
+     * @param \Apache_Solr_Document $document
+     * @param string $field
+     * @return string
+     */
+    public function render(\Apache_Solr_Document $document, $field)
+    {
+        /** @var \Tx_Solr_Search $search */
+        $search = GeneralUtility::makeInstance('Tx_Solr_Search');
+        $configuration = \Tx_Solr_Util::getSolrConfiguration();
+        $content = call_user_func(array($document, 'get' . $field));
 
-		$highlightedContent = $search->getHighlightedContent();
-		if (!empty($highlightedContent->{$document->getId()}->{$field}[0])) {
-			$content = implode(
-				' ' . $configuration['search.']['results.']['resultsHighlighting.']['fragmentSeparator'] . ' ',
-				$highlightedContent->{$document->getId()}->{$field}
-			);
-		}
-		return $content;
-	}
+        $highlightedContent = $search->getHighlightedContent();
+        if (!empty($highlightedContent->{$document->getId()}->{$field}[0])) {
+            $content = implode(
+                ' ' . $configuration['search.']['results.']['resultsHighlighting.']['fragmentSeparator'] . ' ',
+                $highlightedContent->{$document->getId()}->{$field}
+            );
+        }
+        return $content;
+    }
 }

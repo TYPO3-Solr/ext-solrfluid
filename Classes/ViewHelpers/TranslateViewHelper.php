@@ -17,7 +17,8 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
 /**
  * Class TranslateViewHelper
  */
-class TranslateViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelper {
+class TranslateViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelper
+{
 
     /**
      * Render translation
@@ -30,38 +31,40 @@ class TranslateViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelp
      * @param string $extensionName UpperCamelCased extension key (for example BlogExample)
      * @return string The translated key or tag body if key doesn't exist
      */
-    public function render($key = null, $id = null, $default = null, $htmlEscape = null, array $arguments = null, $extensionName = null) {
-		if ($this->hasArgument('arguments')) {
-			foreach ($this->arguments['arguments'] as $key => $value) {
-				if (substr($key, 0, 1) === '@') {
-					return $this->renderSolrTranslation(
-						$this->hasArgument('id') ? $this->arguments['id'] : $this->arguments['key']
-					);
-				}
-			}
-		}
-		return parent::render();
-	}
+    public function render($key = null, $id = null, $default = null, $htmlEscape = null, array $arguments = null, $extensionName = null)
+    {
+        if ($this->hasArgument('arguments')) {
+            foreach ($this->arguments['arguments'] as $key => $value) {
+                if (substr($key, 0, 1) === '@') {
+                    return $this->renderSolrTranslation(
+                        $this->hasArgument('id') ? $this->arguments['id'] : $this->arguments['key']
+                    );
+                }
+            }
+        }
+        return parent::render();
+    }
 
-	/**
-	 * Translate a given key or use the tag body as default.
-	 * Use strtr instead of vsprintf to replace the arguments
-	 *
-	 * @param string $id The locallang id
-	 * @return string The translated key or tag body if key doesn't exist
-	 */
-	protected function renderSolrTranslation($id) {
-		$request = $this->controllerContext->getRequest();
-		$extensionName = $this->arguments['extensionName'] === NULL ? $request->getControllerExtensionName() : $this->arguments['extensionName'];
-		$value = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($id, $extensionName, $this->arguments['arguments']);
-		if ($value === NULL) {
-			$value = $this->arguments['default'] !== NULL ? $this->arguments['default'] : $this->renderChildren();
-			if (is_array($this->arguments['arguments'])) {
-				$value = strtr($value, $this->arguments['arguments']);
-			}
-		} elseif ($this->arguments['htmlEscape']) {
-			$value = htmlspecialchars($value);
-		}
-		return $value;
-	}
+    /**
+     * Translate a given key or use the tag body as default.
+     * Use strtr instead of vsprintf to replace the arguments
+     *
+     * @param string $id The locallang id
+     * @return string The translated key or tag body if key doesn't exist
+     */
+    protected function renderSolrTranslation($id)
+    {
+        $request = $this->controllerContext->getRequest();
+        $extensionName = $this->arguments['extensionName'] === null ? $request->getControllerExtensionName() : $this->arguments['extensionName'];
+        $value = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($id, $extensionName, $this->arguments['arguments']);
+        if ($value === null) {
+            $value = $this->arguments['default'] !== null ? $this->arguments['default'] : $this->renderChildren();
+            if (is_array($this->arguments['arguments'])) {
+                $value = strtr($value, $this->arguments['arguments']);
+            }
+        } elseif ($this->arguments['htmlEscape']) {
+            $value = htmlspecialchars($value);
+        }
+        return $value;
+    }
 }

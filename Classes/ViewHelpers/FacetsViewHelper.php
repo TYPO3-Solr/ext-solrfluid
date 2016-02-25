@@ -19,133 +19,136 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 /**
  * Facets ViewHelper
  */
-class FacetsViewHelper extends AbstractViewHelper {
+class FacetsViewHelper extends AbstractViewHelper
+{
 
-	/**
-	 * @var \Tx_Solr_Search
-	 */
-	protected $search;
+    /**
+     * @var \Tx_Solr_Search
+     */
+    protected $search;
 
-	/**
-	 * @var \Tx_Solr_Facet_FacetRendererFactory
-	 */
-	protected $facetRendererFactory;
+    /**
+     * @var \Tx_Solr_Facet_FacetRendererFactory
+     */
+    protected $facetRendererFactory;
 
-	/**
-	 * @var array
-	 */
-	protected $configuration;
+    /**
+     * @var array
+     */
+    protected $configuration;
 
-	/**
-	 * @var bool
-	 */
-	protected $facetsActive = FALSE;
+    /**
+     * @var bool
+     */
+    protected $facetsActive = false;
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		// todo: fetch from ControllerContext
-		$this->configuration = \Tx_Solr_Util::getSolrConfiguration();
-	}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        // todo: fetch from ControllerContext
+        $this->configuration = \Tx_Solr_Util::getSolrConfiguration();
+    }
 
-	/**
-	 * Get facets
-	 *
-	 * @param \Tx_Solr_Search $search
-	 * @param string $facets variable name for the facets
-	 * @param string $usedFacets variable name for usedFacets
-	 * @return string
-	 */
-	public function render(\Tx_Solr_Search $search, $facets = 'facets', $usedFacets = 'usedFacets') {
-		$this->search = $search;
-		$this->facetRendererFactory = GeneralUtility::makeInstance(
-			'Tx_Solr_Facet_FacetRendererFactory',
-			$this->configuration['search.']['faceting.']['facets.']
-		);
+    /**
+     * Get facets
+     *
+     * @param \Tx_Solr_Search $search
+     * @param string $facets variable name for the facets
+     * @param string $usedFacets variable name for usedFacets
+     * @return string
+     */
+    public function render(\Tx_Solr_Search $search, $facets = 'facets', $usedFacets = 'usedFacets')
+    {
+        $this->search = $search;
+        $this->facetRendererFactory = GeneralUtility::makeInstance(
+            'Tx_Solr_Facet_FacetRendererFactory',
+            $this->configuration['search.']['faceting.']['facets.']
+        );
 
-		$templateVariableContainer = $this->renderingContext->getTemplateVariableContainer();
-		$templateVariableContainer->add($facets, $this->getAvailableFacets());
-		$templateVariableContainer->add($usedFacets, $this->getUsedFacets());
+        $templateVariableContainer = $this->renderingContext->getTemplateVariableContainer();
+        $templateVariableContainer->add($facets, $this->getAvailableFacets());
+        $templateVariableContainer->add($usedFacets, $this->getUsedFacets());
 
-		$content = $this->renderChildren();
+        $content = $this->renderChildren();
 
-		$templateVariableContainer->remove($facets);
-		$templateVariableContainer->remove($usedFacets);
+        $templateVariableContainer->remove($facets);
+        $templateVariableContainer->remove($usedFacets);
 
-		return $content;
-	}
+        return $content;
+    }
 
-	/**
-	 * Get available facet objects
-	 *
-	 * @return \Tx_Solr_Facet_Facet[]
-	 */
-	protected function getAvailableFacets() {
+    /**
+     * Get available facet objects
+     *
+     * @return \Tx_Solr_Facet_Facet[]
+     */
+    protected function getAvailableFacets()
+    {
+        $facets = array();
+        $configuredFacets = $this->configuration['search.']['faceting.']['facets.'];
+        foreach ($configuredFacets as $facetName => $facetConfiguration) {
+            $facetName = substr($facetName, 0, -1);
+            /** @var \Tx_Solr_Facet_Facet $facet */
+            $facet = GeneralUtility::makeInstance('Tx_Solr_Facet_Facet',
+                $facetName,
+                $this->facetRendererFactory->getFacetInternalType($facetName)
+            );
 
-		$facets = array();
-		$configuredFacets = $this->configuration['search.']['faceting.']['facets.'];
-		foreach ($configuredFacets as $facetName => $facetConfiguration) {
-			$facetName = substr($facetName, 0, -1);
-			/** @var \Tx_Solr_Facet_Facet $facet */
-			$facet = GeneralUtility::makeInstance('Tx_Solr_Facet_Facet',
-				$facetName,
-				$this->facetRendererFactory->getFacetInternalType($facetName)
-			);
+            if (
+                (isset($facetConfiguration['includeInAvailableFacets']) && $facetConfiguration['includeInAvailableFacets'] == '0')
+                || !$facet->isRenderingAllowed()
+            ) {
+                // don't render facets that should not be included in available facets
+                // or that do not meet their requirements to be rendered
+                continue;
+            }
 
-			if (
-				(isset($facetConfiguration['includeInAvailableFacets']) && $facetConfiguration['includeInAvailableFacets'] == '0')
-				|| !$facet->isRenderingAllowed()
-			) {
-				// don't render facets that should not be included in available facets
-				// or that do not meet their requirements to be rendered
-				continue;
-			}
+            if ($facet->isActive()) {
+                $this->facetsActive = true;
+            }
+            $facets[] = $facet;
+        }
 
-			if ($facet->isActive()) {
-				$this->facetsActive = TRUE;
-			}
-			$facets[] = $facet;
-		}
+        return $facets;
+    }
 
-		return $facets;
-	}
+    /**
+     *
+     */
+    protected function getUsedFacets()
+    {
+        $resultParameters = GeneralUtility::_GET('tx_solr');
+        $filterParameters = array();
+        if (isset($resultParameters['filter'])) {
+            $filterParameters = (array) array_map('urldecode', $resultParameters['filter']);
+        }
 
-	/**
-	 *
-	 */
-	protected function getUsedFacets() {
+        $facetsInUse = array();
+        foreach ($filterParameters as $filter) {
+            // only split by the first ":" to allow the use of colons in the filter value
+            list($facetName, $filterValue) = explode(':', $filter, 2);
 
-		$resultParameters = GeneralUtility::_GET('tx_solr');
-		$filterParameters = array();
-		if (isset($resultParameters['filter'])) {
-			$filterParameters = (array) array_map('urldecode', $resultParameters['filter']);
-		}
+            $facetConfiguration = $this->configuration['search.']['faceting.']['facets.'][$facetName . '.'];
 
-		$facetsInUse = array();
-		foreach ($filterParameters as $filter) {
-			// only split by the first ":" to allow the use of colons in the filter value
-			list($facetName, $filterValue) = explode(':', $filter, 2);
+            // don't render facets that should not be included in used facets
+            if (empty($facetConfiguration)
+                ||
+                (isset($facetConfiguration['includeInUsedFacets']) && $facetConfiguration['includeInUsedFacets'] == '0')
+            ) {
+                continue;
+            }
 
-			$facetConfiguration = $this->configuration['search.']['faceting.']['facets.'][$facetName . '.'];
+            /** @var \Tx_Solr_Facet_Facet $facet */
+            $facet = GeneralUtility::makeInstance('Tx_Solr_Facet_Facet',
+                $facetName,
+                $this->facetRendererFactory->getFacetInternalType($facetName)
+            );
 
-			// don't render facets that should not be included in used facets
-			if (empty($facetConfiguration)
-				||
-				(isset($facetConfiguration['includeInUsedFacets']) && $facetConfiguration['includeInUsedFacets'] == '0')
-			) {
-				continue;
-			}
+            $facetsInUse[] = $facet;
+        }
 
-			/** @var \Tx_Solr_Facet_Facet $facet */
-			$facet = GeneralUtility::makeInstance('Tx_Solr_Facet_Facet',
-				$facetName,
-				$this->facetRendererFactory->getFacetInternalType($facetName)
-			);
-
-			$facetsInUse[] = $facet;
-		}
-
-		return $facetsInUse;
-	}
+        return $facetsInUse;
+    }
 }

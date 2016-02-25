@@ -50,110 +50,112 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  * </output>
  *
  */
-class TypolinkViewHelper extends AbstractViewHelper {
+class TypolinkViewHelper extends AbstractViewHelper
+{
 
-	/**
-	 * Render
-	 *
-	 * @param string $parameter stdWrap.typolink style parameter string
-	 * @param string $target
-	 * @param string $class
-	 * @param string $title
-	 * @param string $additionalParams
-	 * @param array $additionalAttributes
-	 *
-	 * @return string
-	 */
-	public function render($parameter, $target = '', $class = '', $title = '', $additionalParams = '', $additionalAttributes = array()) {
-		// Merge the $parameter with other arguments
-		$typolinkParameter = $this->createTypolinkParameterArrayFromArguments($parameter, $target, $class, $title, $additionalParams);
+    /**
+     * Render
+     *
+     * @param string $parameter stdWrap.typolink style parameter string
+     * @param string $target
+     * @param string $class
+     * @param string $title
+     * @param string $additionalParams
+     * @param array $additionalAttributes
+     *
+     * @return string
+     */
+    public function render($parameter, $target = '', $class = '', $title = '', $additionalParams = '', $additionalAttributes = array())
+    {
+        // Merge the $parameter with other arguments
+        $typolinkParameter = $this->createTypolinkParameterArrayFromArguments($parameter, $target, $class, $title, $additionalParams);
 
-		// array(param1 -> value1, param2 -> value2) --> "param1=value1 param2=>value2" for typolink.ATagParams
-		$extraAttributes = array();
-		foreach ($additionalAttributes as $attributeName => $attributeValue) {
-			$extraAttributes[] = $attributeName . '="' . htmlspecialchars($attributeValue) . '"';
-		}
-		$aTagParams = implode(' ', $extraAttributes);
+        // array(param1 -> value1, param2 -> value2) --> "param1=value1 param2=>value2" for typolink.ATagParams
+        $extraAttributes = array();
+        foreach ($additionalAttributes as $attributeName => $attributeValue) {
+            $extraAttributes[] = $attributeName . '="' . htmlspecialchars($attributeValue) . '"';
+        }
+        $aTagParams = implode(' ', $extraAttributes);
 
-		// If no link has to be rendered, the inner content will be returned as such
-		$content = $this->renderChildren();
+        // If no link has to be rendered, the inner content will be returned as such
+        $content = $this->renderChildren();
 
-		if ($parameter) {
-			/** @var ContentObjectRenderer $contentObject */
-			$contentObject = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
-			$contentObject->start(array(), '');
-			$content = $contentObject->stdWrap(
-				$content,
-				array(
-					'typolink.' => array(
-						'parameter' => implode(' ', $typolinkParameter),
-						'ATagParams' => $aTagParams,
-					)
-				)
-			);
-		}
+        if ($parameter) {
+            /** @var ContentObjectRenderer $contentObject */
+            $contentObject = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
+            $contentObject->start(array(), '');
+            $content = $contentObject->stdWrap(
+                $content,
+                array(
+                    'typolink.' => array(
+                        'parameter' => implode(' ', $typolinkParameter),
+                        'ATagParams' => $aTagParams,
+                    )
+                )
+            );
+        }
 
-		return $content;
-	}
+        return $content;
+    }
 
-	/**
-	 * Transforms ViewHelper arguments to typo3link.parameters.typoscript option as array.
-	 *
-	 * @param string $parameter Example: 19 _blank - "testtitle with whitespace" &X=y
-	 * @param string $target
-	 * @param string $class
-	 * @param string $title
-	 * @param string $additionalParams
-	 *
-	 * @return array Final merged typolink.parameter as array to be imploded with empty string later
-	 */
-	protected function createTypolinkParameterArrayFromArguments($parameter, $target = '', $class = '', $title = '', $additionalParams = '') {
-		// Explode $parameter by whitespace and remove any " around resulting array values
-		$parameterArray = GeneralUtility::unQuoteFilenames($parameter, TRUE);
+    /**
+     * Transforms ViewHelper arguments to typo3link.parameters.typoscript option as array.
+     *
+     * @param string $parameter Example: 19 _blank - "testtitle with whitespace" &X=y
+     * @param string $target
+     * @param string $class
+     * @param string $title
+     * @param string $additionalParams
+     *
+     * @return array Final merged typolink.parameter as array to be imploded with empty string later
+     */
+    protected function createTypolinkParameterArrayFromArguments($parameter, $target = '', $class = '', $title = '', $additionalParams = '')
+    {
+        // Explode $parameter by whitespace and remove any " around resulting array values
+        $parameterArray = GeneralUtility::unQuoteFilenames($parameter, true);
 
-		if (empty($parameterArray)) {
-			return array();
-		}
+        if (empty($parameterArray)) {
+            return array();
+        }
 
-		// Extend to 4 elements
-		$typolinkConfiguration = array_pad($parameterArray, 4, '-');
+        // Extend to 4 elements
+        $typolinkConfiguration = array_pad($parameterArray, 4, '-');
 
-		// Override target if given in target argument
-		if ($target) {
-			$typolinkConfiguration[1] = $target;
-		}
+        // Override target if given in target argument
+        if ($target) {
+            $typolinkConfiguration[1] = $target;
+        }
 
-		// Combine classes if given in both "parameter" string and "class" argument
-		if ($class) {
-			$typolinkConfiguration[2] = $typolinkConfiguration[2] !== '-' ? $typolinkConfiguration[2] . ' ' : '';
-			$typolinkConfiguration[2] .= $class;
-		}
+        // Combine classes if given in both "parameter" string and "class" argument
+        if ($class) {
+            $typolinkConfiguration[2] = $typolinkConfiguration[2] !== '-' ? $typolinkConfiguration[2] . ' ' : '';
+            $typolinkConfiguration[2] .= $class;
+        }
 
-		// Override title if given in title argument
-		if ($title) {
-			$typolinkConfiguration[3] = $title;
-		}
+        // Override title if given in title argument
+        if ($title) {
+            $typolinkConfiguration[3] = $title;
+        }
 
-		// Combine additionalParams
-		if ($additionalParams) {
-			$typolinkConfiguration[4] .= $additionalParams;
-		}
+        // Combine additionalParams
+        if ($additionalParams) {
+            $typolinkConfiguration[4] .= $additionalParams;
+        }
 
-		// Unset unused parameters again from the end, wrap all given values with "
-		$reverseSortedParameters = array_reverse($typolinkConfiguration, TRUE);
-		$aValueWasSet = FALSE;
-		foreach ($reverseSortedParameters as $position => $value) {
-			if ($value === '-' && !$aValueWasSet) {
-				unset($typolinkConfiguration[$position]);
-			} else {
-				$aValueWasSet = TRUE;
-				if ($value !== '-') {
-					$typolinkConfiguration[$position] = '"' . $value . '"';
-				}
-			}
-		}
+        // Unset unused parameters again from the end, wrap all given values with "
+        $reverseSortedParameters = array_reverse($typolinkConfiguration, true);
+        $aValueWasSet = false;
+        foreach ($reverseSortedParameters as $position => $value) {
+            if ($value === '-' && !$aValueWasSet) {
+                unset($typolinkConfiguration[$position]);
+            } else {
+                $aValueWasSet = true;
+                if ($value !== '-') {
+                    $typolinkConfiguration[$position] = '"' . $value . '"';
+                }
+            }
+        }
 
-		return $typolinkConfiguration;
-	}
-
+        return $typolinkConfiguration;
+    }
 }

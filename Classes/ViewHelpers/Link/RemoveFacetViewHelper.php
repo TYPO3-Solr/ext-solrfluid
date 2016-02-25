@@ -18,42 +18,44 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Class RemoveFacetViewHelper
  */
-class RemoveFacetViewHelper extends FacetViewHelper {
+class RemoveFacetViewHelper extends FacetViewHelper
+{
 
-	/**
-	 * Create remove facet link
-	 *
-	 * @param \Tx_Solr_Facet_Facet $facet
-	 * @param \Tx_Solr_Facet_FacetOption $facetOption
-	 * @param string $optionValue
-	 * @param int $pageUid
-	 * @param bool $returnUrl
-	 * @param string $section The anchor to be added to the url
-	 * @return string
-	 */
-	public function render(\Tx_Solr_Facet_Facet $facet, \Tx_Solr_Facet_FacetOption $facetOption = NULL, $optionValue = NULL, $pageUid = NULL, $returnUrl = FALSE, $section = '') {
-		if ($facetOption === NULL) {
-			/** @var \Tx_Solr_Facet_FacetOption $facetOption */
-			$facetOption = GeneralUtility::makeInstance('Tx_Solr_Facet_FacetOption',
-				$facet->getName(),
-				$optionValue
-			);
-		}
-		$linkBuilder = $this->getLinkBuilder($facet, $facetOption);
-		if ($pageUid) {
-			$linkBuilder->setLinkTargetPageId($pageUid);
-		}
-		$uri = $linkBuilder->getRemoveFacetOptionUrl();
-		if ($section) {
-			$uri .= '#' . $section;
-		}
-		if (!$returnUrl) {
-			$this->tag->addAttribute('href', $uri, FALSE);
-			$this->tag->setContent($this->renderChildren());
-			$this->tag->forceClosingTag(TRUE);
-			return $this->tag->render();
-		} else {
-			return $uri;
-		}
-	}
+    /**
+     * Create remove facet link
+     *
+     * @param \Tx_Solr_Facet_Facet $facet
+     * @param \Tx_Solr_Facet_FacetOption $facetOption
+     * @param string $optionValue
+     * @param int $pageUid
+     * @param bool $returnUrl
+     * @param string $section The anchor to be added to the url
+     * @return string
+     */
+    public function render(\Tx_Solr_Facet_Facet $facet, \Tx_Solr_Facet_FacetOption $facetOption = null, $optionValue = null, $pageUid = null, $returnUrl = false, $section = '')
+    {
+        if ($facetOption === null) {
+            /** @var \Tx_Solr_Facet_FacetOption $facetOption */
+            $facetOption = GeneralUtility::makeInstance('Tx_Solr_Facet_FacetOption',
+                $facet->getName(),
+                $optionValue
+            );
+        }
+        $linkBuilder = $this->getLinkBuilder($facet, $facetOption);
+        if ($pageUid) {
+            $linkBuilder->setLinkTargetPageId($pageUid);
+        }
+        $uri = $linkBuilder->getRemoveFacetOptionUrl();
+        if ($section) {
+            $uri .= '#' . $section;
+        }
+        if (!$returnUrl) {
+            $this->tag->addAttribute('href', $uri, false);
+            $this->tag->setContent($this->renderChildren());
+            $this->tag->forceClosingTag(true);
+            return $this->tag->render();
+        } else {
+            return $uri;
+        }
+    }
 }

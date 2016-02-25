@@ -17,20 +17,22 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget;
 /**
  * Class LinkViewHelper
  */
-class LinkViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Widget\LinkViewHelper {
+class LinkViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Widget\LinkViewHelper
+{
 
-	/**
-	 * Get the URI for a non-AJAX Request.
-	 *
-	 * @return string the Widget URI
-	 */
-	protected function getWidgetUri() {
-		$uriBuilder = $this->controllerContext->getUriBuilder();
-		$argumentPrefix = $this->controllerContext->getRequest()->getArgumentPrefix();
-		$arguments = $this->hasArgument('arguments') ? $this->arguments['arguments'] : array();
-		if ($this->hasArgument('addQueryStringMethod') && $this->arguments['addQueryStringMethod'] !== '') {
-			$arguments['addQueryStringMethod'] = $this->arguments['addQueryStringMethod'];
-		}
-		return $uriBuilder->reset()->setUseCacheHash(FALSE)->setArguments(array($argumentPrefix => $arguments))->setSection($this->arguments['section'])->setAddQueryString(TRUE)->setAddQueryStringMethod($this->arguments['addQueryStringMethod'])->setArgumentsToBeExcludedFromQueryString(array($argumentPrefix . '[page]', 'cHash'))->setFormat($this->arguments['format'])->build();
-	}
+    /**
+     * Get the URI for a non-AJAX Request.
+     *
+     * @return string the Widget URI
+     */
+    protected function getWidgetUri()
+    {
+        $uriBuilder = $this->controllerContext->getUriBuilder();
+        $argumentPrefix = $this->controllerContext->getRequest()->getArgumentPrefix();
+        $arguments = $this->hasArgument('arguments') ? $this->arguments['arguments'] : array();
+        if ($this->hasArgument('addQueryStringMethod') && $this->arguments['addQueryStringMethod'] !== '') {
+            $arguments['addQueryStringMethod'] = $this->arguments['addQueryStringMethod'];
+        }
+        return $uriBuilder->reset()->setUseCacheHash(false)->setArguments(array($argumentPrefix => $arguments))->setSection($this->arguments['section'])->setAddQueryString(true)->setAddQueryStringMethod($this->arguments['addQueryStringMethod'])->setArgumentsToBeExcludedFromQueryString(array($argumentPrefix . '[page]', 'cHash'))->setFormat($this->arguments['format'])->build();
+    }
 }

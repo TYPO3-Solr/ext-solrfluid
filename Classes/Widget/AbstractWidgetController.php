@@ -10,10 +10,11 @@ namespace ApacheSolrForTypo3\Solrfluid\Widget;
 /**
  * Class AbstractWidgetController
  */
-class AbstractWidgetController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController {
+class AbstractWidgetController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController
+{
 
-	/**
-	 * @var array
-	 */
-	protected $supportedRequestTypes = array('ApacheSolrForTypo3\\Solrfluid\\Widget\\WidgetRequest');
+    /**
+     * @var array
+     */
+    protected $supportedRequestTypes = array('ApacheSolrForTypo3\\Solrfluid\\Widget\\WidgetRequest');
 }

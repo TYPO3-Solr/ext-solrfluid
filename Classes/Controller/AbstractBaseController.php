@@ -1,7 +1,6 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\Controller;
 
-
 use ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -15,7 +14,8 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  * Class AbstractBaseController
  * @package ApacheSolrForTypo3\Solrfluid\Controller
  */
-abstract class AbstractBaseController extends ActionController {
+abstract class AbstractBaseController extends ActionController
+{
     /**
      * @var string
      */
@@ -71,7 +71,8 @@ abstract class AbstractBaseController extends ActionController {
     /**
      * Initialize action
      */
-    protected function initializeAction() {
+    protected function initializeAction()
+    {
         parent::initializeAction();
         $this->typoScriptFrontendController = $GLOBALS['TSFE'];
         $this->typoScriptConfiguration = $this->solrConfigurationManager->getTypoScriptConfiguration();
@@ -82,7 +83,8 @@ abstract class AbstractBaseController extends ActionController {
      * Initialize the Solr connection and
      * test the connection through a ping
      */
-    protected function initializeSearch() {
+    protected function initializeSearch()
+    {
         /** @var \Tx_Solr_ConnectionManager $solrConnection */
         $solrConnection = GeneralUtility::makeInstance('Tx_Solr_ConnectionManager')->getConnectionByPageId(
             $this->typoScriptFrontendController->id,

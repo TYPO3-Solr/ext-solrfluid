@@ -18,20 +18,21 @@ use ApacheSolrForTypo3\Solrfluid\Widget\AbstractWidgetViewHelper;
 /**
  * Class Last searches ViewHelper
  */
-class LastSearchesViewHelper extends AbstractWidgetViewHelper {
+class LastSearchesViewHelper extends AbstractWidgetViewHelper
+{
 
-	/**
-	 * @var \ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\Controller\LastSearchesController
-	 * @inject
-	 */
-	protected $controller;
+    /**
+     * @var \ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\Controller\LastSearchesController
+     * @inject
+     */
+    protected $controller;
 
-	/**
-	 * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface
-	 * @throws \TYPO3\CMS\Fluid\Core\Widget\Exception\MissingControllerException
-	 */
-	public function render() {
-		return $this->initiateSubRequest();
-	}
-
+    /**
+     * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface
+     * @throws \TYPO3\CMS\Fluid\Core\Widget\Exception\MissingControllerException
+     */
+    public function render()
+    {
+        return $this->initiateSubRequest();
+    }
 }
