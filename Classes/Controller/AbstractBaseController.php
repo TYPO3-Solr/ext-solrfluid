@@ -2,6 +2,8 @@
 namespace ApacheSolrForTypo3\Solrfluid\Controller;
 
 
+use ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager;
+use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -17,7 +19,7 @@ abstract class AbstractBaseController extends ActionController {
     /**
      * @var string
      */
-    protected $pluginName = 'pi';
+    protected $pluginName = 'search';
 
     /**
      * Flexform information
@@ -44,51 +46,26 @@ abstract class AbstractBaseController extends ActionController {
     protected $search;
 
     /**
-     * The plugin's query
-     *
-     * @var \Tx_Solr_Query
-     */
-    protected $query = NULL;
-
-    /**
-     * Full typoscript configuration
-     *
-     * @var array
-     */
-    protected $configuration = array();
-
-    /**
      * Determines whether the solr server is available or not.
      */
     protected $solrAvailable;
 
     /**
-     * The user's raw query
-     *
-     * @var string
+     * @var TypoScriptConfiguration
      */
-    protected $rawUserQuery;
+    protected $typoScriptConfiguration;
 
     /**
-     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
-     * @return void
+     * @var ConfigurationManager
      */
-    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager) {
-        $this->configurationManager = $configurationManager;
-        $this->settings = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
+    protected $solrConfigurationManager;
 
-        $fullTypoScript = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-        $this->configuration = ArrayUtility::arrayMergeRecursiveOverrule(
-            $fullTypoScript['plugin.']['tx_solr.'],
-            (array)$fullTypoScript['plugin.']['tx_solr_pi_results.'] // todo: check what to do with this. Do we need fallback to old typoscript config? define used name by called action?
-        );
-
-        $this->contentObjectRenderer = $this->configurationManager->getContentObject();
-        $this->flexformData = GeneralUtility::xml2array($this->contentObjectRenderer->data['pi_flexform']);
-
-        // todo: add flexform overrides
-        //		$this->overrideTyposcriptWithFlexformSettings();
-
+    /**
+     * @param \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager
+     */
+    public function injectSolrConfigurationManager(ConfigurationManager $configurationManager)
+    {
+        $this->solrConfigurationManager = $configurationManager;
     }
 
     /**
@@ -97,16 +74,8 @@ abstract class AbstractBaseController extends ActionController {
     protected function initializeAction() {
         parent::initializeAction();
         $this->typoScriptFrontendController = $GLOBALS['TSFE'];
-        $this->initializeQuery();
+        $this->typoScriptConfiguration = $this->solrConfigurationManager->getTypoScriptConfiguration();
         $this->initializeSearch();
-    }
-
-    /**
-     * Initializes the query from the GET query parameter.
-     *
-     */
-    protected function initializeQuery() {
-        $this->rawUserQuery = GeneralUtility::_GET('q');
     }
 
     /**
@@ -123,35 +92,5 @@ abstract class AbstractBaseController extends ActionController {
 
         $this->search = GeneralUtility::makeInstance('Tx_Solr_Search', $solrConnection);
         $this->solrAvailable = $this->search->ping();
-    }
-
-    /**
-     * Get rawUserQuery
-     *
-     * @return string
-     */
-    public function getRawUserQuery() {
-        return $this->rawUserQuery;
-    }
-
-    /**
-     * Get field value from flexform configuration,
-     * including checks if flexform configuration is available
-     *
-     * @param string $key name of the key
-     * @param string $sheet name of the sheet
-     * @return string|NULL if nothing found, value if found
-     */
-    protected function getFieldFromFlexform($key, $sheet = 'sDEF') {
-        $flexform = $this->flexformData;
-        if (isset($flexform['data'])) {
-            $flexform = $flexform['data'];
-            if (is_array($flexform) && is_array($flexform[$sheet]) && is_array($flexform[$sheet]['lDEF'])
-                && is_array($flexform[$sheet]['lDEF'][$key]) && isset($flexform[$sheet]['lDEF'][$key]['vDEF'])
-            ) {
-                return $flexform[$sheet]['lDEF'][$key]['vDEF'];
-            }
-        }
-        return NULL;
     }
 }

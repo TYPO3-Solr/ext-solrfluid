@@ -6,6 +6,6 @@ if (!defined ('TYPO3_MODE')) {
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     $_EXTKEY,
-    'Search',
+    'pi_result',
     'Search result - fluid'
 );
