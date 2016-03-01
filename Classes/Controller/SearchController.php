@@ -22,9 +22,6 @@ class SearchController extends AbstractBaseController
         $searchRequest = $this->buildSearchRequest();
         $searchResultSet = $this->searchService->search($searchRequest);
 
-        if ($searchResultSet->getUsedQuery() == null) {
-            //   $this->forward('form');
-        }
         $this->view->assignMultiple(array(
             'search' => $this->searchService->getSearch(),
             'hasSearched' => $this->searchService->getHasSearched(),

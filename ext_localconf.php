@@ -32,3 +32,15 @@
         'Search' => 'frequentlySearched'
     )
 );
+
+// registering facet types
+\ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory::registerFacetType(
+    'fluid',
+    'ApacheSolrForTypo3\\Solrfluid\\FluidFacetRenderer'
+);
+\ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory::registerFacetType(
+    'fluidQueryGroup',
+    'ApacheSolrForTypo3\\Solrfluid\\FluidQueryGroupFacetRenderer',
+    'ApacheSolrForTypo3\\Solr\\Query\\FilterEncoder\\QueryGroup',
+    'ApacheSolrForTypo3\\Solr\\Query\\FilterEncoder\\QueryGroup'
+);

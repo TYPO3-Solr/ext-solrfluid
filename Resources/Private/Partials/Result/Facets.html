@@ -3,13 +3,13 @@
 	  xmlns:s="http://typo3.org/ns/ApacheSolrForTypo3/Solrfluid/ViewHelpers">
 
 <f:section name="Facets">
-<div id="solr-faceting">
+<div id="tx-solr-faceting">
 
 	<s:facets search="{search}">
 
 		<f:if condition="{usedFacets -> f:count()}">
-			<div id="solr-facets-in-use">
-				<h5>Used facets</h5>
+			<div id="tx-solr-facets-in-use">
+				<h3>Used facets</h3>
 
 				<ul class="facets">
 					<f:for each="{facets}" as="facet">
@@ -23,16 +23,16 @@
 						</f:for>
 					</f:for>
 					<li class="facets-remove-all">
-						<f:link.page>Verwijder alle filters</f:link.page>
+						<f:link.page>Remove all filters</f:link.page>
 					</li>
 				</ul>
 			</div>
 		</f:if>
 
 		<f:if condition="{facets -> f:count()}">
-			<div id="solr-facets-available" class="secondaryContentSection">
+			<div id="tx-solr-facets-available" class="secondaryContentSection">
 				<div class="csc-header">
-					<h5 class="csc-firstHeader">Resultaat verfijnen</h5>
+					<h3 class="csc-firstHeader">Narrow Search</h3>
 				</div>
 				<ul class="facets">
 					<f:for each="{facets}" as="facet">

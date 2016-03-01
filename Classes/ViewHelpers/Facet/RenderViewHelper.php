@@ -49,10 +49,12 @@ class RenderViewHelper extends AbstractViewHelper
                 'ApacheSolrForTypo3\\Solr\\Template',
                 GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'),
                 $configuration['templateFiles.']['results'],
-                'single_facet'
+                'available_facets'
             );
+
+
             $facetRenderer->setTemplate($template);
-            $facetRenderer->setLinkTargetPageId($configuration['search.']['targetPage']);
+            $facetRenderer->setLinkTargetPageId($configuration->getSearchTargetPage());
             $facet = $facetRenderer->getFacetProperties();
             $template->addVariable('facet', $facet);
         }
