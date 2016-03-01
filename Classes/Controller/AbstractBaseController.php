@@ -1,6 +1,9 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\Controller;
 
+use ApacheSolrForTypo3\Solr\ConnectionManager;
+use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService;
+use ApacheSolrForTypo3\Solr\Search;
 use ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -39,18 +42,6 @@ abstract class AbstractBaseController extends ActionController
     protected $typoScriptFrontendController;
 
     /**
-     * An instance of Tx_Solr_Search
-     *
-     * @var \Tx_Solr_Search
-     */
-    protected $search;
-
-    /**
-     * Determines whether the solr server is available or not.
-     */
-    protected $solrAvailable;
-
-    /**
      * @var TypoScriptConfiguration
      */
     protected $typoScriptConfiguration;
@@ -59,6 +50,11 @@ abstract class AbstractBaseController extends ActionController
      * @var ConfigurationManager
      */
     protected $solrConfigurationManager;
+
+    /**
+     * @var \ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService
+     */
+    protected $searchService;
 
     /**
      * @param \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager
@@ -86,13 +82,14 @@ abstract class AbstractBaseController extends ActionController
     protected function initializeSearch()
     {
         /** @var \Tx_Solr_ConnectionManager $solrConnection */
-        $solrConnection = GeneralUtility::makeInstance('Tx_Solr_ConnectionManager')->getConnectionByPageId(
+        $solrConnection = GeneralUtility::makeInstance(ConnectionManager::class)->getConnectionByPageId(
             $this->typoScriptFrontendController->id,
             $this->typoScriptFrontendController->sys_language_uid,
             $this->typoScriptFrontendController->MP
         );
+        $search = GeneralUtility::makeInstance(Search::class, $solrConnection);
 
-        $this->search = GeneralUtility::makeInstance('Tx_Solr_Search', $solrConnection);
-        $this->solrAvailable = $this->search->ping();
+        /** @var $searchService \ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService */
+        $this->searchService = GeneralUtility::makeInstance(SearchResultSetService::class, $this->typoScriptConfiguration, $search);
     }
 }

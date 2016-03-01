@@ -9,3 +9,7 @@ plugin.tx_solr {
 		pluginNamespace = tx_solr
 	}
 }
+
+page.includeCSS {
+	search = EXT:solrfluid/Resources/Public/Css/results.css
+}

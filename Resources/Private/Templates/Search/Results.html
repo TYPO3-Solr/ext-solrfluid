@@ -6,7 +6,7 @@
 
 <f:section name="main">
 
-	<div id="solr-search">
+	<div id="tx-solr-search">
 
 		<f:render partial="Search/Form" section="Form" arguments="{search:search, additionalFilters:additionalFilters}" />
 
@@ -27,18 +27,22 @@
 		</f:if>
 
 
-		<s:widget.resultPaginate search="{search}">
-			<ol start="{pagination.displayRangeStart}" class="results-list">
-				<f:for each="{documents}" as="document">
-					<f:render partial="Result/Document" section="Document" arguments="{search:search, document:document}" />
-				</f:for>
-			</ol>
-		</s:widget.resultPaginate>
+		<f:if condition="{hasSearched}">
+			<s:widget.resultPaginate search="{search}">
+				<ol start="{pagination.displayRangeStart}" class="results-list">
+					<f:for each="{documents}" as="document">
+						<f:render partial="Result/Document" section="Document" arguments="{search:search, document:document}" />
+					</f:for>
+				</ol>
+			</s:widget.resultPaginate>
+		</f:if>
 
 	</div>
 
-	<div id="solr-search-functions">
-		<f:render partial="Result/Facets" section="Facets" arguments="{search:search}" />
+	<div id="tx-solr-search-functions">
+		<f:if condition="{hasSearched}">
+			<f:render partial="Result/Facets" section="Facets" arguments="{search:search}" />
+		</f:if>
 		<f:render partial="Search/LastSearches" section="LastSearches" arguments="{search:search}" />
 		<f:render partial="Search/FrequentlySearched" section="FrequentlySearched" />
 	</div>

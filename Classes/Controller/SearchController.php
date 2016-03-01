@@ -13,22 +13,23 @@ class SearchController extends AbstractBaseController
      */
     public function resultsAction()
     {
-        if ($this->solrAvailable) {
-            // perform the current search.
-            /** @var $searchService \ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService */
-            $searchService = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService', $this->typoScriptConfiguration, $this->search);
-            $searchService->setUsePluginAwardComponents(false);
-            $searchRequest = $this->buildSearchRequest();
-            $searchResultSet = $searchService->search($searchRequest);
-
-            if ($searchResultSet->getUsedQuery() == null) {
-                $this->redirect('form');
-            }
-            $this->view->assignMultiple(array(
-                'search' => $this->search,
-                'additionalFilters' => $searchResultSet->getUsedAdditionalFilters(),
-            ));
+        if (!$this->searchService->getIsSolrAvailable()) {
+            $this->forward('solrNotAvailable');
         }
+
+        // perform the current search.
+        $this->searchService->setUsePluginAwareComponents(false);
+        $searchRequest = $this->buildSearchRequest();
+        $searchResultSet = $this->searchService->search($searchRequest);
+
+        if ($searchResultSet->getUsedQuery() == null) {
+            //   $this->forward('form');
+        }
+        $this->view->assignMultiple(array(
+            'search' => $this->searchService->getSearch(),
+            'hasSearched' => $this->searchService->getHasSearched(),
+            'additionalFilters' => $this->searchService->getAdditionalFilters(),
+        ));
     }
 
     /**
@@ -52,8 +53,8 @@ class SearchController extends AbstractBaseController
     public function formAction()
     {
         $this->view->assignMultiple(array(
-            'search' => $this->search,
-            'additionalFilters' => $this->additionalFilters,
+            'search' => $this->searchService->getSearch(),
+            'additionalFilters' => $this->searchService->getAdditionalFilters(),
         ));
     }
 

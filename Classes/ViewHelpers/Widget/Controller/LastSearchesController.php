@@ -13,24 +13,22 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\Controller;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use ApacheSolrForTypo3\Solr\Domain\Search\LastSearches\LastSearchesService;
+use ApacheSolrForTypo3\Solr\Util;
 use ApacheSolrForTypo3\Solrfluid\Widget\AbstractWidgetController;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class LastSearchesController
  */
 class LastSearchesController extends AbstractWidgetController
 {
-
     /**
-     * @var array
+     * @var LastSearchesService
      */
-    protected $solrConfiguration = array();
-
-    /**
-     * @var DatabaseConnection
-     */
-    protected $databaseConnection;
+    protected $lastSearchesService;
 
     /**
      * Constructor
@@ -38,8 +36,11 @@ class LastSearchesController extends AbstractWidgetController
     public function __construct()
     {
         // todo: fetch from ControllerContext
-        $this->solrConfiguration = \Tx_Solr_Util::getSolrConfiguration();
-        $this->databaseConnection = $GLOBALS['DB'];
+        $typoScriptConfiguration = Util::getSolrConfiguration();
+        $databaseConnection= $GLOBALS['TYPO3_DB'];
+        $tsfe = $GLOBALS['TSFE'];
+
+        $this->lastSearchesService = GeneralUtility::makeInstance(LastSearchesService::class, $typoScriptConfiguration, $tsfe, $databaseConnection);
     }
 
     /**
@@ -47,79 +48,6 @@ class LastSearchesController extends AbstractWidgetController
      */
     public function indexAction()
     {
-        $this->view->assign('contentArguments', array('lastSearches' => $this->getLastSearches()));
-    }
-
-    /**
-     * Prepares the content for the last search markers
-     *
-     * @return	array	An array with content for the last search markers
-     */
-    protected function getLastSearches()
-    {
-        $lastSearches = array();
-        $limit = $this->solrConfiguration['search.']['lastSearches.']['limit'];
-        switch ($this->solrConfiguration['search.']['lastSearches.']['mode']) {
-            case 'user':
-                $lastSearches = $this->getLastSearchesFromSession($limit);
-                break;
-            case 'global':
-                $lastSearches = $this->getLastSearchesFromDatabase($limit);
-                break;
-        }
-
-        return $lastSearches;
-    }
-
-    /**
-     * Gets the last searched keywords from the user's session
-     *
-     * @param int $limit
-     * @return array An array containing the last searches of the current user
-     */
-    protected function getLastSearchesFromSession($limit = 0)
-    {
-        $lastSearches = $GLOBALS['TSFE']->fe_user->getKey(
-            'ses',
-            'tx_solr_lastSearches'
-        );
-
-        if (!is_array($lastSearches)) {
-            $lastSearches = array();
-        }
-
-        $lastSearches = array_reverse(array_unique($lastSearches));
-
-        if ($limit) {
-            $lastSearches = array_slice($lastSearches, 0, (int)$limit);
-        }
-
-        return $lastSearches;
-    }
-
-    /**
-     * Gets the last searched keywords from the database
-     *
-     * @param int $limit
-     * @return array An array containing the last searches of the current user
-     */
-    protected function getLastSearchesFromDatabase($limit = 0)
-    {
-        $limit = $limit ? intval($limit) : false;
-        $lastSearchesRows = $this->databaseConnection->exec_SELECTgetRows(
-            'DISTINCT keywords',
-            'tx_solr_last_searches',
-            '',
-            '',
-            'tstamp DESC',
-            $limit
-        );
-
-        $lastSearches = array();
-        foreach ($lastSearchesRows as $row) {
-            $lastSearches[] = $row['keywords'];
-        }
-
-        return $lastSearches;
+        $this->view->assign('contentArguments', array('lastSearches' => $this->lastSearchesService->getLastSearches()));
     }
 }
