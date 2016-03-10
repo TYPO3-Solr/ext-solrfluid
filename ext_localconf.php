@@ -24,7 +24,7 @@
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'ApacheSolrForTypo3.solrfluid',
-    'pi_facets',
+    'pi_frequentlySearched',
     array(
         'Search' => 'frequentlySearched'
     ),
