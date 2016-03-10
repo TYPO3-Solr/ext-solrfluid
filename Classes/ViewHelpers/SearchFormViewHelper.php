@@ -116,13 +116,13 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
         // Get search term
         $q = '';
         if ($this->search->hasSearched()) {
-            $q = $this->search->getQuery()->getKeywordsCleaned();
+            $q = $this->search->getQuery()->getKeywordsRaw();
         } elseif (GeneralUtility::_GET('q')) {
             $q = GeneralUtility::_GET('q');
         }
 
         // Render form content
-        $this->templateVariableContainer->add('q', $q);
+        $this->templateVariableContainer->add('q', trim($q));
         $this->templateVariableContainer->add('pageUid', $pageUid);
         $this->templateVariableContainer->add('languageUid', $this->frontendController->sys_language_uid);
         $formContent = $this->renderChildren();
