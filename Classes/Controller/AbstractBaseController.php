@@ -9,6 +9,8 @@ use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Service\FlexFormService;
+use TYPO3\CMS\Extbase\Service\TypoScriptService;
 use TYPO3\CMS\Extbase\Utility\ArrayUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -19,18 +21,6 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  */
 abstract class AbstractBaseController extends ActionController
 {
-    /**
-     * @var string
-     */
-    protected $pluginName = 'search';
-
-    /**
-     * Flexform information
-     *
-     * @var array
-     */
-    public $flexformData = array();
-
     /**
      * @var ContentObjectRenderer
      */
@@ -47,6 +37,11 @@ abstract class AbstractBaseController extends ActionController
     protected $typoScriptConfiguration;
 
     /**
+     * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
+     */
+    protected $configurationManager;
+
+    /**
      * @var ConfigurationManager
      */
     protected $solrConfigurationManager;
@@ -55,6 +50,15 @@ abstract class AbstractBaseController extends ActionController
      * @var \ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService
      */
     protected $searchService;
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
+     * @return void
+     */
+    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager) {
+        $this->configurationManager = $configurationManager;
+        $this->contentObjectRenderer = $this->configurationManager->getContentObject();
+    }
 
     /**
      * @param \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager
@@ -69,9 +73,30 @@ abstract class AbstractBaseController extends ActionController
      */
     protected function initializeAction()
     {
+        // Reset configuration (to reset flexform overrides)
+        $this->solrConfigurationManager->reset();
+        // Override configuration with flexform settings
+        if (!empty($this->contentObjectRenderer->data['pi_flexform'])) {
+            $flexFormService = $this->objectManager->get(FlexFormService::class);
+            $flexFormConfiguration = $flexFormService->convertFlexFormContentToArray(
+                $this->contentObjectRenderer->data['pi_flexform']
+            );
+            $typoScriptService = $this->objectManager->get(TypoScriptService::class);
+            $flexFormConfiguration = $typoScriptService->convertPlainArrayToTypoScriptArray(
+                $flexFormConfiguration
+            );
+
+            $this->solrConfigurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration(
+                $flexFormConfiguration,
+                true,
+                false
+            );
+        }
+
         parent::initializeAction();
         $this->typoScriptFrontendController = $GLOBALS['TSFE'];
         $this->typoScriptConfiguration = $this->solrConfigurationManager->getTypoScriptConfiguration();
+
         $this->initializeSearch();
     }
 
