@@ -89,8 +89,8 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
      */
     public function render($pageUid = null, $additionalFilters = null, array $additionalParams = array(), $noCache = false, $pageType = 0, $noCacheHash = false, $section = '', $absolute = false, $addQueryString = false, array $argumentsToBeExcludedFromQueryString = array(), $addQueryStringMethod = null, $addSuggestUrl = true)
     {
-        if ($pageUid === null && !empty($this->configuration['search.']['targetPage'])) {
-            $pageUid = (int)$this->configuration['search.']['targetPage'];
+        if ($pageUid === null && !empty($this->configuration->getSearchTargetPage())) {
+            $pageUid = $this->configuration->getSearchTargetPage();
         }
 
         $uriBuilder = $this->controllerContext->getUriBuilder();
@@ -107,7 +107,7 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
             ->setSection($section)
             ->build();
 
-        $this->tag->addAttribute('action', $uri);
+        $this->tag->addAttribute('action', trim($uri));
         if ($addSuggestUrl) {
             $this->tag->addAttribute('data-suggest', $this->getSuggestEidUrl($additionalFilters));
         }
@@ -123,7 +123,7 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
 
         // Render form content
         $this->templateVariableContainer->add('q', $q);
-        $this->templateVariableContainer->add('pageUid', $this->frontendController->id);
+        $this->templateVariableContainer->add('pageUid', $pageUid);
         $this->templateVariableContainer->add('languageUid', $this->frontendController->sys_language_uid);
         $formContent = $this->renderChildren();
         $this->templateVariableContainer->remove('q');
