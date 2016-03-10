@@ -23,6 +23,8 @@ class TranslateViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelp
     /**
      * Render translation
      *
+     * Wrapper function to support "old solr way" of doing translations
+     *
      * @param string $key Translation Key
      * @param string $id Translation Key compatible to TYPO3 Flow
      * @param string $default If the given locallang key could not be found, this value is used. If this argument is not set, child nodes will be used to render the default
@@ -33,16 +35,14 @@ class TranslateViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelp
      */
     public function render($key = null, $id = null, $default = null, $htmlEscape = null, array $arguments = null, $extensionName = null)
     {
-        if ($this->hasArgument('arguments')) {
-            foreach ($this->arguments['arguments'] as $key => $value) {
-                if (substr($key, 0, 1) === '@') {
-                    return $this->renderSolrTranslation(
-                        $this->hasArgument('id') ? $this->arguments['id'] : $this->arguments['key']
-                    );
-                }
+        foreach ($arguments as $key => $value) {
+            if (substr($key, 0, 1) === '@') {
+                return $this->renderSolrTranslation(
+                    $id ?: $key
+                );
             }
         }
-        return parent::render();
+        return parent::render($key, $id, $default, $htmlEscape, $arguments, $extensionName);
     }
 
     /**
