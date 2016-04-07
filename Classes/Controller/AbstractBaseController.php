@@ -6,6 +6,7 @@ use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService;
 use ApacheSolrForTypo3\Solr\Search;
 use ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
+use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -24,17 +25,12 @@ abstract class AbstractBaseController extends ActionController
     /**
      * @var ContentObjectRenderer
      */
-    protected $contentObjectRenderer;
+    private $contentObjectRenderer;
 
     /**
      * @var TypoScriptFrontendController
      */
-    protected $typoScriptFrontendController;
-
-    /**
-     * @var TypoScriptConfiguration
-     */
-    protected $typoScriptConfiguration;
+    private $typoScriptFrontendController;
 
     /**
      * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
@@ -44,7 +40,18 @@ abstract class AbstractBaseController extends ActionController
     /**
      * @var ConfigurationManager
      */
-    protected $solrConfigurationManager;
+    private $solrConfigurationManager;
+
+    /**
+     * The configuration is private if you need it please get it from the controllerContext.
+     * @var TypoScriptConfiguration
+     */
+    private $typoScriptConfiguration;
+
+    /**
+     * @var \ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext
+     */
+    protected $controllerContext;
 
     /**
      * @var \ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService
@@ -67,6 +74,28 @@ abstract class AbstractBaseController extends ActionController
     public function injectSolrConfigurationManager(ConfigurationManager $configurationManager)
     {
         $this->solrConfigurationManager = $configurationManager;
+    }
+
+    /**
+     * Initialize the controller context
+     *
+     * @return \TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext ControllerContext to be passed to the view
+     * @api
+     */
+    protected function buildControllerContext()
+    {
+        /** @var $controllerContext \ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext */
+        $controllerContext = $this->objectManager->get(SolrControllerContext::class);
+        $controllerContext->setRequest($this->request);
+        $controllerContext->setResponse($this->response);
+        if ($this->arguments !== null) {
+            $controllerContext->setArguments($this->arguments);
+        }
+        $controllerContext->setUriBuilder($this->uriBuilder);
+
+        $controllerContext->setTypoScriptConfiguration($this->typoScriptConfiguration);
+
+        return $controllerContext;
     }
 
     /**
@@ -115,7 +144,6 @@ abstract class AbstractBaseController extends ActionController
         );
         $search = GeneralUtility::makeInstance(Search::class, $solrConnection);
 
-        /** @var $searchService \ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService */
         $this->searchService = GeneralUtility::makeInstance(SearchResultSetService::class, $this->typoScriptConfiguration, $search);
     }
 }

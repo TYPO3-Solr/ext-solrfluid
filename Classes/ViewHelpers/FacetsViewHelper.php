@@ -13,15 +13,14 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Facets ViewHelper
  */
 class FacetsViewHelper extends AbstractViewHelper
 {
-
     /**
      * @var \ApacheSolrForTypo3\Solr\Search
      */
@@ -33,23 +32,9 @@ class FacetsViewHelper extends AbstractViewHelper
     protected $facetRendererFactory;
 
     /**
-     * @var array
-     */
-    protected $configuration;
-
-    /**
      * @var bool
      */
     protected $facetsActive = false;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        // todo: fetch from ControllerContext
-        $this->configuration = \ApacheSolrForTypo3\Solr\Util::getSolrConfiguration();
-    }
 
     /**
      * Get facets
@@ -61,15 +46,16 @@ class FacetsViewHelper extends AbstractViewHelper
      */
     public function render(\ApacheSolrForTypo3\Solr\Search $search, $facets = 'facets', $usedFacets = 'usedFacets')
     {
+        $configuredFacets = $this->getTypoScriptConfiguration()->getSearchFacetingFacets();
         $this->search = $search;
         $this->facetRendererFactory = GeneralUtility::makeInstance(
             'ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory',
-            $this->configuration['search.']['faceting.']['facets.']
+            $configuredFacets
         );
 
         $templateVariableContainer = $this->renderingContext->getTemplateVariableContainer();
-        $templateVariableContainer->add($facets, $this->getAvailableFacets());
-        $templateVariableContainer->add($usedFacets, $this->getUsedFacets());
+        $templateVariableContainer->add($facets, $this->getAvailableFacets($configuredFacets));
+        $templateVariableContainer->add($usedFacets, $this->getUsedFacets($configuredFacets));
 
         $content = $this->renderChildren();
 
@@ -82,12 +68,12 @@ class FacetsViewHelper extends AbstractViewHelper
     /**
      * Get available facet objects
      *
+     * @param array $configuredFacets
      * @return \ApacheSolrForTypo3\Solr\Facet\Facet[]
      */
-    protected function getAvailableFacets()
+    protected function getAvailableFacets(array $configuredFacets)
     {
         $facets = array();
-        $configuredFacets = $this->configuration['search.']['faceting.']['facets.'];
         foreach ($configuredFacets as $facetName => $facetConfiguration) {
             $facetName = substr($facetName, 0, -1);
             /** @var \ApacheSolrForTypo3\Solr\Facet\Facet $facet */
@@ -115,9 +101,10 @@ class FacetsViewHelper extends AbstractViewHelper
     }
 
     /**
-     *
+     * @param array $configuredFacets
+     * @return array
      */
-    protected function getUsedFacets()
+    protected function getUsedFacets(array $configuredFacets)
     {
         $resultParameters = GeneralUtility::_GET('tx_solr');
         $filterParameters = array();
@@ -130,7 +117,7 @@ class FacetsViewHelper extends AbstractViewHelper
             // only split by the first ":" to allow the use of colons in the filter value
             list($facetName, $filterValue) = explode(':', $filter, 2);
 
-            $facetConfiguration = $this->configuration['search.']['faceting.']['facets.'][$facetName . '.'];
+            $facetConfiguration = $configuredFacets[$facetName . '.'];
 
             // don't render facets that should not be included in used facets
             if (empty($facetConfiguration)

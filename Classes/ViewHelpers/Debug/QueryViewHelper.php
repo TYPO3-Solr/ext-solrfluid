@@ -13,8 +13,9 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Debug;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class QueryViewHelper

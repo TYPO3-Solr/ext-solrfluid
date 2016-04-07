@@ -6,9 +6,10 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Debug;
  * Date: 02-04-2015 10:08
  * All code (c) Beech Applications B.V. all rights reserved
  */
+
 use ApacheSolrForTypo3\Solr\Util;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class DocumentScoreAnalyzerViewHelper
@@ -22,17 +23,10 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
     protected $search;
 
     /**
-     * @var array
-     */
-    protected $configuration = array();
-
-    /**
      * Constructor
      */
     public function __construct()
     {
-        // todo: fetch from ControllerContext
-        $this->configuration = Util::getSolrConfiguration();
         $this->search = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Search');
     }
 
@@ -126,10 +120,11 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
         $scores = array();
         $totalScore = 0;
 
+        $queryFields = $this->getTypoScriptConfiguration()->getSearchQueryQueryFields();
         foreach ($highScores as $field => $highScore) {
             $pattern = '/' . $highScore['field'] . '\^([\d.]*)/';
             $matches = array();
-            preg_match_all($pattern, $this->configuration['search.']['query.']['queryFields'], $matches);
+            preg_match_all($pattern, $queryFields, $matches);
 
             $scores[] = '
 				<td>+ ' . $highScore['score'] . '</td>

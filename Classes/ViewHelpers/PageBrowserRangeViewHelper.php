@@ -15,7 +15,6 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
  */
 
 use ApacheSolrForTypo3\Solr\Search;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class PageBrowserRangeViewHelper

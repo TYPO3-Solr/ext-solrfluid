@@ -13,6 +13,8 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use ApacheSolrForTypo3\Solr\Facet\Facet;
+use ApacheSolrForTypo3\Solr\Facet\FacetOption;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -24,18 +26,18 @@ class RemoveFacetViewHelper extends FacetViewHelper
     /**
      * Create remove facet link
      *
-     * @param \ApacheSolrForTypo3\Solr\Facet\Facet $facet
-     * @param \ApacheSolrForTypo3\Solr\Facet\FacetOption $facetOption
+     * @param Facet $facet
+     * @param FacetOption $facetOption
      * @param string $optionValue
      * @param int $pageUid
      * @param bool $returnUrl
      * @param string $section The anchor to be added to the url
      * @return string
      */
-    public function render(\ApacheSolrForTypo3\Solr\Facet\Facet $facet, \ApacheSolrForTypo3\Solr\Facet\FacetOption $facetOption = null, $optionValue = null, $pageUid = null, $returnUrl = false, $section = '')
+    public function render(Facet $facet, FacetOption $facetOption = null, $optionValue = null, $pageUid = null, $returnUrl = false, $section = '')
     {
         if ($facetOption === null) {
-            /** @var \ApacheSolrForTypo3\Solr\Facet\FacetOption $facetOption */
+            /** @var FacetOption $facetOption */
             $facetOption = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetOption',
                 $facet->getName(),
                 $optionValue

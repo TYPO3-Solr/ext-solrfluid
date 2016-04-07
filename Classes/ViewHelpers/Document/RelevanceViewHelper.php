@@ -15,7 +15,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document;
  */
 
 use ApacheSolrForTypo3\Solr\Search;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 
 /**
  * Class RelevanceViewHelper

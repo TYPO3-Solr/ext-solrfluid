@@ -15,9 +15,9 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Format;
  */
 use ApacheSolrForTypo3\Solr\Facet\Facet;
 use ApacheSolrForTypo3\Solr\Util;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
@@ -25,11 +25,6 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class FacetLabelViewHelper extends AbstractViewHelper implements SingletonInterface
 {
-
-    /**
-     * @var array
-     */
-    protected $configuration = array();
 
     /**
      * @var ContentObjectRenderer
@@ -41,8 +36,6 @@ class FacetLabelViewHelper extends AbstractViewHelper implements SingletonInterf
      */
     public function __construct()
     {
-        // todo: fetch from ControllerContext
-        $this->configuration = Util::getSolrConfiguration();
         $this->contentObjectRenderer = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
     }
 
@@ -52,11 +45,9 @@ class FacetLabelViewHelper extends AbstractViewHelper implements SingletonInterf
      */
     public function render(Facet $facet)
     {
-        $facetLabel = $this->contentObjectRenderer->stdWrap(
-            $this->configuration['search.']['faceting.']['facets.'][$facet->getName() . '.']['label'],
-            $this->configuration['search.']['faceting.']['facets.'][$facet->getName() . '.']['label.']
-        );
-
+        $facetConfiguration = $this->getTypoScriptConfiguration()->getSearchFacetingFacets();
+        $currentFacet = $facetConfiguration[$facet->getName() . '.'];
+        $facetLabel = $this->contentObjectRenderer->stdWrap($currentFacet['label'], $currentFacet['label.']);
         return $facetLabel ?: $facet->getName();
     }
 }

@@ -16,7 +16,6 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
 
 use ApacheSolrForTypo3\Solr\Util;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
@@ -41,19 +40,12 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
     protected $frontendController;
 
     /**
-     * @var array
-     */
-    protected $configuration;
-
-    /**
      * Constructor
      */
     public function __construct()
     {
         $this->frontendController =  $GLOBALS['TSFE'];
         $this->search = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Search');
-        // todo: fetch from ControllerContext
-        $this->configuration = Util::getSolrConfiguration();
     }
 
     /**
@@ -90,8 +82,8 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
      */
     public function render($pageUid = null, $additionalFilters = null, array $additionalParams = array(), $noCache = false, $pageType = 0, $noCacheHash = false, $section = '', $absolute = false, $addQueryString = false, array $argumentsToBeExcludedFromQueryString = array(), $addQueryStringMethod = null, $addSuggestUrl = true)
     {
-        if ($pageUid === null && !empty($this->configuration->getSearchTargetPage())) {
-            $pageUid = $this->configuration->getSearchTargetPage();
+        if ($pageUid === null && !empty($this->getTypoScriptConfiguration()->getSearchTargetPage())) {
+            $pageUid = $this->getTypoScriptConfiguration()->getSearchTargetPage();
         }
 
         $uriBuilder = $this->controllerContext->getUriBuilder();

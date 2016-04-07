@@ -14,8 +14,8 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document;
  * The TYPO3 project - inspiring people to share!
  */
 use ApacheSolrForTypo3\Solr\Util;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class HighlightResultViewHelper
@@ -34,15 +34,12 @@ class HighlightResultViewHelper extends AbstractViewHelper
     {
         /** @var \ApacheSolrForTypo3\Solr\Search $search */
         $search = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Search');
-        $configuration = Util::getSolrConfiguration();
+        $fragmentSeparator = $this->getTypoScriptConfiguration()->getSearchResultsHighlightingFragmentSeparator();
         $content = call_user_func(array($document, 'get' . $field));
 
         $highlightedContent = $search->getHighlightedContent();
         if (!empty($highlightedContent->{$document->getId()}->{$field}[0])) {
-            $content = implode(
-                ' ' . $configuration['search.']['results.']['resultsHighlighting.']['fragmentSeparator'] . ' ',
-                $highlightedContent->{$document->getId()}->{$field}
-            );
+            $content = implode(' ' . $fragmentSeparator . ' ', $highlightedContent->{$document->getId()}->{$field});
         }
         return $content;
     }

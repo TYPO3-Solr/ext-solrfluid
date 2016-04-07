@@ -14,9 +14,9 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Format;
  * The TYPO3 project - inspiring people to share!
  */
 use ApacheSolrForTypo3\Solr\Util;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
@@ -24,11 +24,6 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class FacetOptionLabelViewHelper extends AbstractViewHelper implements SingletonInterface
 {
-
-    /**
-     * @var array
-     */
-    protected $configuration = array();
 
     /**
      * @var ContentObjectRenderer
@@ -40,8 +35,6 @@ class FacetOptionLabelViewHelper extends AbstractViewHelper implements Singleton
      */
     public function __construct()
     {
-        // todo: fetch from ControllerContext
-        $this->configuration = Util::getSolrConfiguration();
         $this->contentObjectRenderer = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
     }
 
@@ -64,8 +57,10 @@ class FacetOptionLabelViewHelper extends AbstractViewHelper implements Singleton
             $optionValue
         );
 
+        $facetConfiguration = $this->getTypoScriptConfiguration()->getSearchFacetingFacets();
+
         // FIXME decouple this
-        if ($this->configuration['search.']['faceting.']['facets.'][$facet->getName() . '.']['type'] == 'hierarchy') {
+        if ($facetConfiguration[$facet->getName() . '.']['type'] == 'hierarchy') {
             $filterEncoder = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Query\FilterEncoder\Hierarchy');
             $facetRenderer = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\HierarchicalFacetRenderer', $facet);
             $optionValueLabel = $facetRenderer->getLastPathSegmentFromHierarchicalFacetOption($filterEncoder->decodeFilter($optionValue));
