@@ -30,7 +30,7 @@ class SimpleFacetFluidRenderer extends AbstractFacetFluidRenderer
      */
     public static function getFacetInternalType()
     {
-        return \Tx_Solr_Facet_Facet::TYPE_FIELD;
+        return \ApacheSolrForTypo3\Solr\Facet\Facet::TYPE_FIELD;
     }
 
     /**
@@ -58,8 +58,8 @@ class SimpleFacetFluidRenderer extends AbstractFacetFluidRenderer
                 continue;
             }
 
-            /* @var $facetOption \Tx_Solr_Facet_FacetOption */
-            $facetOption = GeneralUtility::makeInstance('Tx_Solr_Facet_FacetOption',
+            /* @var $facetOption \ApacheSolrForTypo3\Solr\Facet\FacetOption */
+            $facetOption = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetOption',
                 $this->facetName,
                 $facetOption,
                 $facetOptionResultCount

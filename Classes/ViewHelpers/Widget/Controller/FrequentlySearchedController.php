@@ -14,6 +14,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 use ApacheSolrForTypo3\Solr\Domain\Search\FrequentSearches\FrequentSearchesService;
+use ApacheSolrForTypo3\Solr\Util;
 use ApacheSolrForTypo3\Solrfluid\Widget\AbstractWidgetController;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
@@ -41,7 +42,7 @@ class FrequentlySearchedController extends AbstractWidgetController
     public function __construct()
     {
         // todo: fetch from ControllerContext
-        $this->solrConfiguration = \Tx_Solr_Util::getSolrConfiguration();
+        $this->solrConfiguration = Util::getSolrConfiguration();
         $databaseConnection = $GLOBALS['TYPO3_DB'];
         $tsfe = $GLOBALS['TSFE'];
         $cache = $this->getInitializedCache();

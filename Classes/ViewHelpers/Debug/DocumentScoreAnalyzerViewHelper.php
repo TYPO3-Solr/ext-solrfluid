@@ -6,6 +6,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Debug;
  * Date: 02-04-2015 10:08
  * All code (c) Beech Applications B.V. all rights reserved
  */
+use ApacheSolrForTypo3\Solr\Util;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -16,7 +17,7 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
 {
 
     /**
-     * @var \Tx_Solr_Search
+     * @var \ApacheSolrForTypo3\Solr\Search
      */
     protected $search;
 
@@ -31,8 +32,8 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
     public function __construct()
     {
         // todo: fetch from ControllerContext
-        $this->configuration = \Tx_Solr_Util::getSolrConfiguration();
-        $this->search = GeneralUtility::makeInstance('Tx_Solr_Search');
+        $this->configuration = Util::getSolrConfiguration();
+        $this->search = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Search');
     }
 
     /**

@@ -26,25 +26,25 @@ class RenderViewHelper extends AbstractViewHelper
     /**
      * Render facet
      *
-     * @param \Tx_Solr_Facet_Facet $facet
+     * @param \ApacheSolrForTypo3\Solr\Facet\Facet $facet
      * @return string
      */
-    public function render(\Tx_Solr_Facet_Facet $facet)
+    public function render(\ApacheSolrForTypo3\Solr\Facet\Facet $facet)
     {
         // todo: fetch from ControllerContext
-        $configuration = \Tx_Solr_Util::getSolrConfiguration();
+        $configuration = \ApacheSolrForTypo3\Solr\Util::getSolrConfiguration();
         $configuredFacets = $configuration['search.']['faceting.']['facets.'];
-        /** @var \Tx_Solr_Facet_FacetRendererFactory $facetRendererFactory */
+        /** @var \ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory $facetRendererFactory */
         $facetRendererFactory = GeneralUtility::makeInstance(
-            'Tx_Solr_Facet_FacetRendererFactory',
+            'ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory',
             $configuredFacets
         );
 
 
-        /** @var \Tx_Solr_FacetRenderer $renderer */
+        /** @var \ApacheSolrForTypo3\Solr\FacetRenderer $renderer */
         $facetRenderer = $facetRendererFactory->getFacetRendererByFacet($facet);
         if (!$facetRenderer instanceof FacetFluidRendererInterface) {
-            /** @var \Tx_Solr_Template $template */
+            /** @var \ApacheSolrForTypo3\Solr\Template $template */
             $template = GeneralUtility::makeInstance(
                 'ApacheSolrForTypo3\\Solr\\Template',
                 GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'),

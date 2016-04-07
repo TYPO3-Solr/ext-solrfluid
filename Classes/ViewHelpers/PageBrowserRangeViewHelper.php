@@ -14,6 +14,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
+use ApacheSolrForTypo3\Solr\Search;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -23,14 +24,14 @@ class PageBrowserRangeViewHelper extends AbstractViewHelper
 {
 
     /**
-     * @param \Tx_Solr_Search $search
+     * @param Search $search
      * @param string $from variable name for from value
      * @param string $to variable name for to value
      * @param string $total variable name for total value
      * @return string
      * @throws \TYPO3\CMS\Fluid\Core\ViewHelper\Exception\InvalidVariableException
      */
-    public function render(\Tx_Solr_Search $search, $from = 'from', $to = 'to', $total = 'total')
+    public function render(Search $search, $from = 'from', $to = 'to', $total = 'total')
     {
         $templateVariableContainer = $this->renderingContext->getTemplateVariableContainer();
 

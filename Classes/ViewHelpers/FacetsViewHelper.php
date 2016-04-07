@@ -23,12 +23,12 @@ class FacetsViewHelper extends AbstractViewHelper
 {
 
     /**
-     * @var \Tx_Solr_Search
+     * @var \ApacheSolrForTypo3\Solr\Search
      */
     protected $search;
 
     /**
-     * @var \Tx_Solr_Facet_FacetRendererFactory
+     * @var \ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory
      */
     protected $facetRendererFactory;
 
@@ -48,22 +48,22 @@ class FacetsViewHelper extends AbstractViewHelper
     public function __construct()
     {
         // todo: fetch from ControllerContext
-        $this->configuration = \Tx_Solr_Util::getSolrConfiguration();
+        $this->configuration = \ApacheSolrForTypo3\Solr\Util::getSolrConfiguration();
     }
 
     /**
      * Get facets
      *
-     * @param \Tx_Solr_Search $search
+     * @param \ApacheSolrForTypo3\Solr\Search $search
      * @param string $facets variable name for the facets
      * @param string $usedFacets variable name for usedFacets
      * @return string
      */
-    public function render(\Tx_Solr_Search $search, $facets = 'facets', $usedFacets = 'usedFacets')
+    public function render(\ApacheSolrForTypo3\Solr\Search $search, $facets = 'facets', $usedFacets = 'usedFacets')
     {
         $this->search = $search;
         $this->facetRendererFactory = GeneralUtility::makeInstance(
-            'Tx_Solr_Facet_FacetRendererFactory',
+            'ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory',
             $this->configuration['search.']['faceting.']['facets.']
         );
 
@@ -82,7 +82,7 @@ class FacetsViewHelper extends AbstractViewHelper
     /**
      * Get available facet objects
      *
-     * @return \Tx_Solr_Facet_Facet[]
+     * @return \ApacheSolrForTypo3\Solr\Facet\Facet[]
      */
     protected function getAvailableFacets()
     {
@@ -90,8 +90,8 @@ class FacetsViewHelper extends AbstractViewHelper
         $configuredFacets = $this->configuration['search.']['faceting.']['facets.'];
         foreach ($configuredFacets as $facetName => $facetConfiguration) {
             $facetName = substr($facetName, 0, -1);
-            /** @var \Tx_Solr_Facet_Facet $facet */
-            $facet = GeneralUtility::makeInstance('Tx_Solr_Facet_Facet',
+            /** @var \ApacheSolrForTypo3\Solr\Facet\Facet $facet */
+            $facet = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\Facet',
                 $facetName,
                 $this->facetRendererFactory->getFacetInternalType($facetName)
             );
@@ -140,8 +140,8 @@ class FacetsViewHelper extends AbstractViewHelper
                 continue;
             }
 
-            /** @var \Tx_Solr_Facet_Facet $facet */
-            $facet = GeneralUtility::makeInstance('Tx_Solr_Facet_Facet',
+            /** @var \ApacheSolrForTypo3\Solr\Facet\Facet $facet */
+            $facet = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\Facet',
                 $facetName,
                 $this->facetRendererFactory->getFacetInternalType($facetName)
             );

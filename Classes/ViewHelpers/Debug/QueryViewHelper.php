@@ -23,7 +23,7 @@ class QueryViewHelper extends AbstractViewHelper
 {
 
     /**
-     * @var \Tx_Solr_Search
+     * @var \ApacheSolrForTypo3\Solr\Search
      */
     protected $search;
 
@@ -32,7 +32,7 @@ class QueryViewHelper extends AbstractViewHelper
      */
     public function __construct()
     {
-        $this->search = GeneralUtility::makeInstance('Tx_Solr_Search');
+        $this->search = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Search');
     }
 
     /**

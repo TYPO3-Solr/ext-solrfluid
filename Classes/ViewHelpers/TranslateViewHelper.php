@@ -13,6 +13,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class TranslateViewHelper
@@ -56,7 +57,7 @@ class TranslateViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelp
     {
         $request = $this->controllerContext->getRequest();
         $extensionName = $this->arguments['extensionName'] === null ? $request->getControllerExtensionName() : $this->arguments['extensionName'];
-        $value = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($id, $extensionName, $this->arguments['arguments']);
+        $value = LocalizationUtility::translate($id, $extensionName, $this->arguments['arguments']);
         if ($value === null) {
             $value = $this->arguments['default'] !== null ? $this->arguments['default'] : $this->renderChildren();
             if (is_array($this->arguments['arguments'])) {

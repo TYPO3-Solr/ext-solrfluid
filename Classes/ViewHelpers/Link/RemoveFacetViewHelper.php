@@ -24,19 +24,19 @@ class RemoveFacetViewHelper extends FacetViewHelper
     /**
      * Create remove facet link
      *
-     * @param \Tx_Solr_Facet_Facet $facet
-     * @param \Tx_Solr_Facet_FacetOption $facetOption
+     * @param \ApacheSolrForTypo3\Solr\Facet\Facet $facet
+     * @param \ApacheSolrForTypo3\Solr\Facet\FacetOption $facetOption
      * @param string $optionValue
      * @param int $pageUid
      * @param bool $returnUrl
      * @param string $section The anchor to be added to the url
      * @return string
      */
-    public function render(\Tx_Solr_Facet_Facet $facet, \Tx_Solr_Facet_FacetOption $facetOption = null, $optionValue = null, $pageUid = null, $returnUrl = false, $section = '')
+    public function render(\ApacheSolrForTypo3\Solr\Facet\Facet $facet, \ApacheSolrForTypo3\Solr\Facet\FacetOption $facetOption = null, $optionValue = null, $pageUid = null, $returnUrl = false, $section = '')
     {
         if ($facetOption === null) {
-            /** @var \Tx_Solr_Facet_FacetOption $facetOption */
-            $facetOption = GeneralUtility::makeInstance('Tx_Solr_Facet_FacetOption',
+            /** @var \ApacheSolrForTypo3\Solr\Facet\FacetOption $facetOption */
+            $facetOption = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetOption',
                 $facet->getName(),
                 $optionValue
             );

@@ -22,7 +22,7 @@ class FacetViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Link\ActionViewHelper
 {
 
     /**
-     * @var \Tx_Solr_Search
+     * @var \ApacheSolrForTypo3\Solr\Search
      */
     protected $search;
 
@@ -31,20 +31,20 @@ class FacetViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Link\ActionViewHelper
      */
     public function __construct()
     {
-        $this->search = GeneralUtility::makeInstance('Tx_Solr_Search');
+        $this->search = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Search');
     }
 
     /**
      * Create add facet link
      *
-     * @param \Tx_Solr_Facet_Facet $facet
-     * @param \Tx_Solr_Facet_FacetOption $facetOption
+     * @param \ApacheSolrForTypo3\Solr\Facet\Facet $facet
+     * @param \ApacheSolrForTypo3\Solr\Facet\FacetOption $facetOption
      * @param int $pageUid
      * @param bool $returnUrl
      * @param string $section The anchor to be added to the url
      * @return string
      */
-    public function render(\Tx_Solr_Facet_Facet $facet, \Tx_Solr_Facet_FacetOption $facetOption, $pageUid = null, $returnUrl = false, $section = '')
+    public function render(\ApacheSolrForTypo3\Solr\Facet\Facet $facet, \ApacheSolrForTypo3\Solr\Facet\FacetOption $facetOption, $pageUid = null, $returnUrl = false, $section = '')
     {
         $linkBuilder = $this->getLinkBuilder($facet, $facetOption);
         if ($pageUid) {
@@ -67,15 +67,15 @@ class FacetViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Link\ActionViewHelper
     /**
      * Get LinkBuilder
      *
-     * @param \Tx_Solr_Facet_Facet $facet
-     * @param \Tx_Solr_Facet_FacetOption $facetOption
-     * @return \Tx_Solr_Facet_LinkBuilder
+     * @param \ApacheSolrForTypo3\Solr\Facet\Facet $facet
+     * @param \ApacheSolrForTypo3\Solr\Facet\FacetOption $facetOption
+     * @return \ApacheSolrForTypo3\Solr\Facet\LinkBuilder
      */
-    protected function getLinkBuilder(\Tx_Solr_Facet_Facet $facet, \Tx_Solr_Facet_FacetOption $facetOption)
+    protected function getLinkBuilder(\ApacheSolrForTypo3\Solr\Facet\Facet $facet, \ApacheSolrForTypo3\Solr\Facet\FacetOption $facetOption)
     {
-        /** @var \Tx_Solr_Facet_LinkBuilder $linkBuilder */
+        /** @var \ApacheSolrForTypo3\Solr\Facet\LinkBuilder $linkBuilder */
         $linkBuilder = GeneralUtility::makeInstance(
-            'Tx_Solr_Facet_LinkBuilder',
+            'ApacheSolrForTypo3\Solr\Facet\LinkBuilder',
             $this->search->getQuery(),
             $facet->getName(),
             $facetOption

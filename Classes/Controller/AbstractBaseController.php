@@ -55,7 +55,8 @@ abstract class AbstractBaseController extends ActionController
      * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
      * @return void
      */
-    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager) {
+    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager)
+    {
         $this->configurationManager = $configurationManager;
         $this->contentObjectRenderer = $this->configurationManager->getContentObject();
     }
@@ -106,7 +107,7 @@ abstract class AbstractBaseController extends ActionController
      */
     protected function initializeSearch()
     {
-        /** @var \Tx_Solr_ConnectionManager $solrConnection */
+        /** @var \ApacheSolrForTypo3\Solr\ConnectionManager $solrConnection */
         $solrConnection = GeneralUtility::makeInstance(ConnectionManager::class)->getConnectionByPageId(
             $this->typoScriptFrontendController->id,
             $this->typoScriptFrontendController->sys_language_uid,
