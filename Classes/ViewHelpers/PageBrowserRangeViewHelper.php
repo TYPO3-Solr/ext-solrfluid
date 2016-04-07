@@ -35,7 +35,7 @@ class PageBrowserRangeViewHelper extends AbstractViewHelper
         $templateVariableContainer = $this->renderingContext->getTemplateVariableContainer();
 
         $resultsFrom = $search->getResponseBody()->start + 1;
-        $resultsTo = $resultsFrom + count($search->getResultDocuments()) - 1;
+        $resultsTo = $resultsFrom + count($search->getResultDocumentsRaw()) - 1;
         $templateVariableContainer->add($from, $resultsFrom);
         $templateVariableContainer->add($to, $resultsTo);
         $templateVariableContainer->add($total, $search->getNumberOfResults());

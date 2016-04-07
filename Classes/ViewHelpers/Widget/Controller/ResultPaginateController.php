@@ -30,7 +30,7 @@ class ResultPaginateController extends AbstractWidgetController
     protected $configuration = array('insertAbove' => true, 'insertBelow' => true, 'maximumNumberOfLinks' => 10, 'addQueryStringMethod' => '');
 
     /**
-     * @var \Tx_Solr_Search
+     * @var \ApacheSolrForTypo3\Solr\Search
      */
     protected $search;
 
@@ -84,7 +84,7 @@ class ResultPaginateController extends AbstractWidgetController
             $this->currentPage = 1;
         }
         $this->view->assign('contentArguments', array(
-            $this->widgetConfiguration['as'] => $this->search->getResultDocuments(),
+            $this->widgetConfiguration['as'] => $this->search->getResultDocumentsRaw(),
             'pagination' => $this->buildPagination()
         ));
         $this->view->assign('configuration', $this->configuration);
