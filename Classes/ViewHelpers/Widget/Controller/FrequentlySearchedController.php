@@ -27,34 +27,6 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 class FrequentlySearchedController extends AbstractWidgetController
 {
     /**
-     * @var array
-     */
-    protected $solrConfiguration = array();
-
-    /**
-     * @var FrequentSearchesService
-     */
-    protected $frequentSearchesService;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        // todo: fetch from ControllerContext
-        $this->solrConfiguration = Util::getSolrConfiguration();
-        $databaseConnection = $GLOBALS['TYPO3_DB'];
-        $tsfe = $GLOBALS['TSFE'];
-        $cache = $this->getInitializedCache();
-
-        $this->frequentSearchesService = GeneralUtility::makeInstance(FrequentSearchesService::class,
-            $this->solrConfiguration,
-            $cache,
-            $tsfe,
-            $databaseConnection);
-    }
-
-    /**
      * Initializes the cache for this command.
      *
      * @return \TYPO3\CMS\Core\Cache\Frontend\AbstractFrontend
@@ -83,23 +55,35 @@ class FrequentlySearchedController extends AbstractWidgetController
      */
     public function indexAction()
     {
-        $frequentSearches = $this->frequentSearchesService->getFrequentSearchTerms();
-        $this->view->assign('contentArguments', array('frequentSearches' => $this->enrichFrequentSearchesInfo($frequentSearches)));
+        $databaseConnection = $GLOBALS['TYPO3_DB'];
+        $tsfe = $GLOBALS['TSFE'];
+        $cache = $this->getInitializedCache();
+        $configuration = $this->controllerContext->getTypoScriptConfiguration();
+
+        $frequentSearchesService = GeneralUtility::makeInstance(FrequentSearchesService::class,
+            $configuration,
+            $cache,
+            $tsfe,
+            $databaseConnection);
+
+        $frequentSearches = $frequentSearchesService->getFrequentSearchTerms();
+        $minimumSize = $configuration->getSearchFrequentSearchesMinSize();
+        $maximumSize = $configuration->getSearchFrequentSearchesMaxSize();
+
+        $this->view->assign('contentArguments', array('frequentSearches' => $this->enrichFrequentSearchesInfo($frequentSearches, $minimumSize, $maximumSize)));
     }
 
     /**
      * Enrich the frequentSearches
      *
      * @param array Frequent search terms as array with terms as keys and hits as the value
+     * @param integer $minimumSize
+     * @param integer $maximumSize
      * @return array An array with content for the frequent terms markers
      */
-    protected function enrichFrequentSearchesInfo(array $frequentSearchTerms)
+    protected function enrichFrequentSearchesInfo(array $frequentSearchTerms, $minimumSize, $maximumSize)
     {
         $frequentSearches = array();
-
-        $minimumSize = $this->solrConfiguration['search.']['frequentSearches.']['minSize'];
-        $maximumSize = $this->solrConfiguration['search.']['frequentSearches.']['maxSize'];
-
         if (count($frequentSearchTerms)) {
             $maximumHits = max(array_values($frequentSearchTerms));
             $minimumHits = min(array_values($frequentSearchTerms));

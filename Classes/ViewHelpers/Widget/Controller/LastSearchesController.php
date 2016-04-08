@@ -26,28 +26,14 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class LastSearchesController extends AbstractWidgetController
 {
     /**
-     * @var LastSearchesService
-     */
-    protected $lastSearchesService;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        // todo: fetch from ControllerContext
-        $typoScriptConfiguration = Util::getSolrConfiguration();
-        $databaseConnection= $GLOBALS['TYPO3_DB'];
-        $tsfe = $GLOBALS['TSFE'];
-
-        $this->lastSearchesService = GeneralUtility::makeInstance(LastSearchesService::class, $typoScriptConfiguration, $tsfe, $databaseConnection);
-    }
-
-    /**
      * Last searches
      */
     public function indexAction()
     {
-        $this->view->assign('contentArguments', array('lastSearches' => $this->lastSearchesService->getLastSearches()));
+        $databaseConnection= $GLOBALS['TYPO3_DB'];
+        $tsfe = $GLOBALS['TSFE'];
+        $typoScriptConfiguration = $this->controllerContext->getTypoScriptConfiguration();
+        $lastSearchesService = GeneralUtility::makeInstance(LastSearchesService::class, $typoScriptConfiguration, $tsfe, $databaseConnection);
+        $this->view->assign('contentArguments', array('lastSearches' => $lastSearchesService->getLastSearches()));
     }
 }
