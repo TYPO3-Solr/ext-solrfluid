@@ -8,16 +8,18 @@
   "homepage": "http://www.typo3-solr.com",
   "authors": [
     {
-      "name": "Ingo Renner",
-      "email": "ingo@typo3.org",
-      "role": "Lead Developer"
+      "name": "Timo Schmidt",
+      "email": "timo.schmidt@dkd.de"
+    },
+    {
+      "name": "Frans Saris",
+      "email": "frans@beech.it"
     }
   ],
   "support": {
     "email": "typo3-project-solr@lists.typo3.org",
     "issues": "https://github.com/TYPO3-Solr/ext-solr/issues",
-    "forum": "http://forum.typo3.org/index.php/f/53/",
-    "wiki": "https://forge.typo3.org/projects/extension-solr/wiki"
+    "forum": "http://forum.typo3.org/index.php/f/53/"
   },
   "require": {
     "php": ">=5.5.0",
@@ -38,6 +40,7 @@
   "autoload-dev": {
     "psr-4": {
       "ApacheSolrForTypo3\\Solrfluid\\Tests\\": "Tests/",
+      "ApacheSolrForTypo3\\Solr\\Tests\\": ".Build/Web/typo3conf/ext/solr/Tests/",
       "TYPO3\\CMS\\Core\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/"
     }
   },
@@ -54,17 +57,14 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "3.2.x-dev"
+      "dev-master": "1.0.x-dev"
     },
     "typo3/cms": {
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "web-dir": ".Build/Web"
     },
     "typo3/class-alias-loader": {
-      "always-add-alias-loader": true,
-      "class-alias-maps": [
-        "Migrations/Code/ClassAliasMap.php"
-      ]
+      "always-add-alias-loader": true
     }
   }
 }
