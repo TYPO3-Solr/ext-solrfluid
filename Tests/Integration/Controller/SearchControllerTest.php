@@ -26,6 +26,7 @@ namespace ApacheSolrForTypo3\Solr\Tests\Integration\Plugin\Results;
 
 use ApacheSolrForTypo3\Solr\Site;
 use ApacheSolrForTypo3\Solr\Tests\Integration\IntegrationTest;
+use ApacheSolrForTypo3\Solrfluid\Controller\SearchController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
@@ -42,6 +43,20 @@ use TYPO3\CMS\Frontend\Page\PageGenerator;
  */
 class SearchControllerTest extends IntegrationTest
 {
+    /**
+     * @var SearchController
+     */
+    protected $searchController;
+
+    /**
+     * @var Request
+     */
+    protected $searchRequest;
+
+    /**
+     * @var Response
+     */
+    protected $searchResponse;
 
     /**
      * @var array
@@ -52,6 +67,11 @@ class SearchControllerTest extends IntegrationTest
     {
         parent::setUp();
         $GLOBALS['TT'] = $this->getMock('\\TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker', array(), array(), '', false);
+
+        /** @var  $searchController SearchController */
+        $this->searchController = $this->objectManager->get(SearchController::class);
+        $this->searchRequest = $this->getPreparedRequest();
+        $this->searchResponse = $this->getPreparedResponse();
     }
 
     /**
@@ -62,14 +82,9 @@ class SearchControllerTest extends IntegrationTest
         $this->importDataSetFromFixture('can_render_search_controller.xml');
         $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
         $this->indexPages(array(1, 2));
-
-            /** @var  $searchController \ApacheSolrForTypo3\Solrfluid\Controller\SearchController */
-        $searchController = $this->objectManager->get(\ApacheSolrForTypo3\Solrfluid\Controller\SearchController::class);
-        $request = $this->getPreparedRequest();
-        $response = $this->getPreparedResponse();
-        $searchController->processRequest($request, $response);
-
-        $this->assertContains('id="tx-solr-search-form-pi-results"', $response->getContent(), 'Response did not contain search css selector');
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $content = $this->searchResponse->getContent();
+        $this->assertContains('id="tx-solr-search-form-pi-results"', $content, 'Response did not contain search css selector');
     }
 
     /**
@@ -82,13 +97,9 @@ class SearchControllerTest extends IntegrationTest
         $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
         $this->indexPages(array(1, 2, 3));
 
-        /** @var  $searchController \ApacheSolrForTypo3\Solrfluid\Controller\SearchController */
-        $searchController = $this->objectManager->get(\ApacheSolrForTypo3\Solrfluid\Controller\SearchController::class);
-        $request = $this->getPreparedRequest();
-        $response = $this->getPreparedResponse();
-        $searchController->processRequest($request, $response);
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $result = $this->searchResponse->getContent();
 
-        $result = $response->getContent();
         $this->assertContains('pages/3/0/0/0', $result, 'Could not find page 3 in result set');
         $this->assertContains('pages/2/0/0/0', $result, 'Could not find page 2 in result set');
     }
@@ -104,15 +115,53 @@ class SearchControllerTest extends IntegrationTest
         $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
 
         $_GET['q'] = '*';
-        /** @var  $searchController \ApacheSolrForTypo3\Solrfluid\Controller\SearchController */
-        $searchController = $this->objectManager->get(\ApacheSolrForTypo3\Solrfluid\Controller\SearchController::class);
-        $request = $this->getPreparedRequest();
-        $response = $this->getPreparedResponse();
-        $searchController->processRequest($request, $response);
 
-        $resultPage1 = $response->getContent();
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $resultPage1 = $this->searchResponse->getContent();
+
         $this->assertPaginationVisible($resultPage1);
         $this->assertContains('Results 1 until 5 of 8', $resultPage1, 'Wrong result count indicated in template');
+    }
+
+    /**
+     * @test
+     */
+    public function canOpenSecondPageOfPaginatedSearch()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+
+        //now we jump to the second page
+        $_GET['q'] = '*';
+
+        $this->searchRequest->setArgument('page', 2);
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $resultPage2 = $this->searchResponse->getContent();
+
+        $this->assertContains('pages/8/0/0/0', $resultPage2, 'Could not find page 8 in result set');
+        $this->assertContains('Results 6 until 8 of 8', $resultPage2, 'Wrong result count indicated in template');
+    }
+
+    /**
+     * @test
+     */
+    public function canGetADidYouMeanProposalForATypo()
+    {
+        $this->markTestSkipped('We need to implement this');
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = 'shoo';
+
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $resultPage1 = $this->searchResponse->getContent();
+
+        $this->assertContains("Did you mean", $resultPage1, 'Could not find did you mean in response');
+        $this->assertContains("shoes", $resultPage1, 'Could not find shoes in response');
     }
 
     /**
