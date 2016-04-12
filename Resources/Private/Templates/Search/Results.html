@@ -17,6 +17,15 @@
 			</span>
 		</f:if>
 
+		<f:if condition="{resultSet.hasSpellCheckingSuggestions}">
+			<f:then>
+				Did you mean
+				<f:for each="{resultSet.spellCheckingSuggestions}" as="suggestion">
+					<f:link.page additionalParams="{q:suggestion.suggestion}" noCacheHash="1">{suggestion.suggestion}</f:link.page>
+				</f:for> ?
+			</f:then>
+		</f:if>
+
 		<f:if condition="{search.numberOfResults}">
 			<span class="result-found"><s:translate key="results_found" arguments="{0:search.numberOfResults, 1: search.queryTime}">Found %d results in %d seconds</s:translate></span>
 			<span class="result-range">

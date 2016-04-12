@@ -38,8 +38,6 @@ use TYPO3\CMS\Frontend\Page\PageGenerator;
  * Integration testcase to test for the SearchController
  *
  * @author Timo Schmidt
- * @package TYPO3
- * @subpackage solr
  */
 class SearchControllerTest extends IntegrationTest
 {
@@ -148,7 +146,6 @@ class SearchControllerTest extends IntegrationTest
      */
     public function canGetADidYouMeanProposalForATypo()
     {
-        $this->markTestSkipped('We need to implement this');
         $this->importDataSetFromFixture('can_render_search_controller.xml');
         $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
 
