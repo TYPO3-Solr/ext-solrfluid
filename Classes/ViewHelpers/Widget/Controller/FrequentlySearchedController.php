@@ -93,7 +93,7 @@ class FrequentlySearchedController extends AbstractWidgetController
             foreach ($frequentSearchTerms as $term => $hits) {
                 $size = round($minimumSize + (($hits - $minimumHits) * $step));
                 $frequentSearches[] = array(
-                    'q' => $term,
+                    'q' => htmlspecialchars_decode($term),
                     'hits' => $hits,
                     'style' => 'font-size: ' . $size . 'px',
                     'class' => 'tx-solr-frequent-term-' . $size,
