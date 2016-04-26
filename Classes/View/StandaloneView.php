@@ -1,5 +1,6 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\View;
+
 /**
  * This source file is proprietary property of Beech Applications B.V.
  * Date: 30-03-2015 14:09
@@ -8,18 +9,20 @@ namespace ApacheSolrForTypo3\Solrfluid\View;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\ArrayUtility;
 use TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException;
+
 /**
  * Class StandaloneView
  *
  * Standalone viewHelper from core extended with templatePath resolving
  */
-class StandaloneView extends \TYPO3\CMS\Fluid\View\StandaloneView {
+class StandaloneView extends \TYPO3\CMS\Fluid\View\StandaloneView
+{
     /**
      * Path(s) to the template root
      *
      * @var array
      */
-    protected $templateRootPaths = NULL;
+    protected $templateRootPaths = null;
     /**
      * @var array
      */
@@ -29,7 +32,8 @@ class StandaloneView extends \TYPO3\CMS\Fluid\View\StandaloneView {
      *
      * @param array $templateRootPaths
      */
-    public function setTemplateRootPaths(array $templateRootPaths) {
+    public function setTemplateRootPaths(array $templateRootPaths)
+    {
         $this->templateRootPaths = $templateRootPaths;
     }
     /**
@@ -38,12 +42,13 @@ class StandaloneView extends \TYPO3\CMS\Fluid\View\StandaloneView {
      * @return null
      * @throws InvalidTemplateResourceException
      */
-    public function setTemplateName($templateName, $throwException = TRUE) {
+    public function setTemplateName($templateName, $throwException = true)
+    {
         $templateName = ucfirst($templateName);
         $cacheKey = 't_' . $templateName;
         if (!isset($this->templatePathCache[$cacheKey])) {
             $paths = ArrayUtility::sortArrayWithIntegerKeys($this->templateRootPaths);
-            $paths = array_reverse($paths, TRUE);
+            $paths = array_reverse($paths, true);
             $possibleTemplatePaths = array();
             foreach ($paths as $templateRootPath) {
                 $possibleTemplatePaths[] = GeneralUtility::fixWindowsFilePath($templateRootPath . '/' . $templateName . '.html');
@@ -61,7 +66,7 @@ class StandaloneView extends \TYPO3\CMS\Fluid\View\StandaloneView {
         } elseif ($throwException) {
             throw new InvalidTemplateResourceException('Could not load template file. Tried following paths: "' . implode('", "', $possibleTemplatePaths) . '".', 1413190242);
         } else {
-            return NULL;
+            return null;
         }
     }
 }

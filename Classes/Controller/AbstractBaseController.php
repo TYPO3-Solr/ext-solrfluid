@@ -118,7 +118,7 @@ abstract class AbstractBaseController extends ActionController
     protected function initializeAction()
     {
         // Reset configuration (to reset flexform overrides) if resetting is enabled
-        if($this->resetConfigurationBeforeInitialize) {
+        if ($this->resetConfigurationBeforeInitialize) {
             $this->solrConfigurationManager->reset();
         }
 
