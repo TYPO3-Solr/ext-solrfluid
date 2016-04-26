@@ -30,9 +30,9 @@ class ResultPaginateController extends AbstractWidgetController
     protected $configuration = array('insertAbove' => true, 'insertBelow' => true, 'maximumNumberOfLinks' => 10, 'addQueryStringMethod' => '');
 
     /**
-     * @var \ApacheSolrForTypo3\Solr\Search
+     * @var \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet
      */
-    protected $search;
+    protected $resultSet;
 
     /**
      * @var int
@@ -64,11 +64,11 @@ class ResultPaginateController extends AbstractWidgetController
      */
     public function initializeAction()
     {
-        $this->search = $this->widgetConfiguration['search'];
+        $this->resultSet = $this->widgetConfiguration['resultSet'];
 
         ArrayUtility::mergeRecursiveWithOverrule($this->configuration, $this->widgetConfiguration['configuration'], false);
-        $this->configuration['itemsPerPage'] = (int)$this->search->getQuery()->getResultsPerPage();
-        $this->numberOfPages = ceil($this->search->getNumberOfResults() / $this->configuration['itemsPerPage']);
+        $this->configuration['itemsPerPage'] = (int)$this->resultSet->getUsedSearch()->getQuery()->getResultsPerPage();
+        $this->numberOfPages = ceil($this->resultSet->getUsedSearch()->getNumberOfResults() / $this->configuration['itemsPerPage']);
         $this->maximumNumberOfLinks = (int)$this->configuration['maximumNumberOfLinks'];
     }
 
@@ -84,7 +84,7 @@ class ResultPaginateController extends AbstractWidgetController
             $this->currentPage = 1;
         }
         $this->view->assign('contentArguments', array(
-            $this->widgetConfiguration['as'] => $this->search->getResultDocumentsRaw(),
+            $this->widgetConfiguration['as'] => $this->resultSet->getUsedSearch()->getResultDocumentsRaw(),
             'pagination' => $this->buildPagination()
         ));
         $this->view->assign('configuration', $this->configuration);

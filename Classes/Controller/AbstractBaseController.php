@@ -59,6 +59,11 @@ abstract class AbstractBaseController extends ActionController
     protected $searchService;
 
     /**
+     * @var bool
+     */
+    protected $resetConfigurationBeforeInitialize = true;
+
+    /**
      * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
      * @return void
      */
@@ -75,6 +80,15 @@ abstract class AbstractBaseController extends ActionController
     {
         $this->solrConfigurationManager = $configurationManager;
     }
+
+    /**
+     * @param boolean $resetConfigurationBeforeInitialize
+     */
+    public function setResetConfigurationBeforeInitialize($resetConfigurationBeforeInitialize)
+    {
+        $this->resetConfigurationBeforeInitialize = $resetConfigurationBeforeInitialize;
+    }
+
 
     /**
      * Initialize the controller context
@@ -103,8 +117,11 @@ abstract class AbstractBaseController extends ActionController
      */
     protected function initializeAction()
     {
-        // Reset configuration (to reset flexform overrides)
-        $this->solrConfigurationManager->reset();
+        // Reset configuration (to reset flexform overrides) if resetting is enabled
+        if($this->resetConfigurationBeforeInitialize) {
+            $this->solrConfigurationManager->reset();
+        }
+
         // Override configuration with flexform settings
         if (!empty($this->contentObjectRenderer->data['pi_flexform'])) {
             $flexFormService = $this->objectManager->get(FlexFormService::class);

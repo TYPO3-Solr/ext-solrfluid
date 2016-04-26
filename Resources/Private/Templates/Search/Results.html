@@ -11,9 +11,9 @@
 		<f:render partial="Search/Form" section="Form" arguments="{search:search, additionalFilters:additionalFilters}" />
 
 
-		<f:if condition="{search.query.keywordsCleaned}">
+		<f:if condition="{resultSet.usedQuery.keywordsCleaned}">
 			<span class="searched-for">
-				<s:translate key="results_searched_for" arguments="{0:'\"{search.query.keywordsCleaned}\"'}">Searched for %s</s:translate>
+				<s:translate key="results_searched_for" arguments="{0:'\"{resultSet.usedQuery.keywordsCleaned}\"'}">Searched for %s</s:translate>
 			</span>
 		</f:if>
 
@@ -26,10 +26,10 @@
 			</f:then>
 		</f:if>
 
-		<f:if condition="{search.numberOfResults}">
-			<span class="result-found"><s:translate key="results_found" arguments="{0:search.numberOfResults, 1: search.queryTime}">Found %d results in %d seconds</s:translate></span>
+		<f:if condition="{resultSet.usedSearch.numberOfResults}">
+			<span class="result-found"><s:translate key="results_found" arguments="{0:resultSet.usedSearch.numberOfResults, 1: resultSet.usedSearch.queryTime}">Found %d results in %d seconds</s:translate></span>
 			<span class="result-range">
-			<s:pageBrowserRange search="{search}">
+			<s:pageBrowserRange resultSet="{resultSet}">
 				<f:translate key="results_range" arguments="{0:from, 1: to, 2: total}">Results %d until %d of %d</f:translate>
 			</s:pageBrowserRange>
 			</span>
@@ -37,10 +37,10 @@
 
 
 		<f:if condition="{hasSearched}">
-			<s:widget.resultPaginate search="{search}">
+			<s:widget.resultPaginate resultSet="{resultSet}">
 				<ol start="{pagination.displayRangeStart}" class="results-list">
 					<f:for each="{documents}" as="document">
-						<f:render partial="Result/Document" section="Document" arguments="{search:search, document:document}" />
+						<f:render partial="Result/Document" section="Document" arguments="{resultSet:resultSet, document:document}" />
 					</f:for>
 				</ol>
 			</s:widget.resultPaginate>
@@ -50,9 +50,9 @@
 
 	<div id="tx-solr-search-functions">
 		<f:if condition="{hasSearched}">
-			<f:render partial="Result/Facets" section="Facets" arguments="{search:search}" />
+			<f:render partial="Result/Facets" section="Facets" arguments="{resultSet:resultSet}" />
 		</f:if>
-		<f:render partial="Search/LastSearches" section="LastSearches" arguments="{search:search}" />
+		<f:render partial="Search/LastSearches" section="LastSearches" arguments="{resultSet:resultSet}" />
 		<f:render partial="Search/FrequentlySearched" section="FrequentlySearched" />
 	</div>
 

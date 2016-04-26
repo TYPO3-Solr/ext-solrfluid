@@ -14,6 +14,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget;
  * The TYPO3 project - inspiring people to share!
  */
 use ApacheSolrForTypo3\Solr\Search;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\Widget\AbstractWidgetViewHelper;
 
 /**
@@ -29,13 +30,13 @@ class ResultPaginateViewHelper extends AbstractWidgetViewHelper
     protected $controller;
 
     /**
-     * @param Search $search
+     * @param SearchResultSet $resultSet
      * @param string $as
      * @param array $configuration
      * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface
      * @throws \TYPO3\CMS\Fluid\Core\Widget\Exception\MissingControllerException
      */
-    public function render(Search $search, $as = 'documents', array $configuration = array('insertAbove' => true, 'insertBelow' => true, 'maximumNumberOfLinks' => 10))
+    public function render(SearchResultSet $resultSet, $as = 'documents', array $configuration = array('insertAbove' => true, 'insertBelow' => true, 'maximumNumberOfLinks' => 10))
     {
         return $this->initiateSubRequest();
     }

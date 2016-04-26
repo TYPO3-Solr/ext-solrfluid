@@ -47,14 +47,17 @@ abstract class AbstractFacetFluidRenderer extends AbstractFacetRenderer implemen
         $this->facetName          = $facet->getName();
 
         $this->solrConfiguration  = \ApacheSolrForTypo3\Solr\Util::getSolrConfiguration();
-        $this->facetConfiguration = $this->solrConfiguration['search.']['faceting.']['facets.'][$this->facetName . '.'];
+        $this->facetConfiguration = $this->solrConfiguration->getSearchFacetingFacetByName($facet->getName());
 
         $this->typoScriptService = GeneralUtility::makeInstance(
             'TYPO3\\CMS\\Extbase\\Service\\TypoScriptService'
         );
-        $this->settings = $this->typoScriptService->convertTypoScriptArrayToPlainArray(
+     /*   $this->settings = $this->typoScriptService->convertTypoScriptArrayToPlainArray(
             \ApacheSolrForTypo3\Solr\Util::getSolrConfiguration()
-        );
+        );*/
+
+        $this->queryLinkBuilder = GeneralUtility::makeInstance('ApacheSolrForTypo3\\Solr\\Query\\LinkBuilder',
+            $this->search->getQuery());
         $this->initView();
     }
 
@@ -64,13 +67,13 @@ abstract class AbstractFacetFluidRenderer extends AbstractFacetRenderer implemen
     protected function initView()
     {
         /** @var StandaloneView view */
-        $this->view = GeneralUtility::makeInstance('ApacheSolrForTypo3\\Solr\\View\\StandaloneView');
+        $this->view = GeneralUtility::makeInstance('ApacheSolrForTypo3\\Solrfluid\\View\\StandaloneView');
         $paths = $this->settings['view']['layoutRootPaths'];
-        $this->view->setLayoutRootPaths($this->fixPaths($paths ?: array('EXT:solr/Resources/Private/Layouts')));
+        $this->view->setLayoutRootPaths($this->fixPaths($paths ?: array('EXT:solrfluid/Resources/Private/Layouts')));
         $paths = $this->settings['view']['partialRootPaths'];
-        $this->view->setPartialRootPaths($this->fixPaths($paths ?: array('EXT:solr/Resources/Private/Partials')));
+        $this->view->setPartialRootPaths($this->fixPaths($paths ?: array('EXT:solrfluid/Resources/Private/Partials')));
         $paths = $this->settings['view']['templateRootPaths'];
-        $this->view->setTemplateRootPaths($this->fixPaths($paths ?: array('EXT:solr/Resources/Private/Templates')));
+        $this->view->setTemplateRootPaths($this->fixPaths($paths ?: array('EXT:solrfluid/Resources/Private/Templates')));
     }
 
     /**
@@ -96,19 +99,11 @@ abstract class AbstractFacetFluidRenderer extends AbstractFacetRenderer implemen
     {
         $facetContent = '';
 
-        $showEmptyFacets = false;
-        if (!empty($this->solrConfiguration['search.']['faceting.']['showEmptyFacets'])) {
-            $showEmptyFacets = true;
-        }
-
-        $showEvenWhenEmpty = false;
-        if (!empty($this->solrConfiguration['search.']['faceting.']['facets.'][$this->facetName . '.']['showEvenWhenEmpty'])) {
-            $showEvenWhenEmpty = true;
-        }
+        $showEmptyFacets = $this->solrConfiguration->getSearchFacetingShowEmptyFacetsByName($this->facetName);
 
         // if the facet doesn't provide any options, don't render it unless
         // it is configured to be rendered nevertheless
-        if (!$this->facet->isEmpty() || $showEmptyFacets || $showEvenWhenEmpty) {
+        if (!$this->facet->isEmpty() || $showEmptyFacets) {
             try {
                 $this->view->setTemplateName('Facets/' . ($this->facetConfiguration['fluid.']['template'] ?: 'Default'));
             } catch (InvalidTemplateResourceException $e) {

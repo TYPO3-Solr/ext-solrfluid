@@ -23,8 +23,6 @@ class SearchController extends AbstractBaseController
         $searchResultSet = $this->searchService->search($searchRequest);
 
         $this->view->assignMultiple(array(
-             // @todo: we should avoid to pass the search directly and use the resultSet instead
-            'search' => $this->searchService->getSearch(),
             'hasSearched' => $this->searchService->getHasSearched(),
             'additionalFilters' => $this->searchService->getAdditionalFilters(),
             'resultSet' => $searchResultSet

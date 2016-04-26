@@ -16,6 +16,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document;
 
 use ApacheSolrForTypo3\Solr\Search;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 
 /**
  * Class RelevanceViewHelper
@@ -26,13 +27,13 @@ class RelevanceViewHelper extends AbstractViewHelper
     /**
      * Get document relevance percentage
      *
-     * @param Search $search
+     * @param SearchResultSet $resultSet
      * @param \Apache_Solr_Document $document
      * @return int
      */
-    public function render(Search $search, \Apache_Solr_Document $document)
+    public function render(SearchResultSet $resultSet, \Apache_Solr_Document $document)
     {
-        $maximumScore = $document->__solr_grouping_groupMaximumScore ?: $search->getMaximumResultScore();
+        $maximumScore = $document->__solr_grouping_groupMaximumScore ?: $resultSet->getUsedSearch()->getMaximumResultScore();
         $documentScore = $document->getScore();
         $content = 0;
         if ($maximumScore > 0) {

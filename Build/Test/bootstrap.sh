@@ -4,7 +4,7 @@ SCRIPTPATH=$( cd $(dirname $0) ; pwd -P )
 EXTENSION_ROOTPATH="$SCRIPTPATH/../../"
 
 if [[ $* == *--local* ]]; then
-    echo -n "Choose a TYPO3 Version (e.g. dev-master,~6.2.17,~7.6.4): "
+    echo -n "Choose a TYPO3 Version (e.g. dev-master,~6.2.17,~7.6.5): "
     read typo3Version
     export TYPO3_VERSION=$typo3Version
 

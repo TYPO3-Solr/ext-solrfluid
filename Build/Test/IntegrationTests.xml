@@ -15,7 +15,7 @@
 
     <testsuites>
         <testsuite name="ext-solrfluid-integration-tests">
-            <directory>../Integration/</directory>
+            <directory>../../Tests/Integration/</directory>
         </testsuite>
     </testsuites>
     <filter>

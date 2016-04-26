@@ -16,7 +16,7 @@
 
 	<testsuites>
 		<testsuite name="ext-solrfluid-unit-tests">
-			<directory>../Unit/</directory>
+			<directory>../../Tests/Unit/</directory>
 		</testsuite>
 	</testsuites>
 

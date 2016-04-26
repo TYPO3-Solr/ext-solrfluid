@@ -162,6 +162,56 @@ class SearchControllerTest extends IntegrationTest
     }
 
     /**
+     * @test
+     */
+    public function canRenderAFacetWithoutFluid()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = '*';
+
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $resultPage1 = $this->searchResponse->getContent();
+
+        $this->assertContains('class="facet">pages</a>', $resultPage1, 'Could not find facet option for pages');
+    }
+
+
+    /**
+     * @test
+     */
+    public function canRenderAFacetWithFluid()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+
+        // now we set the facet type for "type" facet to fluid and expect that we get a rendered facet
+        $overwriteConfiguration = array();
+        $overwriteConfiguration['search.']['faceting.']['facets.']['type.']['type'] = 'fluid';
+
+        /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
+        $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
+        $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = '*';
+
+            // since we overwrite the configuration in the testcase from outside we want to avoid that it will be resetted
+        $this->searchController->setResetConfigurationBeforeInitialize(false);
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $resultPage1 = $this->searchResponse->getContent();
+
+        $this->assertContains('class="facet-option-list fluidfacet"', $resultPage1, 'Could not find fluidfacet class that indicates the facet was rendered with fluid');
+        $this->assertContains('pages</a> <span class="facet-result-count">', $resultPage1, 'Could not find facet option for pages');
+    }
+
+    /**
      * Assertion to check if the pagination markup is present in the response.
      *
      * @param string $content
@@ -191,6 +241,7 @@ class SearchControllerTest extends IntegrationTest
         /** @var $beUser  \TYPO3\CMS\Core\Authentication\BackendUserAuthentication */
         $beUser = GeneralUtility::makeInstance('TYPO3\CMS\Core\Authentication\BackendUserAuthentication');
         $GLOBALS['BE_USER'] = $beUser;
+        sleep(1);
     }
 
     /**

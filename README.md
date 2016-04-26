@@ -11,12 +11,12 @@ the bootstrapper will ask you for some variables (TYPO3 version, EXT:solr versio
 for the integration tests:
 
 ```bash
-chmod u+x ./Tests/Build/*.sh
-source ./Tests/Build/bootstrap.sh --local
+chmod u+x ./Build/Test/*.sh
+source ./Build/Test/bootstrap.sh --local
 ```
 
 Now you can run the complete test suite:
 
 ```bash
-./Tests/Build/cibuild.sh
+./Build/Test/cibuild.sh
 ```

@@ -22,7 +22,7 @@ if [ $? -eq "0" ]; then
 fi
 
 echo "Run unit tests"
-.Build/bin/phpunit --colors -c Tests/Build/UnitTests.xml --coverage-html=../../coverage-unit-solrfluid/
+.Build/bin/phpunit --colors -c Build/Test/UnitTests.xml --coverage-html=../../coverage-unit-solrfluid/
 
 echo "Run integration tests"
 
@@ -58,4 +58,4 @@ else
 	exit 1
 fi
 
-.Build/bin/phpunit --colors -c Tests/Build/IntegrationTests.xml --coverage-html=../../../coverage-integration-solrfluid/
+.Build/bin/phpunit --colors -c Build/Test/IntegrationTests.xml --coverage-html=../../../coverage-integration-solrfluid/
