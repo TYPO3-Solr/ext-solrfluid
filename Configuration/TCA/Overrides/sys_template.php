@@ -7,5 +7,5 @@ if (!defined('TYPO3_MODE')) {
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
     'solrfluid',
     'Configuration/TypoScript/FluidRendering/',
-    'Apache Solr - Fluid rendering (include after Default Configuration)s'
+    'Search - Fluid rendering (include after Default Configuration)s'
 );
