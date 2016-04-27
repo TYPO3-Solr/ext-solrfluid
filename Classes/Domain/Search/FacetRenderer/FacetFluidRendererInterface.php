@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Facet;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\FacetRenderer;
 
 /*
  * This file is part of the TYPO3 CMS project.

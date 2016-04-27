@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Facet;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\FacetRenderer;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -78,6 +78,7 @@ class SimpleFacetFluidRenderer extends AbstractFacetFluidRenderer
      * Sorts the facet options as defined in the facet's manualSortOrder
      * configuration option.
      *
+     * @param $facetOptions
      * @return array
      */
     protected function sortFacetOptionsByUserDefinedOrder($facetOptions)

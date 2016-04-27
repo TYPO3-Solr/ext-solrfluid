@@ -36,11 +36,11 @@
 // registering facet types
 \ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory::registerFacetType(
     'fluid',
-    'ApacheSolrForTypo3\\Solrfluid\\Facet\\SimpleFacetFluidRenderer'
+    'ApacheSolrForTypo3\\Solrfluid\\Domain\\Search\\FacetRenderer\\SimpleFacetFluidRenderer'
 );
 \ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory::registerFacetType(
     'fluidQueryGroup',
-    'ApacheSolrForTypo3\\Solrfluid\\FluidQueryGroupFacetRenderer',
+    'ApacheSolrForTypo3\\Solrfluid\\Domain\\Search\\FacetRenderer\\FluidQueryGroupFacetRenderer',
     'ApacheSolrForTypo3\\Solr\\Query\\FilterEncoder\\QueryGroup',
     'ApacheSolrForTypo3\\Solr\\Query\\FilterEncoder\\QueryGroup'
 );
