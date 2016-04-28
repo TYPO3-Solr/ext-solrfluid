@@ -16,8 +16,13 @@ namespace ApacheSolrForTypo3\Solrfluid\Facet;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+
 /**
- * Class FluidRenderer
+ * Class SimpleFacetFluidRenderer
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\Facet
  */
 class SimpleFacetFluidRenderer extends AbstractFacetFluidRenderer
 {
@@ -52,30 +57,19 @@ class SimpleFacetFluidRenderer extends AbstractFacetFluidRenderer
         }
 
         foreach ($rawFacetOptions as $facetOption => $facetOptionResultCount) {
-            $facetOption = (string) $facetOption;
+            $facetOption = (string)$facetOption;
             if ($facetOption === '_empty_') {
                 // skip missing facets
                 continue;
             }
 
             /* @var $facetOption \ApacheSolrForTypo3\Solr\Facet\FacetOption */
-            $facetOption = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetOption',
-                $this->facetName,
-                $facetOption,
-                $facetOptionResultCount
-            );
+            $facetOption = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetOption', $this->facetName, $facetOption, $facetOptionResultCount);
 
             $optionText = $facetOption->render();
             $optionSelected = $facetOption->isSelectedInFacet($this->facetName);
 
-            $facetOptions[] = array(
-                'label' => $optionText,
-                'value' => $facetOption->getValue(),
-                'count' => $facetOption->getNumberOfResults(),
-                'selected' => (bool)$optionSelected,
-                'facetName' => $this->facetName,
-                'facetOption' => $facetOption
-            );
+            $facetOptions[] = array('label' => $optionText, 'value' => $facetOption->getValue(), 'count' => $facetOption->getNumberOfResults(), 'selected' => (bool)$optionSelected, 'facetName' => $this->facetName, 'facetOption' => $facetOption);
         }
 
         $this->view->assign('options', $facetOptions);

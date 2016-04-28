@@ -1,10 +1,17 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Debug;
 
-/**
- * This source file is proprietary property of Beech Applications B.V.
- * Date: 02-04-2015 10:08
- * All code (c) Beech Applications B.V. all rights reserved
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
  */
 
 use ApacheSolrForTypo3\Solr\Util;
@@ -13,6 +20,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class DocumentScoreAnalyzerViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Debug
  */
 class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
 {
@@ -43,7 +54,7 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
         // only check whether a BE user is logged in, don't need to check
         // for enabled score analysis as we wouldn't be here if it was disabled
         if (!empty($GLOBALS['TSFE']->beUserLogin)) {
-            $debugData  = $this->search->getDebugResponse()->explain->{$document->getId()};
+            $debugData = $this->search->getDebugResponse()->explain->{$document->getId()};
             $highScores = $this->getHighScores($debugData);
             $score = $document->getField('score');
             $content = $this->renderScoreAnalysis($highScores, (float)($score ? $score['value'] : 0), $debugData);
@@ -81,13 +92,8 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
             list($field, $searchTerm) = explode(':', $matches[2][$key]);
 
             // keep track of highest score per search term
-            if (!isset($highScores[$field])
-                || $highScores[$field]['score'] < $matches[1][$key]) {
-                $highScores[$field] = array(
-                    'score'      => $matches[1][$key],
-                    'field'      => $field,
-                    'searchTerm' => $searchTerm
-                );
+            if (!isset($highScores[$field]) || $highScores[$field]['score'] < $matches[1][$key]) {
+                $highScores[$field] = array('score' => $matches[1][$key], 'field' => $field, 'searchTerm' => $searchTerm);
             }
         }
 
@@ -96,11 +102,7 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
         preg_match($pattern, $debugData, $match);
         if (!empty($match[1])) {
             $field = 'FunctionQuery (misses boost value)';
-            $highScores[$field] = array(
-                'score'      => $match[1],
-                'field'      => $field,
-                'searchTerm' => $match[2]
-            );
+            $highScores[$field] = array('score' => $match[1], 'field' => $field, 'searchTerm' => $match[2]);
         }
 
         return $highScores;
@@ -135,9 +137,7 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
         }
 
         $content = '<table class="document-score-analysis" style="width: 100%; border: 1px solid #aaa; font-size: 11px; background-color: #eee;">
-			<tr style="border-bottom: 2px solid #aaa; font-weight: bold;"><td>Score</td><td>Field</td><td>Boost</td></tr><tr>'
-            . implode('</tr><tr>', $scores)
-            . '</tr>
+			<tr style="border-bottom: 2px solid #aaa; font-weight: bold;"><td>Score</td><td>Field</td><td>Boost</td></tr><tr>' . implode('</tr><tr>', $scores) . '</tr>
 			<tr><td colspan="3"><hr style="border-top: 1px solid #aaa; height: 0px; padding: 0px; margin: 0px;" /></td></tr>
 			<tr><td colspan="3">= ' . $totalScore . ' (Inaccurate analysis! Not all parts of the score have been taken into account.)</td></tr>
 			<tr><td colspan="3">= ' . $realScore . ' (real score)</td></tr>

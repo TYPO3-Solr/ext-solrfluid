@@ -13,6 +13,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\Controller;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use ApacheSolrForTypo3\Solr\Domain\Search\FrequentSearches\FrequentSearchesService;
 use ApacheSolrForTypo3\Solr\Util;
 use ApacheSolrForTypo3\Solrfluid\Widget\AbstractWidgetController;
@@ -23,6 +24,10 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Class FrequentlySearchedController
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\Controller
  */
 class FrequentlySearchedController extends AbstractWidgetController
 {
@@ -39,12 +44,7 @@ class FrequentlySearchedController extends AbstractWidgetController
         } catch (NoSuchCacheException $e) {
             /** @var t3lib_cache_Factory $typo3CacheFactory */
             $typo3CacheFactory = $GLOBALS['typo3CacheFactory'];
-            $cacheInstance = $typo3CacheFactory->create(
-                $cacheIdentifier,
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheIdentifier]['frontend'],
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheIdentifier]['backend'],
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheIdentifier]['options']
-            );
+            $cacheInstance = $typo3CacheFactory->create($cacheIdentifier, $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheIdentifier]['frontend'], $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheIdentifier]['backend'], $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheIdentifier]['options']);
         }
 
         return $cacheInstance;
@@ -60,11 +60,7 @@ class FrequentlySearchedController extends AbstractWidgetController
         $cache = $this->getInitializedCache();
         $configuration = $this->controllerContext->getTypoScriptConfiguration();
 
-        $frequentSearchesService = GeneralUtility::makeInstance(FrequentSearchesService::class,
-            $configuration,
-            $cache,
-            $tsfe,
-            $databaseConnection);
+        $frequentSearchesService = GeneralUtility::makeInstance(FrequentSearchesService::class, $configuration, $cache, $tsfe, $databaseConnection);
 
         $frequentSearches = $frequentSearchesService->getFrequentSearchTerms();
         $minimumSize = $configuration->getSearchFrequentSearchesMinSize();
@@ -92,13 +88,7 @@ class FrequentlySearchedController extends AbstractWidgetController
 
             foreach ($frequentSearchTerms as $term => $hits) {
                 $size = round($minimumSize + (($hits - $minimumHits) * $step));
-                $frequentSearches[] = array(
-                    'q' => htmlspecialchars_decode($term),
-                    'hits' => $hits,
-                    'style' => 'font-size: ' . $size . 'px',
-                    'class' => 'tx-solr-frequent-term-' . $size,
-                    'size' => $size,
-                );
+                $frequentSearches[] = array('q' => htmlspecialchars_decode($term), 'hits' => $hits, 'style' => 'font-size: ' . $size . 'px', 'class' => 'tx-solr-frequent-term-' . $size, 'size' => $size,);
             }
         }
 

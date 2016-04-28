@@ -13,12 +13,17 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use ApacheSolrForTypo3\Solr\Facet\Facet;
 use ApacheSolrForTypo3\Solr\Facet\FacetOption;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class RemoveFacetViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link
  */
 class RemoveFacetViewHelper extends FacetViewHelper
 {
@@ -38,10 +43,7 @@ class RemoveFacetViewHelper extends FacetViewHelper
     {
         if ($facetOption === null) {
             /** @var FacetOption $facetOption */
-            $facetOption = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetOption',
-                $facet->getName(),
-                $optionValue
-            );
+            $facetOption = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetOption', $facet->getName(), $optionValue);
         }
         $linkBuilder = $this->getLinkBuilder($facet, $facetOption);
         if ($pageUid) {

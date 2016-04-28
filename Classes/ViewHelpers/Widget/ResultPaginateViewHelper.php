@@ -13,12 +13,17 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use ApacheSolrForTypo3\Solr\Search;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\Widget\AbstractWidgetViewHelper;
 
 /**
  * Class ResultPaginateViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget
  */
 class ResultPaginateViewHelper extends AbstractWidgetViewHelper
 {

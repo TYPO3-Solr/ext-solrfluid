@@ -13,10 +13,15 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Format;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class ArrayViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Format
  */
 class ArrayViewHelper extends AbstractViewHelper
 {

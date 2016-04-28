@@ -1,25 +1,19 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\Widget;
 
-/*                                                                        *
- * This script is backported from the TYPO3 Flow package "TYPO3.Fluid".   *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- *  of the License, or (at your option) any later version.                *
- *                                                                        *
- *                                                                        *
- * This script is distributed in the hope that it will be useful, but     *
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHAN-    *
- * TABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser       *
- * General Public License for more details.                               *
- *                                                                        *
- * You should have received a copy of the GNU Lesser General Public       *
- * License along with the script.                                         *
- * If not, see http://www.gnu.org/licenses/lgpl.html                      *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\ChildNodeAccessInterface;
@@ -29,9 +23,15 @@ use TYPO3\CMS\Fluid\Core\Widget\Exception\MissingControllerException;
 use TYPO3\CMS\Fluid\Core\Widget\WidgetRequest;
 
 /**
+ * Class AbstractWidgetViewHelper
+ *
  * This is almost a exact copy of \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
  * because we need to switch the request object to overrule the widget prefix for url params
  * todo: find cleaner way to let widget listen to tx_solr[] instead of tx_solr[@widget]
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\Widget
  */
 abstract class AbstractWidgetViewHelper extends AbstractViewHelper implements ChildNodeAccessInterface
 {

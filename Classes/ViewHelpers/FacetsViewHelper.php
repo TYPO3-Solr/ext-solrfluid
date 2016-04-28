@@ -13,12 +13,17 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Facets ViewHelper
+ * Class FacetsViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers
  */
 class FacetsViewHelper extends AbstractViewHelper
 {
@@ -49,10 +54,7 @@ class FacetsViewHelper extends AbstractViewHelper
     {
         $configuredFacets = $this->getTypoScriptConfiguration()->getSearchFacetingFacets();
         $this->search = $resultSet->getUsedSearch();
-        $this->facetRendererFactory = GeneralUtility::makeInstance(
-            'ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory',
-            $configuredFacets
-        );
+        $this->facetRendererFactory = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory', $configuredFacets);
 
         $templateVariableContainer = $this->renderingContext->getTemplateVariableContainer();
         $templateVariableContainer->add($facets, $this->getAvailableFacets($configuredFacets));
@@ -78,14 +80,9 @@ class FacetsViewHelper extends AbstractViewHelper
         foreach ($configuredFacets as $facetName => $facetConfiguration) {
             $facetName = substr($facetName, 0, -1);
             /** @var \ApacheSolrForTypo3\Solr\Facet\Facet $facet */
-            $facet = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\Facet',
-                $facetName,
-                $this->facetRendererFactory->getFacetInternalType($facetName)
-            );
+            $facet = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\Facet', $facetName, $this->facetRendererFactory->getFacetInternalType($facetName));
 
-            if (
-                (isset($facetConfiguration['includeInAvailableFacets']) && $facetConfiguration['includeInAvailableFacets'] == '0')
-                || !$facet->isRenderingAllowed()
+            if ((isset($facetConfiguration['includeInAvailableFacets']) && $facetConfiguration['includeInAvailableFacets'] == '0') || !$facet->isRenderingAllowed()
             ) {
                 // don't render facets that should not be included in available facets
                 // or that do not meet their requirements to be rendered
@@ -110,7 +107,7 @@ class FacetsViewHelper extends AbstractViewHelper
         $resultParameters = GeneralUtility::_GET('tx_solr');
         $filterParameters = array();
         if (isset($resultParameters['filter'])) {
-            $filterParameters = (array) array_map('urldecode', $resultParameters['filter']);
+            $filterParameters = (array)array_map('urldecode', $resultParameters['filter']);
         }
 
         $facetsInUse = array();
@@ -121,18 +118,13 @@ class FacetsViewHelper extends AbstractViewHelper
             $facetConfiguration = $configuredFacets[$facetName . '.'];
 
             // don't render facets that should not be included in used facets
-            if (empty($facetConfiguration)
-                ||
-                (isset($facetConfiguration['includeInUsedFacets']) && $facetConfiguration['includeInUsedFacets'] == '0')
+            if (empty($facetConfiguration) || (isset($facetConfiguration['includeInUsedFacets']) && $facetConfiguration['includeInUsedFacets'] == '0')
             ) {
                 continue;
             }
 
             /** @var \ApacheSolrForTypo3\Solr\Facet\Facet $facet */
-            $facet = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\Facet',
-                $facetName,
-                $this->facetRendererFactory->getFacetInternalType($facetName)
-            );
+            $facet = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\Facet', $facetName, $this->facetRendererFactory->getFacetInternalType($facetName));
 
             $facetsInUse[] = $facet;
         }

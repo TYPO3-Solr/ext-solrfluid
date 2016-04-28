@@ -20,6 +20,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class RenderViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Facet
  */
 class RenderViewHelper extends AbstractViewHelper
 {
@@ -34,10 +38,7 @@ class RenderViewHelper extends AbstractViewHelper
     {
         $configuredFacets = $this->getTypoScriptConfiguration()->getSearchFacetingFacets();
         /** @var \ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory $facetRendererFactory */
-        $facetRendererFactory = GeneralUtility::makeInstance(
-            'ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory',
-            $configuredFacets
-        );
+        $facetRendererFactory = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory', $configuredFacets);
 
 
         /** @var \ApacheSolrForTypo3\Solr\FacetRenderer $renderer */
@@ -45,12 +46,7 @@ class RenderViewHelper extends AbstractViewHelper
         if (!$facetRenderer instanceof FacetFluidRendererInterface) {
             $resultsTemplate = $this->getTypoScriptConfiguration()->getTemplateByFileKey('results');
             /** @var \ApacheSolrForTypo3\Solr\Template $template */
-            $template = GeneralUtility::makeInstance(
-                'ApacheSolrForTypo3\\Solr\\Template',
-                GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'),
-                $resultsTemplate,
-                'available_facets'
-            );
+            $template = GeneralUtility::makeInstance('ApacheSolrForTypo3\\Solr\\Template', GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'), $resultsTemplate, 'available_facets');
 
 
             $facetRenderer->setTemplate($template);

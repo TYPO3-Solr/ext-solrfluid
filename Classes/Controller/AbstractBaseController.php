@@ -1,6 +1,19 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\Controller;
 
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 use ApacheSolrForTypo3\Solr\ConnectionManager;
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService;
 use ApacheSolrForTypo3\Solr\Search;
@@ -18,6 +31,9 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class AbstractBaseController
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Controller
  */
 abstract class AbstractBaseController extends ActionController
@@ -89,7 +105,6 @@ abstract class AbstractBaseController extends ActionController
         $this->resetConfigurationBeforeInitialize = $resetConfigurationBeforeInitialize;
     }
 
-
     /**
      * Initialize the controller context
      *
@@ -125,19 +140,11 @@ abstract class AbstractBaseController extends ActionController
         // Override configuration with flexform settings
         if (!empty($this->contentObjectRenderer->data['pi_flexform'])) {
             $flexFormService = $this->objectManager->get(FlexFormService::class);
-            $flexFormConfiguration = $flexFormService->convertFlexFormContentToArray(
-                $this->contentObjectRenderer->data['pi_flexform']
-            );
+            $flexFormConfiguration = $flexFormService->convertFlexFormContentToArray($this->contentObjectRenderer->data['pi_flexform']);
             $typoScriptService = $this->objectManager->get(TypoScriptService::class);
-            $flexFormConfiguration = $typoScriptService->convertPlainArrayToTypoScriptArray(
-                $flexFormConfiguration
-            );
+            $flexFormConfiguration = $typoScriptService->convertPlainArrayToTypoScriptArray($flexFormConfiguration);
 
-            $this->solrConfigurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration(
-                $flexFormConfiguration,
-                true,
-                false
-            );
+            $this->solrConfigurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($flexFormConfiguration, true, false);
         }
 
         parent::initializeAction();
@@ -154,11 +161,7 @@ abstract class AbstractBaseController extends ActionController
     protected function initializeSearch()
     {
         /** @var \ApacheSolrForTypo3\Solr\ConnectionManager $solrConnection */
-        $solrConnection = GeneralUtility::makeInstance(ConnectionManager::class)->getConnectionByPageId(
-            $this->typoScriptFrontendController->id,
-            $this->typoScriptFrontendController->sys_language_uid,
-            $this->typoScriptFrontendController->MP
-        );
+        $solrConnection = GeneralUtility::makeInstance(ConnectionManager::class)->getConnectionByPageId($this->typoScriptFrontendController->id, $this->typoScriptFrontendController->sys_language_uid, $this->typoScriptFrontendController->MP);
         $search = GeneralUtility::makeInstance(Search::class, $solrConnection);
 
         $this->searchService = GeneralUtility::makeInstance(SearchResultSetService::class, $this->typoScriptConfiguration, $search);

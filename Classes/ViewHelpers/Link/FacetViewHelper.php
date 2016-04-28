@@ -13,10 +13,15 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class FacetViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link
  */
 class FacetViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Link\ActionViewHelper
 {
@@ -74,12 +79,7 @@ class FacetViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Link\ActionViewHelper
     protected function getLinkBuilder(\ApacheSolrForTypo3\Solr\Facet\Facet $facet, \ApacheSolrForTypo3\Solr\Facet\FacetOption $facetOption)
     {
         /** @var \ApacheSolrForTypo3\Solr\Facet\LinkBuilder $linkBuilder */
-        $linkBuilder = GeneralUtility::makeInstance(
-            'ApacheSolrForTypo3\Solr\Facet\LinkBuilder',
-            $this->search->getQuery(),
-            $facet->getName(),
-            $facetOption
-        );
+        $linkBuilder = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\LinkBuilder', $this->search->getQuery(), $facet->getName(), $facetOption);
         return $linkBuilder;
     }
 }

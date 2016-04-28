@@ -13,12 +13,17 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use ApacheSolrForTypo3\Solr\Util;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class HighlightResultViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document
  */
 class HighlightResultViewHelper extends AbstractViewHelper
 {

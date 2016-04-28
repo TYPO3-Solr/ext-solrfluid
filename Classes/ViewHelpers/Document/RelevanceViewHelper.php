@@ -20,6 +20,10 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 
 /**
  * Class RelevanceViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document
  */
 class RelevanceViewHelper extends AbstractViewHelper
 {
@@ -33,7 +37,7 @@ class RelevanceViewHelper extends AbstractViewHelper
      */
     public function render(SearchResultSet $resultSet, \Apache_Solr_Document $document)
     {
-        $maximumScore = $document->__solr_grouping_groupMaximumScore ?: $resultSet->getUsedSearch()->getMaximumResultScore();
+        $maximumScore = $document->__solr_grouping_groupMaximumScore ? : $resultSet->getUsedSearch()->getMaximumResultScore();
         $documentScore = $document->getScore();
         $content = 0;
         if ($maximumScore > 0) {

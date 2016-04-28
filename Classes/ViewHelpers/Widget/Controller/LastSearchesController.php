@@ -20,8 +20,13 @@ use ApacheSolrForTypo3\Solrfluid\Widget\AbstractWidgetController;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+
 /**
  * Class LastSearchesController
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\Controller
  */
 class LastSearchesController extends AbstractWidgetController
 {
@@ -30,7 +35,7 @@ class LastSearchesController extends AbstractWidgetController
      */
     public function indexAction()
     {
-        $databaseConnection= $GLOBALS['TYPO3_DB'];
+        $databaseConnection = $GLOBALS['TYPO3_DB'];
         $tsfe = $GLOBALS['TSFE'];
         $typoScriptConfiguration = $this->controllerContext->getTypoScriptConfiguration();
         $lastSearchesService = GeneralUtility::makeInstance(LastSearchesService::class, $typoScriptConfiguration, $tsfe, $databaseConnection);

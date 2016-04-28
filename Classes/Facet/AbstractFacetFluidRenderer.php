@@ -1,11 +1,19 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\Facet;
 
-/**
- * This source file is proprietary property of Beech Applications B.V.
- * Date: 30-03-2015 15:55
- * All code (c) Beech Applications B.V. all rights reserved
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
  */
+
 use ApacheSolrForTypo3\Solr\Facet\AbstractFacetRenderer;
 use ApacheSolrForTypo3\Solr\Facet\Facet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -15,6 +23,10 @@ use TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException;
 
 /**
  * Class AbstractFacetFluidRenderer
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\Facet
  */
 abstract class AbstractFacetFluidRenderer extends AbstractFacetRenderer implements FacetFluidRendererInterface
 {
@@ -43,21 +55,18 @@ abstract class AbstractFacetFluidRenderer extends AbstractFacetRenderer implemen
     {
         $this->search = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Search');
 
-        $this->facet              = $facet;
-        $this->facetName          = $facet->getName();
+        $this->facet = $facet;
+        $this->facetName = $facet->getName();
 
-        $this->solrConfiguration  = \ApacheSolrForTypo3\Solr\Util::getSolrConfiguration();
+        $this->solrConfiguration = \ApacheSolrForTypo3\Solr\Util::getSolrConfiguration();
         $this->facetConfiguration = $this->solrConfiguration->getSearchFacetingFacetByName($facet->getName());
 
-        $this->typoScriptService = GeneralUtility::makeInstance(
-            'TYPO3\\CMS\\Extbase\\Service\\TypoScriptService'
-        );
-     /*   $this->settings = $this->typoScriptService->convertTypoScriptArrayToPlainArray(
-            \ApacheSolrForTypo3\Solr\Util::getSolrConfiguration()
-        );*/
+        $this->typoScriptService = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
+        /*   $this->settings = $this->typoScriptService->convertTypoScriptArrayToPlainArray(
+               \ApacheSolrForTypo3\Solr\Util::getSolrConfiguration()
+           );*/
 
-        $this->queryLinkBuilder = GeneralUtility::makeInstance('ApacheSolrForTypo3\\Solr\\Query\\LinkBuilder',
-            $this->search->getQuery());
+        $this->queryLinkBuilder = GeneralUtility::makeInstance('ApacheSolrForTypo3\\Solr\\Query\\LinkBuilder', $this->search->getQuery());
         $this->initView();
     }
 
@@ -69,11 +78,11 @@ abstract class AbstractFacetFluidRenderer extends AbstractFacetRenderer implemen
         /** @var StandaloneView view */
         $this->view = GeneralUtility::makeInstance('ApacheSolrForTypo3\\Solrfluid\\View\\StandaloneView');
         $paths = $this->settings['view']['layoutRootPaths'];
-        $this->view->setLayoutRootPaths($this->fixPaths($paths ?: array('EXT:solrfluid/Resources/Private/Layouts')));
+        $this->view->setLayoutRootPaths($this->fixPaths($paths ? : array('EXT:solrfluid/Resources/Private/Layouts')));
         $paths = $this->settings['view']['partialRootPaths'];
-        $this->view->setPartialRootPaths($this->fixPaths($paths ?: array('EXT:solrfluid/Resources/Private/Partials')));
+        $this->view->setPartialRootPaths($this->fixPaths($paths ? : array('EXT:solrfluid/Resources/Private/Partials')));
         $paths = $this->settings['view']['templateRootPaths'];
-        $this->view->setTemplateRootPaths($this->fixPaths($paths ?: array('EXT:solrfluid/Resources/Private/Templates')));
+        $this->view->setTemplateRootPaths($this->fixPaths($paths ? : array('EXT:solrfluid/Resources/Private/Templates')));
     }
 
     /**
@@ -93,7 +102,7 @@ abstract class AbstractFacetFluidRenderer extends AbstractFacetRenderer implemen
     /**
      * Renders the complete facet.
      *
-     * @return	string	Facet markup.
+     * @return    string    Facet markup.
      */
     public function renderFacet()
     {
@@ -105,16 +114,13 @@ abstract class AbstractFacetFluidRenderer extends AbstractFacetRenderer implemen
         // it is configured to be rendered nevertheless
         if (!$this->facet->isEmpty() || $showEmptyFacets) {
             try {
-                $this->view->setTemplateName('Facets/' . ($this->facetConfiguration['fluid.']['template'] ?: 'Default'));
+                $this->view->setTemplateName('Facets/' . ($this->facetConfiguration['fluid.']['template'] ? : 'Default'));
             } catch (InvalidTemplateResourceException $e) {
                 return $e->getMessage();
             }
             /** @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $contentObject */
             $contentObject = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
-            $label = $contentObject->stdWrap(
-                $this->facetConfiguration['label'],
-                $this->facetConfiguration['label.']
-            );
+            $label = $contentObject->stdWrap($this->facetConfiguration['label'], $this->facetConfiguration['label.']);
             $this->view->assign('label', $label);
             $this->view->assign('facet', $this->facet);
             $this->view->assign('settings', $this->settings);

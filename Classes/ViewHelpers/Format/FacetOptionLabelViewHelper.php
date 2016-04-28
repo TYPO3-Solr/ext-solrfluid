@@ -13,6 +13,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Format;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use ApacheSolrForTypo3\Solr\Util;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -20,7 +21,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
- * Class facetOptionLabelViewHelper
+ * Class FacetOptionLabelViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Format
  */
 class FacetOptionLabelViewHelper extends AbstractViewHelper implements SingletonInterface
 {
@@ -52,10 +57,7 @@ class FacetOptionLabelViewHelper extends AbstractViewHelper implements Singleton
         }
 
         /** @var \ApacheSolrForTypo3\Solr\Facet\FacetOption $facetOption */
-        $facetOption = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetOption',
-            $facet->getName(),
-            $optionValue
-        );
+        $facetOption = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetOption', $facet->getName(), $optionValue);
 
         $facetConfiguration = $this->getTypoScriptConfiguration()->getSearchFacetingFacets();
 

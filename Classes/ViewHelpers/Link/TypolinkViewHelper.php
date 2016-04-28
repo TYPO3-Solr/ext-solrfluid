@@ -1,18 +1,18 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link;
 
-/*                                                                        *
- * This script is part of the TYPO3 project - inspiring people to share!  *
- *                                                                        *
- * TYPO3 is free software; you can redistribute it and/or modify it under *
- * the terms of the GNU General Public License version 2 as published by  *
- * the Free Software Foundation.                                          *
- *                                                                        *
- * This script is distributed in the hope that it will be useful, but     *
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHAN-    *
- * TABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General      *
- * Public License for more details.                                       *
- *                                                                        */
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -49,6 +49,9 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  * </a>
  * </output>
  *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ *
  */
 class TypolinkViewHelper extends AbstractViewHelper
 {
@@ -84,15 +87,7 @@ class TypolinkViewHelper extends AbstractViewHelper
             /** @var ContentObjectRenderer $contentObject */
             $contentObject = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
             $contentObject->start(array(), '');
-            $content = $contentObject->stdWrap(
-                $content,
-                array(
-                    'typolink.' => array(
-                        'parameter' => implode(' ', $typolinkParameter),
-                        'ATagParams' => $aTagParams,
-                    )
-                )
-            );
+            $content = $contentObject->stdWrap($content, array('typolink.' => array('parameter' => implode(' ', $typolinkParameter), 'ATagParams' => $aTagParams,)));
         }
 
         return $content;

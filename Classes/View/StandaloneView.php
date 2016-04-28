@@ -1,21 +1,32 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\View;
 
-/**
- * This source file is proprietary property of Beech Applications B.V.
- * Date: 30-03-2015 14:09
- * All code (c) Beech Applications B.V. all rights reserved
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
  */
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\ArrayUtility;
 use TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException;
+use TYPO3\CMS\Fluid\View\StandaloneView as CoreStandaloneView;
 
 /**
  * Class StandaloneView
  *
- * Standalone viewHelper from core extended with templatePath resolving
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\View
  */
-class StandaloneView extends \TYPO3\CMS\Fluid\View\StandaloneView
+class StandaloneView extends CoreStandaloneView
 {
     /**
      * Path(s) to the template root
@@ -23,10 +34,12 @@ class StandaloneView extends \TYPO3\CMS\Fluid\View\StandaloneView
      * @var array
      */
     protected $templateRootPaths = null;
+
     /**
      * @var array
      */
     protected $templatePathCache = array();
+
     /**
      * Set templateRootPaths
      *
@@ -36,6 +49,7 @@ class StandaloneView extends \TYPO3\CMS\Fluid\View\StandaloneView
     {
         $this->templateRootPaths = $templateRootPaths;
     }
+
     /**
      * @param $templateName
      * @param bool $throwException

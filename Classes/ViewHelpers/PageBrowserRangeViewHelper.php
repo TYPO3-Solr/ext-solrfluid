@@ -18,6 +18,10 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 
 /**
  * Class PageBrowserRangeViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de> *
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers
  */
 class PageBrowserRangeViewHelper extends AbstractViewHelper
 {

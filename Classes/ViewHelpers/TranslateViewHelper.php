@@ -13,10 +13,15 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class TranslateViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers
  */
 class TranslateViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelper
 {
@@ -38,9 +43,7 @@ class TranslateViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelp
     {
         foreach ($arguments as $key => $value) {
             if (substr($key, 0, 1) === '@') {
-                return $this->renderSolrTranslation(
-                    $id ?: $key
-                );
+                return $this->renderSolrTranslation($id ? : $key);
             }
         }
         return parent::render($key, $id, $default, $htmlEscape, $arguments, $extensionName);

@@ -18,7 +18,11 @@ use ApacheSolrForTypo3\Solr\Facet\Facet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Fluid based QueryGroup FacetRenderer
+ * Class QueryGroupFacetFluidRenderer
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solr\Facet
  */
 class QueryGroupFacetFluidRenderer extends SimpleFacetFluidRenderer
 {

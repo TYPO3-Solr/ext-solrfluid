@@ -20,6 +20,10 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class SearchFormViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers
  */
 class SearchFormViewHelper extends AbstractTagBasedViewHelper
 {
@@ -44,7 +48,7 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
      */
     public function __construct()
     {
-        $this->frontendController =  $GLOBALS['TSFE'];
+        $this->frontendController = $GLOBALS['TSFE'];
         $this->search = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Search');
     }
 
@@ -87,18 +91,7 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
         }
 
         $uriBuilder = $this->controllerContext->getUriBuilder();
-        $uri = $uriBuilder->reset()
-            ->setTargetPageUid($pageUid)
-            ->setTargetPageType($pageType)
-            ->setNoCache($noCache)
-            ->setUseCacheHash(!$noCacheHash)
-            ->setArguments($additionalParams)
-            ->setCreateAbsoluteUri($absolute)
-            ->setAddQueryString($addQueryString)
-            ->setArgumentsToBeExcludedFromQueryString($argumentsToBeExcludedFromQueryString)
-            ->setAddQueryStringMethod($addQueryStringMethod)
-            ->setSection($section)
-            ->build();
+        $uri = $uriBuilder->reset()->setTargetPageUid($pageUid)->setTargetPageType($pageType)->setNoCache($noCache)->setUseCacheHash(!$noCacheHash)->setArguments($additionalParams)->setCreateAbsoluteUri($absolute)->setAddQueryString($addQueryString)->setArgumentsToBeExcludedFromQueryString($argumentsToBeExcludedFromQueryString)->setAddQueryStringMethod($addQueryStringMethod)->setSection($section)->build();
 
         $this->tag->addAttribute('action', trim($uri));
         if ($addSuggestUrl) {

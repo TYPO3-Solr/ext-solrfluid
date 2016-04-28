@@ -19,6 +19,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class QueryViewHelper
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
  */
 class QueryViewHelper extends AbstractViewHelper
 {
@@ -46,8 +49,7 @@ class QueryViewHelper extends AbstractViewHelper
     {
         $content = '';
         if (!empty($GLOBALS['TSFE']->beUserLogin)) {
-            $content = '<br><strong>Parsed Query:</strong><br>' .
-                $this->search->getDebugResponse()->parsedquery;
+            $content = '<br><strong>Parsed Query:</strong><br>' . $this->search->getDebugResponse()->parsedquery;
         }
         return $content;
     }
