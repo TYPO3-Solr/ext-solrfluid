@@ -15,6 +15,8 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
  */
 
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper as AbtractCoreViewHelper;
 
 /**
@@ -26,6 +28,10 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper as AbtractCoreViewHelper;
  */
 class AbstractViewHelper extends AbtractCoreViewHelper
 {
+    /**
+     * @var SolrControllerContext
+     */
+    protected $controllerContext;
 
     /**
      * @return TypoScriptConfiguration
@@ -33,5 +39,13 @@ class AbstractViewHelper extends AbtractCoreViewHelper
     protected function getTypoScriptConfiguration()
     {
         return $this->controllerContext->getTypoScriptConfiguration();
+    }
+
+    /**
+     * @return SearchResultSet
+     */
+    protected function getSearchResultSet()
+    {
+        return $this->controllerContext->getSearchResultSet();
     }
 }

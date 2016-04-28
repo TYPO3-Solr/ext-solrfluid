@@ -27,20 +27,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
 {
-
-    /**
-     * @var \ApacheSolrForTypo3\Solr\Search
-     */
-    protected $search;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->search = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Search');
-    }
-
     /**
      * Get document relevance percentage
      *
@@ -54,7 +40,7 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
         // only check whether a BE user is logged in, don't need to check
         // for enabled score analysis as we wouldn't be here if it was disabled
         if (!empty($GLOBALS['TSFE']->beUserLogin)) {
-            $debugData = $this->search->getDebugResponse()->explain->{$document->getId()};
+            $debugData = $this->getSearchResultSet()->getUsedSearch()->getDebugResponse()->explain->{$document->getId()};
             $highScores = $this->getHighScores($debugData);
             $score = $document->getField('score');
             $content = $this->renderScoreAnalysis($highScores, (float)($score ? $score['value'] : 0), $debugData);

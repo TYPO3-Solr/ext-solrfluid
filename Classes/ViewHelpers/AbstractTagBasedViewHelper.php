@@ -15,6 +15,8 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
  */
 
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper as AbstractTagBasedCoreViewHelper;
 
 /**
@@ -28,10 +30,23 @@ class AbstractTagBasedViewHelper extends AbstractTagBasedCoreViewHelper
 {
 
     /**
+     * @var SolrControllerContext
+     */
+    protected $controllerContext;
+
+    /**
      * @return TypoScriptConfiguration
      */
     protected function getTypoScriptConfiguration()
     {
         return $this->controllerContext->getTypoScriptConfiguration();
+    }
+
+    /**
+     * @return SearchResultSet
+     */
+    protected function getSearchResultSet()
+    {
+        return $this->controllerContext->getSearchResultSet();
     }
 }

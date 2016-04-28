@@ -37,12 +37,9 @@ class HighlightResultViewHelper extends AbstractViewHelper
      */
     public function render(\Apache_Solr_Document $document, $field)
     {
-        /** @var \ApacheSolrForTypo3\Solr\Search $search */
-        $search = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Search');
         $fragmentSeparator = $this->getTypoScriptConfiguration()->getSearchResultsHighlightingFragmentSeparator();
         $content = call_user_func(array($document, 'get' . $field));
-
-        $highlightedContent = $search->getHighlightedContent();
+        $highlightedContent = $this->getSearchResultSet()->getUsedSearch()->getHighlightedContent();
         if (!empty($highlightedContent->{$document->getId()}->{$field}[0])) {
             $content = implode(' ' . $fragmentSeparator . ' ', $highlightedContent->{$document->getId()}->{$field});
         }

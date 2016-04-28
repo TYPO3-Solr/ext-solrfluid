@@ -42,7 +42,17 @@ class SearchController extends AbstractBaseController
         $searchRequest = $this->buildSearchRequest();
         $searchResultSet = $this->searchService->search($searchRequest);
 
-        $this->view->assignMultiple(array('hasSearched' => $this->searchService->getHasSearched(), 'additionalFilters' => $this->searchService->getAdditionalFilters(), 'resultSet' => $searchResultSet));
+        // we pass the search result set to the controller context, to have the possibility
+        // to access it without passing it from partial to partial
+        $this->controllerContext->setSearchResultSet($searchResultSet);
+
+        $this->view->assignMultiple(
+            array(
+                'hasSearched' => $this->searchService->getHasSearched(),
+                'additionalFilters' => $this->searchService->getAdditionalFilters(),
+                'resultSet' => $searchResultSet
+            )
+        );
     }
 
     /**
@@ -66,7 +76,12 @@ class SearchController extends AbstractBaseController
      */
     public function formAction()
     {
-        $this->view->assignMultiple(array('search' => $this->searchService->getSearch(), 'additionalFilters' => $this->searchService->getAdditionalFilters(),));
+        $this->view->assignMultiple(
+            array(
+                'search' => $this->searchService->getSearch(),
+                'additionalFilters' => $this->searchService->getAdditionalFilters()
+            )
+        );
     }
 
     /**

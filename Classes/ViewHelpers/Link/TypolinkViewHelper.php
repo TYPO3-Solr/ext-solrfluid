@@ -87,7 +87,7 @@ class TypolinkViewHelper extends AbstractViewHelper
             /** @var ContentObjectRenderer $contentObject */
             $contentObject = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
             $contentObject->start(array(), '');
-            $content = $contentObject->stdWrap($content, array('typolink.' => array('parameter' => implode(' ', $typolinkParameter), 'ATagParams' => $aTagParams,)));
+            $content = $contentObject->stdWrap($content, array('typolink.' => array('parameter' => implode(' ', $typolinkParameter), 'ATagParams' => $aTagParams, )));
         }
 
         return $content;

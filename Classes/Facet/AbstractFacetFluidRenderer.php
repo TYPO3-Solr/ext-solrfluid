@@ -114,6 +114,8 @@ abstract class AbstractFacetFluidRenderer extends AbstractFacetRenderer implemen
         // it is configured to be rendered nevertheless
         if (!$this->facet->isEmpty() || $showEmptyFacets) {
             try {
+                //@todo how can we pass the parent controller context here?
+                //$this->view->setControllerContext();
                 $this->view->setTemplateName('Facets/' . ($this->facetConfiguration['fluid.']['template'] ? : 'Default'));
             } catch (InvalidTemplateResourceException $e) {
                 return $e->getMessage();

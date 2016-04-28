@@ -29,11 +29,6 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
 {
 
     /**
-     * @var \ApacheSolrForTypo3\Solr\Search $search
-     */
-    protected $search;
-
-    /**
      * @var string
      */
     protected $tagName = 'form';
@@ -49,7 +44,6 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
     public function __construct()
     {
         $this->frontendController = $GLOBALS['TSFE'];
-        $this->search = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Search');
     }
 
     /**
@@ -100,15 +94,7 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
         $this->tag->addAttribute('accept-charset', $this->frontendController->metaCharset);
 
         // Get search term
-        $q = '';
-        if ($this->search->hasSearched()) {
-            $q = $this->search->getQuery()->getKeywordsRaw();
-        } elseif (GeneralUtility::_GET('q')) {
-            $q = GeneralUtility::_GET('q');
-        }
-
-        // Render form content
-        $this->templateVariableContainer->add('q', trim($q));
+        $this->templateVariableContainer->add('q', $this->getQueryString());
         $this->templateVariableContainer->add('pageUid', $pageUid);
         $this->templateVariableContainer->add('languageUid', $this->frontendController->sys_language_uid);
         $formContent = $this->renderChildren();
@@ -119,6 +105,18 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
         $this->tag->setContent($formContent);
 
         return $this->tag->render();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getQueryString()
+    {
+        $resultSet = $this->getSearchResultSet();
+        if ($resultSet === null) {
+            return '';
+        }
+        return trim($this->getSearchResultSet()->getUsedSearchRequest()->getRawUserQuery());
     }
 
     /**

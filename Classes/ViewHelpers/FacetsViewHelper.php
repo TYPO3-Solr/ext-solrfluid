@@ -15,7 +15,6 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
  */
 
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -27,11 +26,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class FacetsViewHelper extends AbstractViewHelper
 {
-    /**
-     * @var \ApacheSolrForTypo3\Solr\Search
-     */
-    protected $search;
-
     /**
      * @var \ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory
      */
@@ -45,15 +39,13 @@ class FacetsViewHelper extends AbstractViewHelper
     /**
      * Get facets
      *
-     * @param SearchResultSet $resultSet
      * @param string $facets variable name for the facets
      * @param string $usedFacets variable name for usedFacets
      * @return string
      */
-    public function render(SearchResultSet $resultSet, $facets = 'facets', $usedFacets = 'usedFacets')
+    public function render($facets = 'facets', $usedFacets = 'usedFacets')
     {
         $configuredFacets = $this->getTypoScriptConfiguration()->getSearchFacetingFacets();
-        $this->search = $resultSet->getUsedSearch();
         $this->facetRendererFactory = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory', $configuredFacets);
 
         $templateVariableContainer = $this->renderingContext->getTemplateVariableContainer();

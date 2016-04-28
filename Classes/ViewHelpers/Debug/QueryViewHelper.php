@@ -27,19 +27,6 @@ class QueryViewHelper extends AbstractViewHelper
 {
 
     /**
-     * @var \ApacheSolrForTypo3\Solr\Search
-     */
-    protected $search;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->search = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Search');
-    }
-
-    /**
      * Get parsed query debug output
      * only visible for logged in BE users
      *
@@ -48,8 +35,8 @@ class QueryViewHelper extends AbstractViewHelper
     public function render()
     {
         $content = '';
-        if (!empty($GLOBALS['TSFE']->beUserLogin)) {
-            $content = '<br><strong>Parsed Query:</strong><br>' . $this->search->getDebugResponse()->parsedquery;
+        if (!empty($GLOBALS['TSFE']->beUserLogin) && $this->getSearchResultSet() !== null && $this->getSearchResultSet()->getUsedSearch() !== null) {
+            $content = '<br><strong>Parsed Query:</strong><br>' . $this->getSearchResultSet()->getUsedSearch()->getDebugResponse()->parsedquery;
         }
         return $content;
     }

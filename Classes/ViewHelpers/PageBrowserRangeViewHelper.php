@@ -27,16 +27,15 @@ class PageBrowserRangeViewHelper extends AbstractViewHelper
 {
 
     /**
-     * @param SearchResultSet $search
      * @param string $from variable name for from value
      * @param string $to variable name for to value
      * @param string $total variable name for total value
      * @return string
      * @throws \TYPO3\CMS\Fluid\Core\ViewHelper\Exception\InvalidVariableException
      */
-    public function render(SearchResultSet $resultSet, $from = 'from', $to = 'to', $total = 'total')
+    public function render($from = 'from', $to = 'to', $total = 'total')
     {
-        $search = $resultSet->getUsedSearch();
+        $search = $this->getSearchResultSet()->getUsedSearch();
         $templateVariableContainer = $this->renderingContext->getTemplateVariableContainer();
 
         $resultsFrom = $search->getResponseBody()->start + 1;

@@ -16,7 +16,6 @@ namespace ApacheSolrForTypo3\Solrfluid\Facet;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-
 /**
  * Class SimpleFacetFluidRenderer
  *

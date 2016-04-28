@@ -276,7 +276,7 @@
                                 }
                             }
 
-                            showDocumentScoreAnalysis = 0
+                            showDocumentScoreAnalysis = 1
                         }
 
                         spellchecking = 1

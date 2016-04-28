@@ -14,6 +14,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Mvc\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
 
@@ -33,6 +34,11 @@ class SolrControllerContext extends ControllerContext
     protected $typoScriptConfiguration;
 
     /**
+     * @var SearchResultSet
+     */
+    protected $searchResultSet;
+
+    /**
      * @param TypoScriptConfiguration $typoScriptConfiguration
      */
     public function setTypoScriptConfiguration($typoScriptConfiguration)
@@ -46,5 +52,21 @@ class SolrControllerContext extends ControllerContext
     public function getTypoScriptConfiguration()
     {
         return $this->typoScriptConfiguration;
+    }
+
+    /**
+     * @param \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet $searchResultSet
+     */
+    public function setSearchResultSet($searchResultSet)
+    {
+        $this->searchResultSet = $searchResultSet;
+    }
+
+    /**
+     * @return \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet
+     */
+    public function getSearchResultSet()
+    {
+        return $this->searchResultSet;
     }
 }

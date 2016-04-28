@@ -1,18 +1,28 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget;
 
-/*
- * This file is part of the TYPO3 CMS project.
+/***************************************************************
+ *  Copyright notice
  *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ *  (c) 2016 Frans Saris <frans@beech.it> & Timo Schmidt <timo.schmidt@dkd.de>
+ *  All rights reserved
  *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- * The TYPO3 project - inspiring people to share!
- */
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 use ApacheSolrForTypo3\Solr\Search;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
@@ -20,10 +30,6 @@ use ApacheSolrForTypo3\Solrfluid\Widget\AbstractWidgetViewHelper;
 
 /**
  * Class ResultPaginateViewHelper
- *
- * @author Frans Saris <frans@beech.it>
- * @author Timo Schmidt <timo.schmidt@dkd.de>
- * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget
  */
 class ResultPaginateViewHelper extends AbstractWidgetViewHelper
 {

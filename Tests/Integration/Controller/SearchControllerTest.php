@@ -212,6 +212,49 @@ class SearchControllerTest extends IntegrationTest
     }
 
     /**
+     * @test
+     */
+    public function canRenderAScoreAnalysisWhenBackendUserIsLoggedIn()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+
+        $this->indexPages(array(1, 2));
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = '*';
+        // fake that a backend user is logged in
+        $GLOBALS['TSFE']->beUserLogin = true;
+
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $resultPage1 = $this->searchResponse->getContent();
+
+        $this->assertContains('document-score-analysis', $resultPage1, 'No score analysis in response');
+    }
+
+    /**
+     * @test
+     */
+    public function canSeeTheParsedQueryWhenABackendUserIsLoggedIn()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1, 2));
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = '*';
+        // fake that a backend user is logged in
+        $GLOBALS['TSFE']->beUserLogin = true;
+
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $resultPage1 = $this->searchResponse->getContent();
+
+        $this->assertContains('Parsed Query:', $resultPage1, 'No parsed query in response');
+    }
+
+    /**
      * Assertion to check if the pagination markup is present in the response.
      *
      * @param string $content

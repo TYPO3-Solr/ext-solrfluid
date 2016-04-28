@@ -1,7 +1,7 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking;
 
-    /***************************************************************
+/***************************************************************
      * /*
      * This file is part of the TYPO3 CMS project.
      *
