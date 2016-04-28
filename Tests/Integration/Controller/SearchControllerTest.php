@@ -189,7 +189,7 @@ class SearchControllerTest extends IntegrationTest
         $this->importDataSetFromFixture('can_render_search_controller.xml');
         $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
 
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->indexPages(array(1, 2));
 
         // now we set the facet type for "type" facet to fluid and expect that we get a rendered facet
         $overwriteConfiguration = array();
@@ -209,6 +209,68 @@ class SearchControllerTest extends IntegrationTest
 
         $this->assertContains('class="facet-option-list fluidfacet"', $resultPage1, 'Could not find fluidfacet class that indicates the facet was rendered with fluid');
         $this->assertContains('pages</a> <span class="facet-result-count">', $resultPage1, 'Could not find facet option for pages');
+    }
+
+    /**
+     * @test
+     */
+    public function removeOptionLinkWillBeShownWhenFacetWasSelected()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+
+        // now we set the facet type for "type" facet to fluid and expect that we get a rendered facet
+        $overwriteConfiguration = array();
+        $overwriteConfiguration['search.']['faceting.']['facets.']['type.']['type'] = 'fluid';
+
+        /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
+        $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
+        $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = '*';
+        $_GET['tx_solr']['filter'][0] = urlencode('type:pages');
+
+
+        // since we overwrite the configuration in the testcase from outside we want to avoid that it will be resetted
+        $this->searchController->setResetConfigurationBeforeInitialize(false);
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $resultPage1 = $this->searchResponse->getContent();
+
+        $this->assertContains('remove-facet-option', $resultPage1, 'No link to remove facet option found');
+    }
+
+    /**
+     * @test
+     */
+    public function exceptionWillBeThrownWhenAWrongTemplateIsConfiguredForTheFacet()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+
+        // now we set the facet type for "type" facet to fluid and expect that we get a rendered facet
+        $overwriteConfiguration = array();
+        $overwriteConfiguration['search.']['faceting.']['facets.']['type.']['type'] = 'fluid';
+        $overwriteConfiguration['search.']['faceting.']['facets.']['type.']['fluid.']['template'] = 'NotFound.html';
+
+        /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
+        $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
+        $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = '*';
+
+        // since we overwrite the configuration in the testcase from outside we want to avoid that it will be resetted
+        $this->searchController->setResetConfigurationBeforeInitialize(false);
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $resultPage1 = $this->searchResponse->getContent();
+
+        $this->assertContains('	Could not load template file. ', $resultPage1, 'Could not find error message from missing template');
+
     }
 
     /**

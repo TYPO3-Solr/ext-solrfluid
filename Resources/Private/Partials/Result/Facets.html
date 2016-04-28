@@ -15,7 +15,7 @@
 					<f:for each="{facets}" as="facet">
 						<f:for each="{facet.selectedOptions}" as="optionValue">
 							<li>-
-								<s:link.removeFacet facet="{facet}" optionValue="{optionValue}">
+								<s:link.removeFacet facet="{facet}" optionValue="{optionValue}" class="remove-facet-option">
 									<s:format.facetLabel facet="{facet}" />:
 									<s:format.facetOptionLabel facet="{facet}">{optionValue}</s:format.facetOptionLabel>
 								</s:link.removeFacet>

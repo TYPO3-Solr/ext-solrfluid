@@ -1,19 +1,18 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking;
 
-/***************************************************************
-     * /*
-     * This file is part of the TYPO3 CMS project.
-     *
-     * It is free software; you can redistribute it and/or modify it under
-     * the terms of the GNU General Public License, either version 2
-     * of the License, or any later version.
-     *
-     * For the full copyright and license information, please read the
-     * LICENSE.txt file that was distributed with this source code.
-     *
-     * The TYPO3 project - inspiring people to share!
-     */
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
 
 /**
  * Value object that represent a spellchecking suggestion.
@@ -61,27 +60,11 @@ class Suggestion
     }
 
     /**
-     * @param int $endOffset
-     */
-    public function setEndOffset($endOffset)
-    {
-        $this->endOffset = $endOffset;
-    }
-
-    /**
      * @return int
      */
     public function getEndOffset()
     {
         return $this->endOffset;
-    }
-
-    /**
-     * @param int $numFound
-     */
-    public function setNumFound($numFound)
-    {
-        $this->numFound = $numFound;
     }
 
     /**
@@ -93,27 +76,11 @@ class Suggestion
     }
 
     /**
-     * @param int $startOffset
-     */
-    public function setStartOffset($startOffset)
-    {
-        $this->startOffset = $startOffset;
-    }
-
-    /**
      * @return int
      */
     public function getStartOffset()
     {
         return $this->startOffset;
-    }
-
-    /**
-     * @param string $term
-     */
-    public function setSuggestion($term)
-    {
-        $this->suggestion = $term;
     }
 
     /**
