@@ -25,7 +25,6 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Service\FlexFormService;
 use TYPO3\CMS\Extbase\Service\TypoScriptService;
-use TYPO3\CMS\Extbase\Utility\ArrayUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
@@ -136,12 +135,31 @@ abstract class AbstractBaseController extends ActionController
         if ($this->resetConfigurationBeforeInitialize) {
             $this->solrConfigurationManager->reset();
         }
+        /** @var TypoScriptService $typoScriptService */
+        $typoScriptService = $this->objectManager->get(TypoScriptService::class);
+
+        // Merge settings done by typoscript with solrConfiguration plugin.tx_solr
+        $frameWorkConfiguration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+        $pluginSettings = [];
+        foreach (['search', 'settings', 'suggest', 'statistics', 'logging', 'general', 'solr'] as $key) {
+            if (isset($frameWorkConfiguration[$key])) {
+                $pluginSettings[$key] = $frameWorkConfiguration[$key];
+            }
+        }
+
+        if ($pluginSettings !== []) {
+            $this->solrConfigurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration(
+                $typoScriptService->convertPlainArrayToTypoScriptArray($pluginSettings)
+                ,
+                true,
+                false
+            );
+        }
 
         // Override configuration with flexform settings
         if (!empty($this->contentObjectRenderer->data['pi_flexform'])) {
             $flexFormService = $this->objectManager->get(FlexFormService::class);
             $flexFormConfiguration = $flexFormService->convertFlexFormContentToArray($this->contentObjectRenderer->data['pi_flexform']);
-            $typoScriptService = $this->objectManager->get(TypoScriptService::class);
             $flexFormConfiguration = $typoScriptService->convertPlainArrayToTypoScriptArray($flexFormConfiguration);
 
             $this->solrConfigurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($flexFormConfiguration, true, false);
@@ -150,6 +168,11 @@ abstract class AbstractBaseController extends ActionController
         parent::initializeAction();
         $this->typoScriptFrontendController = $GLOBALS['TSFE'];
         $this->typoScriptConfiguration = $this->solrConfigurationManager->getTypoScriptConfiguration();
+
+        // Make sure plugin.tx_solr.settings are available in the view as {settings}
+        $this->settings = $typoScriptService->convertTypoScriptArrayToPlainArray(
+            $this->typoScriptConfiguration->getObjectByPathOrDefault('plugin.tx_solr.settings.', [])
+        );
 
         $this->initializeSearch();
     }

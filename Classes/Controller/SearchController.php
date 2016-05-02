@@ -16,7 +16,6 @@ namespace ApacheSolrForTypo3\Solrfluid\Controller;
 
 use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
  * Class SearchController

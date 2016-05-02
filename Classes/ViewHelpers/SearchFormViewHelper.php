@@ -89,7 +89,7 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
 
         $this->tag->addAttribute('action', trim($uri));
         if ($addSuggestUrl) {
-            $this->tag->addAttribute('data-suggest', $this->getSuggestEidUrl($additionalFilters));
+            $this->tag->addAttribute('data-suggest', $this->getSuggestEidUrl($additionalFilters, $pageUid));
         }
         $this->tag->addAttribute('accept-charset', $this->frontendController->metaCharset);
 
@@ -128,9 +128,10 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
      */
     /**
      * @param NULL|array $additionalFilters
+     * @param int $pageUid
      * @return string
      */
-    protected function getSuggestEidUrl($additionalFilters)
+    protected function getSuggestEidUrl($additionalFilters, $pageUid)
     {
         $suggestUrl = $this->frontendController->absRefPrefix;
 
@@ -138,7 +139,7 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
 //			$suggestUrl = str_replace('http://', 'https://', $suggestUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL'));
 //		}
 
-        $suggestUrl .= '?eID=tx_solr_suggest&id=' . $this->frontendController->id;
+        $suggestUrl .= '?eID=tx_solr_suggest&id=' . $pageUid;
 
         // add filters
         if (!empty($additionalFilters)) {
