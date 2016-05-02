@@ -61,13 +61,20 @@ class SearchController extends AbstractBaseController
     private function buildSearchRequest()
     {
         /** @var $searchRequest \ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest */
-        $searchRequest = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest');
-
+        $searchRequest = GeneralUtility::makeInstance(SearchRequest::class);
         $rawUserQuery = GeneralUtility::_GET('q');
-        $page = $this->request->hasArgument('page') ? $this->request->getArgument('page') - 1 : 0;
-        $page = max($page, 0);
 
-        $searchRequest->mergeArguments(array('q' => $rawUserQuery, 'page' => $page));
+        $arguments = $this->request->getArguments();
+        $page = isset($arguments['page']) ? $arguments['page'] -1 : 0;
+        $arguments['page'] = max($page, 0);
+
+        $searchRequest->mergeArguments(
+            array(
+                'q' => $rawUserQuery,
+                'tx_solr' => $arguments
+            )
+        );
+
         return $searchRequest;
     }
 
