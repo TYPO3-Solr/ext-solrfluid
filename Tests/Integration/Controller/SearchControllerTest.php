@@ -73,6 +73,15 @@ class SearchControllerTest extends IntegrationTest
     }
 
     /**
+     * Executed after each test. Emptys solr and checks if the index is empty
+     */
+    public function tearDown()
+    {
+        $this->cleanUpSolrServerAndAssertEmpty();
+        parent::tearDown();
+    }
+
+    /**
      * @test
      */
     public function canShowSearchForm()
