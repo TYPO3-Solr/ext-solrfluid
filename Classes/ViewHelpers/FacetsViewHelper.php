@@ -14,7 +14,6 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -46,7 +45,10 @@ class FacetsViewHelper extends AbstractViewHelper
     public function render($facets = 'facets', $usedFacets = 'usedFacets')
     {
         $configuredFacets = $this->getTypoScriptConfiguration()->getSearchFacetingFacets();
-        $this->facetRendererFactory = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory', $configuredFacets);
+        $this->facetRendererFactory = GeneralUtility::makeInstance(
+            \ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory::class,
+            $configuredFacets
+        );
 
         $templateVariableContainer = $this->renderingContext->getTemplateVariableContainer();
         $templateVariableContainer->add($facets, $this->getAvailableFacets($configuredFacets));
@@ -72,7 +74,11 @@ class FacetsViewHelper extends AbstractViewHelper
         foreach ($configuredFacets as $facetName => $facetConfiguration) {
             $facetName = substr($facetName, 0, -1);
             /** @var \ApacheSolrForTypo3\Solr\Facet\Facet $facet */
-            $facet = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\Facet', $facetName, $this->facetRendererFactory->getFacetInternalType($facetName));
+            $facet = GeneralUtility::makeInstance(
+                \ApacheSolrForTypo3\Solr\Facet\Facet::class,
+                $facetName,
+                $this->facetRendererFactory->getFacetInternalType($facetName)
+            );
 
             if ((isset($facetConfiguration['includeInAvailableFacets']) && $facetConfiguration['includeInAvailableFacets'] == '0') || !$facet->isRenderingAllowed()
             ) {
@@ -116,7 +122,11 @@ class FacetsViewHelper extends AbstractViewHelper
             }
 
             /** @var \ApacheSolrForTypo3\Solr\Facet\Facet $facet */
-            $facet = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\Facet', $facetName, $this->facetRendererFactory->getFacetInternalType($facetName));
+            $facet = GeneralUtility::makeInstance(
+                \ApacheSolrForTypo3\Solr\Facet\Facet::class,
+                $facetName,
+                $this->facetRendererFactory->getFacetInternalType($facetName)
+            );
 
             $facetsInUse[] = $facet;
         }

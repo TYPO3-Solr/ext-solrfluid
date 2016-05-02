@@ -14,7 +14,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Facet;
  * The TYPO3 project - inspiring people to share!
  */
 
-use ApacheSolrForTypo3\Solr\Facet\FacetFluidRendererInterface;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\FacetRenderer\FacetFluidRendererInterface;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -38,21 +38,29 @@ class RenderViewHelper extends AbstractViewHelper
     {
         $configuredFacets = $this->getTypoScriptConfiguration()->getSearchFacetingFacets();
         /** @var \ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory $facetRendererFactory */
-        $facetRendererFactory = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory', $configuredFacets);
+        $facetRendererFactory = GeneralUtility::makeInstance(
+            \ApacheSolrForTypo3\Solr\Facet\FacetRendererFactory::class,
+            $configuredFacets
+        );
 
-
-        /** @var \ApacheSolrForTypo3\Solr\FacetRenderer $renderer */
+        /** @var FacetFluidRendererInterface $facetRenderer */
         $facetRenderer = $facetRendererFactory->getFacetRendererByFacet($facet);
         if (!$facetRenderer instanceof FacetFluidRendererInterface) {
             $resultsTemplate = $this->getTypoScriptConfiguration()->getTemplateByFileKey('results');
             /** @var \ApacheSolrForTypo3\Solr\Template $template */
-            $template = GeneralUtility::makeInstance('ApacheSolrForTypo3\\Solr\\Template', GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'), $resultsTemplate, 'available_facets');
-
+            $template = GeneralUtility::makeInstance(
+                \ApacheSolrForTypo3\Solr\Template::class,
+                GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class),
+                $resultsTemplate,
+                'available_facets'
+            );
 
             $facetRenderer->setTemplate($template);
             $facetRenderer->setLinkTargetPageId($this->getTypoScriptConfiguration()->getSearchTargetPage());
             $facet = $facetRenderer->getFacetProperties();
             $template->addVariable('facet', $facet);
+        } else {
+            $facetRenderer->setControllerContext($this->controllerContext);
         }
 
         return $facetRenderer->renderFacet();

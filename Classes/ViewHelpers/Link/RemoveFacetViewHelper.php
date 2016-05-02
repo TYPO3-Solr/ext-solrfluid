@@ -14,8 +14,10 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link;
  * The TYPO3 project - inspiring people to share!
  */
 
+use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solr\Facet\Facet;
 use ApacheSolrForTypo3\Solr\Facet\FacetOption;
+use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -37,15 +39,25 @@ class RemoveFacetViewHelper extends FacetViewHelper
      * @param int $pageUid
      * @param bool $returnUrl
      * @param string $section The anchor to be added to the url
+     * @param SearchResultSet $resultSet Solr search result set
+     * @throws \InvalidArgumentException
      * @return string
      */
-    public function render(Facet $facet, FacetOption $facetOption = null, $optionValue = null, $pageUid = null, $returnUrl = false, $section = '')
+    public function render(Facet $facet, FacetOption $facetOption = null, $optionValue = null, $pageUid = null, $returnUrl = false, $section = '', SearchResultSet $resultSet = null)
     {
+        if (empty($resultSet)) {
+            if (!$this->controllerContext instanceof SolrControllerContext) {
+                throw new \InvalidArgumentException('Missing $resultSet not passed to viewHelper and not available in ControllerContext', 1462176132);
+            }
+            $resultSet = $this->controllerContext->getSearchResultSet();
+        }
+
         if ($facetOption === null) {
             /** @var FacetOption $facetOption */
             $facetOption = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetOption', $facet->getName(), $optionValue);
         }
-        $linkBuilder = $this->getLinkBuilder($facet, $facetOption);
+
+        $linkBuilder = $this->getLinkBuilder($facet, $facetOption, $resultSet);
         if ($pageUid) {
             $linkBuilder->setLinkTargetPageId($pageUid);
         }

@@ -13,6 +13,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\FacetRenderer;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
 
 /**
  * Interface FacetFluidRendererInterface
@@ -23,6 +24,13 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\FacetRenderer;
  */
 interface FacetFluidRendererInterface
 {
+    /**
+     * Set Controller context
+     *
+     * @param SolrControllerContext $controllerContext
+     * @return void
+     */
+    public function setControllerContext(SolrControllerContext $controllerContext);
 
     /**
      * Renders the complete facet.

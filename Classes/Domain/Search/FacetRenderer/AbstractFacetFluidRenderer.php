@@ -16,6 +16,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\FacetRenderer;
 
 use ApacheSolrForTypo3\Solr\Facet\AbstractFacetRenderer;
 use ApacheSolrForTypo3\Solr\Facet\Facet;
+use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use ApacheSolrForTypo3\SolrFluid\View\StandaloneView;
 use TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException;
@@ -44,6 +45,11 @@ abstract class AbstractFacetFluidRenderer extends AbstractFacetRenderer implemen
      * @var StandaloneView
      */
     protected $view;
+
+    /**
+     * @var SolrControllerContext
+     */
+    protected $controllerContext;
 
     /**
      * Constructor
@@ -81,6 +87,17 @@ abstract class AbstractFacetFluidRenderer extends AbstractFacetRenderer implemen
         $this->view->setPartialRootPaths($this->fixPaths($paths ? : array('EXT:solrfluid/Resources/Private/Partials')));
         $paths = $this->settings['view']['templateRootPaths'];
         $this->view->setTemplateRootPaths($this->fixPaths($paths ? : array('EXT:solrfluid/Resources/Private/Templates')));
+    }
+
+    /**
+     * Set controller context
+     *
+     * @param SolrControllerContext $controllerContext
+     */
+    public function setControllerContext(SolrControllerContext $controllerContext)
+    {
+        $this->controllerContext = $controllerContext;
+        $this->view->setControllerContext($controllerContext);
     }
 
     /**
