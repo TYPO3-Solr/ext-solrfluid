@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet;
+namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet;
 
 /***************************************************************
  *  Copyright notice
@@ -25,6 +25,8 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet;
  ***************************************************************/
 
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\ResultSetReconstitutionProcessor;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 
 /**
  * Unit test case for the ObjectReconstitutionProcessor.
