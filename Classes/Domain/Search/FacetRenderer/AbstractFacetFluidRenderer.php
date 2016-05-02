@@ -17,8 +17,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\FacetRenderer;
 use ApacheSolrForTypo3\Solr\Facet\AbstractFacetRenderer;
 use ApacheSolrForTypo3\Solr\Facet\Facet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use ApacheSolrForTypo3\Solr\View\StandaloneView;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use ApacheSolrForTypo3\SolrFluid\View\StandaloneView;
 use TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException;
 
 /**
@@ -75,7 +74,6 @@ abstract class AbstractFacetFluidRenderer extends AbstractFacetRenderer implemen
      */
     protected function initView()
     {
-        /** @var StandaloneView view */
         $this->view = GeneralUtility::makeInstance('ApacheSolrForTypo3\\Solrfluid\\View\\StandaloneView');
         $paths = $this->settings['view']['layoutRootPaths'];
         $this->view->setLayoutRootPaths($this->fixPaths($paths ? : array('EXT:solrfluid/Resources/Private/Layouts')));
