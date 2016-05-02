@@ -10,6 +10,9 @@ plugin.tx_solrfluid {
 	}
 }
 
+# Set facet provided by default configuration of ext:solr to type=fluid
+plugin.tx_solr.search.faceting.facets.type.type = fluid
+
 page.includeCSS {
 	search = EXT:solrfluid/Resources/Public/Css/results.css
 }
