@@ -45,7 +45,7 @@ abstract class AbstractBaseController extends ActionController
     /**
      * @var TypoScriptFrontendController
      */
-    private $typoScriptFrontendController;
+    protected $typoScriptFrontendController;
 
     /**
      * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
@@ -59,9 +59,10 @@ abstract class AbstractBaseController extends ActionController
 
     /**
      * The configuration is private if you need it please get it from the controllerContext.
+     *
      * @var TypoScriptConfiguration
      */
-    private $typoScriptConfiguration;
+    protected $typoScriptConfiguration;
 
     /**
      * @var \ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext
