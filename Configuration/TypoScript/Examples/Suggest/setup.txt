@@ -1,0 +1,22 @@
+# Enable search field autocomplete/suggest
+
+# Enable suggest
+plugin.tx_solr.search {
+    suggest = 1
+    suggest {
+        numberOfSuggestions = 10
+        suggestField = spell
+    }
+}
+
+# Load js files
+page.includeJSFooterlibs {
+    solr-jquery = EXT:solr/Resources/JavaScript/JQuery/jquery.min.js
+    solr-ui = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.core.min.js
+    solr-autocomplete = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.autocomplete.min.js
+    solr-suggest = EXT:solrfluid/Resources/Public/JavaScript/suggest.js
+}
+
+page.includeCSS {
+    solr-suggest = EXT:solr/Resources/Css/JQueryUi/jquery-ui.custom.css
+}
