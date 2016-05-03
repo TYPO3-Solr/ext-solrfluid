@@ -44,8 +44,8 @@ class OptionsFacetTest extends UnitTest
     public function canGetTitleFromOptionsFacet()
     {
         $resultSetMock = $this->getDumbMock(SearchResultSet::class);
-        $optionsFacet = new OptionsFacet($resultSetMock, 'myTitle');
-        $this->assertSame('myTitle', $optionsFacet->getTitle(), 'Could not get title from options facet');
+        $optionsFacet = new OptionsFacet($resultSetMock, 'myFacet', 'myFacetFieldName', 'myTitle');
+        $this->assertSame('myTitle', $optionsFacet->getLabel(), 'Could not get title from options facet');
     }
 
     /**
@@ -54,7 +54,7 @@ class OptionsFacetTest extends UnitTest
     public function canAddOptionsToFacet()
     {
         $resultSetMock = $this->getDumbMock(SearchResultSet::class);
-        $optionsFacet = new OptionsFacet($resultSetMock, 'myTitle');
+        $optionsFacet = new OptionsFacet($resultSetMock, 'myFacet', 'myFacetFieldName', 'myTitle');
         $option = new Option($optionsFacet);
 
             // before adding there should not be any facet present

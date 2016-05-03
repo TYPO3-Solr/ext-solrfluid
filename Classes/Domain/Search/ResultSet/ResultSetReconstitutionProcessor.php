@@ -16,6 +16,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet;
 
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet as SolrSearchResultSet;
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetProcessor;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacetParser;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestion;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -42,9 +43,15 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
      */
     public function process(SolrSearchResultSet $resultSet)
     {
+        if (!$resultSet instanceof SearchResultSet) {
+            return $resultSet;
+        }
+
         $resultSet = $this->parseSpellCheckingResponseIntoObjects($resultSet);
 
         // here we can reconstitute other domain objects from the solr response
+
+        $resultSet = $this->parseFacetsIntoObjects($resultSet);
 
         return $resultSet;
     }
@@ -99,5 +106,48 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
         // and the usage might be a overhead.
         $suggestion = new Suggestion($suggestedTerm, $misspelledTerm, $numFound, $startOffset, $endOffset);
         return $suggestion;
+    }
+
+    /**
+     * Parse available facets into objects
+     *
+     * @param SearchResultSet $resultSet
+     * @return SearchResultSet
+     */
+    private function parseFacetsIntoObjects(SearchResultSet $resultSet)
+    {
+        // Make sure we can access the facet configuration
+        if (!$resultSet->getUsedSearchRequest() || !$resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()) {
+            return $resultSet;
+        }
+
+        // Read the response
+        $response = $resultSet->getResponse();
+        if (!is_object($response->facet_counts)) {
+            return $resultSet;
+        }
+
+        $facetsConfiguration = $resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->getSearchFacetingFacets();
+
+        foreach ($facetsConfiguration as $name => $options) {
+            if (!is_array($options)) {
+                continue;
+            }
+            $facetName = rtrim($name, '.');
+            $type = !empty($options['type']) ? $options['type'] : '';
+
+            // todo; swith to registry->getParser($options)
+            switch ($type) {
+
+                default:
+                    $parser = new OptionsFacetParser();
+                    $facet = $parser->parse($resultSet, $facetName, $options);
+                    if ($facet !== null) {
+                        $resultSet->addFacet($facet);
+                    }
+            }
+        }
+
+        return $resultSet;
     }
 }

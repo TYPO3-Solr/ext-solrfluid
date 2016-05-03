@@ -1,0 +1,19 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+      xmlns:s="http://typo3.org/ns/ApacheSolrForTypo3/Solrfluid/ViewHelpers"
+      data-namespace-typo3-fluid="true"
+>
+
+    <h5 class="facet-label">{facet.label}</h5>
+    <ul class="facet-option-list fluidfacet">
+        <f:for each="{facet.options}" as="option" iteration="iteration">
+            <li class="facet-option{f:if(condition:'{iteration.index} > 9', then:' tx-solr-facet-hidden')}">
+                + <s:link.facetAddOption facet="{facet}" option="{option}" class="facet">{option.label}</s:link.facetAddOption> <span class="facet-result-count">({option.count})</span>
+            </li>
+        </f:for>
+        <f:if condition="{options -> f:count()} > 10">
+            <li><a href="#" class="tx-solr-facet-show-all" data-label-more="Toon meer" data-label-less="Toon minder">Toon meer</a></li>
+        </f:if>
+    </ul>
+
+</html>

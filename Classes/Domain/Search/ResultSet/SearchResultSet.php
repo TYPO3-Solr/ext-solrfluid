@@ -15,6 +15,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet;
  */
 
 use \ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet as SolrSearchResultSet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestion;
 
 /**
@@ -32,7 +33,12 @@ class SearchResultSet extends SolrSearchResultSet
     /**
      * @var Suggestion[]
      */
-    protected $spellCheckingSuggestions = array();
+    protected $spellCheckingSuggestions = [];
+
+    /**
+     * @var AbstractFacet[]
+     */
+    protected $facets = [];
 
     /**
      * @param Suggestion $suggestion
@@ -64,5 +70,20 @@ class SearchResultSet extends SolrSearchResultSet
     public function getSpellCheckingSuggestions()
     {
         return $this->spellCheckingSuggestions;
+    }
+
+    /**
+     * @return Facets\AbstractFacet[]
+     */
+    public function getFacets()
+    {
+        return $this->facets;
+    }
+
+    /**
+     * @param AbstractFacet $facet
+     */
+    public function addFacet(AbstractFacet $facet) {
+        $this->facets[$facet->getName()] = $facet;
     }
 }

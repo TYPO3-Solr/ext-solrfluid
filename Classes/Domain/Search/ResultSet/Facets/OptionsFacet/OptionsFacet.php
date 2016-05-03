@@ -32,7 +32,7 @@ class OptionsFacet extends AbstractFacet
      * String
      * @var string
      */
-    protected $type = self::TYPE_ABSTRACT;
+    static protected $type = self::TYPE_OPTIONS;
 
     /**
      * @var OptionCollection
@@ -40,14 +40,18 @@ class OptionsFacet extends AbstractFacet
     protected $options;
 
     /**
+     * OptionsFacet constructor
+     *
      * @param SearchResultSet $resultSet
-     * @param string $title
-     * @param OptionCollection $options
+     * @param string $name
+     * @param string $field
+     * @param string $label
+     * @param array $configuration Facet configuration passed from typoscript
      */
-    public function __construct(SearchResultSet $resultSet, $title = '', OptionCollection $options = null)
+    public function __construct(SearchResultSet $resultSet, $name, $field, $label = '', array $configuration = [])
     {
-        parent::__construct($resultSet, $title);
-        $this->options = $options === null ? new OptionCollection() : $options;
+        parent::__construct($resultSet, $name, $field, $label, $configuration);
+        $this->options = new OptionCollection();
     }
 
     /**
@@ -63,5 +67,14 @@ class OptionsFacet extends AbstractFacet
      */
     public function addOption(Option $option) {
         $this->options->append($option);
+    }
+
+    /**
+     * Get facet partial name used for rendering the facet
+     *
+     * @return string
+     */
+    public function getPartialName() {
+        return !empty($this->configuration['partialName']) ? $this->configuration['partialName'] : 'Options';
     }
 }

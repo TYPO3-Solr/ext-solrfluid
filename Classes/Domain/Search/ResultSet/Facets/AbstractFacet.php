@@ -30,7 +30,7 @@ abstract class AbstractFacet
      * String
      * @var string
      */
-    protected $type = self::TYPE_ABSTRACT;
+    static protected $type = self::TYPE_ABSTRACT;
 
     /**
      * The resultSet where this facet belongs to.
@@ -42,31 +42,75 @@ abstract class AbstractFacet
     /**
      * @var string
      */
-    protected $title;
+    protected $name;
 
     /**
-     * @param SearchResultSet $resultSet
-     * @param string $title
+     * @var string
      */
-    public function __construct(SearchResultSet $resultSet, $title = '') {
+    protected $field;
+
+    /**
+     * @var string
+     */
+    protected $label;
+
+    /**
+     * @var []
+     */
+    protected $configuration;
+
+    /**
+     * AbstractFacet constructor.
+     *
+     * @param SearchResultSet $resultSet
+     * @param string $name
+     * @param string $field
+     * @param string $label
+     * @param array $configuration Facet configuration passed from typoscript
+     */
+    public function __construct(SearchResultSet $resultSet, $name, $field, $label = '', array $configuration = [])
+    {
         $this->resultSet = $resultSet;
-        $this->title = $title;
+        $this->name = $name;
+        $this->field = $field;
+        $this->label = $label;
+        $this->configuration = $configuration;
     }
 
     /**
-     * @param string $title
+     * Get name
+     *
+     * @return string
      */
-    public function setTitle($title)
+    public function getName()
     {
-        $this->title = $title;
+        return $this->name;
+    }
+
+    /**
+     * Get solr field name
+     *
+     * @return string
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
+
+    /**
+     * @param string $label
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
     }
 
     /**
      * @return string
      */
-    public function getTitle()
+    public function getLabel()
     {
-        return $this->title;
+        return $this->label;
     }
 
     /**
@@ -78,10 +122,29 @@ abstract class AbstractFacet
     }
 
     /**
-     * @return null
+     * @return SearchResultSet
      */
     public function getResultSet()
     {
         return $this->resultSet;
+    }
+
+    /**
+     * Get configuration
+     *
+     * @return mixed
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
+
+    /**
+     * Get facet partial name used for rendering the facet
+     *
+     * @return string
+     */
+    public function getPartialName() {
+        return 'Default';
     }
 }

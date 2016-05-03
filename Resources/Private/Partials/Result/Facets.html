@@ -5,9 +5,25 @@
 <f:section name="Facets">
 <div id="tx-solr-faceting">
 
+	<div class="solr-facets-available secondaryContentSection">
+		<div class="csc-header">
+			<h3 class="csc-firstHeader">Narrow Search</h3>
+		</div>
+		<ul class="facets">
+			<f:for each="{resultSet.facets}" as="facet">
+				<li class="facet facet-type facet-type-{facet.type}">
+					<f:render partial="Facets/{facet.partialName}" arguments="{resultSet:resultSet, facet:facet}"/>
+				</li>
+			</f:for>
+		</ul>
+	</div>
+
+	<h3>Old facet rendering</h3>
+	<p>(only here for testing should be remove including s:facet s:link.facet and s:link.removeFacet??)</p>
+
 	<s:facets>
 
-		<f:if condition="{usedFacets -> f:count()}">
+	<f:if condition="{usedFacets -> f:count()}">
 			<div id="tx-solr-facets-in-use">
 				<h3>Used facets</h3>
 
