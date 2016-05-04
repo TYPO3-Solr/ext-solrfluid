@@ -3,38 +3,15 @@
 	  xmlns:s="http://typo3.org/ns/ApacheSolrForTypo3/Solrfluid/ViewHelpers">
 
 <f:section name="Facets">
-<div id="tx-solr-faceting">
-
-	<div class="solr-facets-available secondaryContentSection">
-		<div class="csc-header">
-			<h3 class="csc-firstHeader">Narrow Search</h3>
-		</div>
-		<ul class="facets">
-			<f:for each="{resultSet.facets}" as="facet">
-				<li class="facet facet-type facet-type-{facet.type}">
-					<f:render partial="Facets/{facet.partialName}" arguments="{resultSet:resultSet, facet:facet}"/>
-				</li>
-			</f:for>
-		</ul>
-	</div>
-
-	<h3>Old facet rendering</h3>
-	<p>(only here for testing should be remove including s:facet s:link.facet and s:link.removeFacet??)</p>
-
-	<s:facets>
-
-	<f:if condition="{usedFacets -> f:count()}">
+	<div id="tx-solr-faceting">
+		<f:if condition="{resultSet.facets.used -> f:count()}">
 			<div id="tx-solr-facets-in-use">
 				<h3>Used facets</h3>
-
 				<ul class="facets">
-					<f:for each="{facets}" as="facet">
-						<f:for each="{facet.selectedOptions}" as="optionValue">
+					<f:for each="{resultSet.facets.used}" as="facet">
+						<f:for each="{facet.options.selected}" as="option">
 							<li>-
-								<s:link.removeFacet facet="{facet}" optionValue="{optionValue}" class="remove-facet-option">
-									<s:format.facetLabel facet="{facet}" />:
-									<s:format.facetOptionLabel facet="{facet}">{optionValue}</s:format.facetOptionLabel>
-								</s:link.removeFacet>
+								<s:link.facet.removeOption facet="{facet}" option="{option}" class="facet remove-facet-option">{option.label}</s:link.facet.removeOption> <span class="facet-result-count">({option.count})</span>
 							</li>
 						</f:for>
 					</f:for>
@@ -45,23 +22,19 @@
 			</div>
 		</f:if>
 
-		<f:if condition="{facets -> f:count()}">
-			<div id="tx-solr-facets-available" class="secondaryContentSection">
-				<div class="csc-header">
-					<h3 class="csc-firstHeader">Narrow Search</h3>
-				</div>
-				<ul class="facets">
-					<f:for each="{facets}" as="facet">
-						<li class="facet facet-type facet-type-{facet.type}">
-							<s:facet.render facet="{facet}" />
-						</li>
-					</f:for>
-				</ul>
+		<div class="solr-facets-available secondaryContentSection">
+			<div class="csc-header">
+				<h3 class="csc-firstHeader">Narrow Search</h3>
 			</div>
-		</f:if>
+			<ul class="facets">
+				<f:for each="{resultSet.facets}" as="facet">
+					<li class="facet facet-type facet-type-{facet.type}">
+						<f:render partial="Facets/{facet.partialName}" arguments="{resultSet:resultSet, facet:facet}"/>
+					</li>
+				</f:for>
+			</ul>
+		</div>
 
-	</s:facets>
-
-</div>
+	</div>
 
 </f:section>

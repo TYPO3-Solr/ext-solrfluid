@@ -41,4 +41,20 @@ class SearchUriBuilder {
                 ->setArguments($persistentAndFacetArguments)
                 ->setUseCacheHash(false)->build();
     }
+
+    /**
+     * @param SearchRequest $searchRequest
+     * @param $facetName
+     * @param $optionValue
+     * @return string
+     */
+    public function getRemoveFacetOptionUri(SearchRequest $searchRequest, $facetName, $optionValue) {
+        $persistentAndFacetArguments = $searchRequest
+            ->getCopyForSubRequest()->removeFacetValue($facetName, $optionValue)
+            ->getAsArray();
+
+        return $this->uriBuilder
+            ->setArguments($persistentAndFacetArguments)
+            ->setUseCacheHash(false)->build();
+    }
 }

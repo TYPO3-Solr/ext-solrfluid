@@ -45,6 +45,5 @@ class FacetCollection extends \ArrayObject {
         }
 
         return $available;
-
     }
 }

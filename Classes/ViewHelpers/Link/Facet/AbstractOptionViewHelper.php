@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link;
+namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link\Facet;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -33,7 +33,7 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link
  */
-class FacetAddOptionViewHelper extends AbstractTagBasedViewHelper
+class AbstractOptionViewHelper extends AbstractTagBasedViewHelper
 {
     /**
      * @var string
@@ -74,14 +74,11 @@ class FacetAddOptionViewHelper extends AbstractTagBasedViewHelper
     }
 
     /**
-     * Render
-     *
      * @return string
+     * @throws \InvalidArgumentException
      */
-    public function render()
+    protected function getOptionValueFromArguments()
     {
-        /** @var  $facet OptionsFacet */
-        $facet = $this->arguments['facet'];
         if ($this->hasArgument('option')) {
             /** @var  $option Option */
             $option = $this->arguments['option'];
@@ -89,13 +86,17 @@ class FacetAddOptionViewHelper extends AbstractTagBasedViewHelper
         } elseif($this->hasArgument('optionValue')) {
             $optionValue = $this->arguments['optionValue'];
         } else {
-            //todo
-            throw new \InvalidArgumentException('...');
+            throw new \InvalidArgumentException('No option was passed, please pass either option or optionValue');
         }
 
-        $previousRequest = $facet->getResultSet()->getUsedSearchRequest();
-        $uri = $this->searchUriBuilder->getAddFacetOptionUri($previousRequest, $facet->getName(), $optionValue);
+        return $optionValue;
+    }
 
+    /**
+     * @param $uri
+     * @return string
+     */
+    protected function returnTagOrUri($uri) {
         if (!$this->arguments['returnUrl']) {
             $this->tag->addAttribute('href', $uri, false);
             $this->tag->setContent($this->renderChildren());

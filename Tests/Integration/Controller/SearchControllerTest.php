@@ -31,6 +31,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;
+use TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Page\PageGenerator;
 
@@ -173,26 +174,6 @@ class SearchControllerTest extends IntegrationTest
     /**
      * @test
      */
-    public function canRenderAFacetWithoutFluid()
-    {
-        $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
-
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
-
-        //not in the content but we expect to get shoes suggested
-        $_GET['q'] = '*';
-
-        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
-        $resultPage1 = $this->searchResponse->getContent();
-
-        $this->assertContains('class="facet">pages</a>', $resultPage1, 'Could not find facet option for pages');
-    }
-
-
-    /**
-     * @test
-     */
     public function canRenderAFacetWithFluid()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
@@ -256,6 +237,10 @@ class SearchControllerTest extends IntegrationTest
      */
     public function exceptionWillBeThrownWhenAWrongTemplateIsConfiguredForTheFacet()
     {
+        // we expected that an exception will be thrown when a facet is rendered
+        // where an unknown partialName is referenced
+        $this->setExpectedExceptionRegExp(InvalidTemplateResourceException::class, '#.*The partial files.*NotFound.*#');
+
         $this->importDataSetFromFixture('can_render_search_controller.xml');
         $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
 
@@ -264,7 +249,7 @@ class SearchControllerTest extends IntegrationTest
         // now we set the facet type for "type" facet to fluid and expect that we get a rendered facet
         $overwriteConfiguration = array();
         $overwriteConfiguration['search.']['faceting.']['facets.']['type.']['type'] = 'fluid';
-        $overwriteConfiguration['search.']['faceting.']['facets.']['type.']['fluid.']['template'] = 'NotFound.html';
+        $overwriteConfiguration['search.']['faceting.']['facets.']['type.']['partialName'] = 'NotFound';
 
         /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
         $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
@@ -276,10 +261,6 @@ class SearchControllerTest extends IntegrationTest
         // since we overwrite the configuration in the testcase from outside we want to avoid that it will be resetted
         $this->searchController->setResetConfigurationBeforeInitialize(false);
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
-        $resultPage1 = $this->searchResponse->getContent();
-
-        $this->assertContains('	Could not load template file. ', $resultPage1, 'Could not find error message from missing template');
-
     }
 
     /**

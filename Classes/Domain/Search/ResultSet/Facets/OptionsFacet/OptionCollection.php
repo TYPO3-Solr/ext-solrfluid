@@ -23,6 +23,15 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFac
  */
 class OptionCollection extends \ArrayObject
 {
+    /**
+     * @param Option $option
+     * @return OptionCollection
+     */
+    public function addOption(Option $option)
+    {
+        $this->append($option);
+        return $this;
+    }
 
     /**
      * Retrieves the count (with get prefixed to be usable in fluid).
@@ -31,5 +40,21 @@ class OptionCollection extends \ArrayObject
      */
     public function getCount() {
         return $this->count();
+    }
+
+    /**
+     * @return OptionCollection
+     */
+    public function getSelected()
+    {
+        $available = new OptionCollection();
+        foreach($this as $option) {
+            /** @var $option Option */
+            if($option->getSelected()) {
+                $available->addOption($option);
+            }
+        }
+
+        return $available;
     }
 }
