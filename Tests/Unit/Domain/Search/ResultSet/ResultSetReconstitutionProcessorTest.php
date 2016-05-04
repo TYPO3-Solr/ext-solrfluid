@@ -299,7 +299,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         /** @var $firstOption Option */
         $firstOption = $facet1->getOptions()->offsetGet(0);
         $this->assertEquals('pages', $firstOption->getValue());
-        $this->assertEquals(5,$firstOption->getCount());
+        $this->assertEquals(5, $firstOption->getCount());
         $this->asserttrue($firstOption->getSelected());
     }
 }

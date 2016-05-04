@@ -23,4 +23,6 @@ use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResult as SolrSearchRe
  */
 class SearchResult extends SolrSearchResult
 {
+
+    //@todo: implement native getters for common schema fields to accelerate the retrieval and avoid __call processing
 }

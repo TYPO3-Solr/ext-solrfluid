@@ -30,7 +30,7 @@ abstract class AbstractFacet
      * String
      * @var string
      */
-    static protected $type = self::TYPE_ABSTRACT;
+    protected static $type = self::TYPE_ABSTRACT;
 
     /**
      * The resultSet where this facet belongs to.
@@ -186,7 +186,8 @@ abstract class AbstractFacet
      *
      * @return string
      */
-    public function getPartialName() {
+    public function getPartialName()
+    {
         return 'Default';
     }
 }

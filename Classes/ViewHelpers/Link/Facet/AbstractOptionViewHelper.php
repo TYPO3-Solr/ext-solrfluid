@@ -48,7 +48,8 @@ class AbstractOptionViewHelper extends AbstractTagBasedViewHelper
     /**
      * @param SearchUriBuilder $searchUriBuilder
      */
-    public function injectSearchUriBuilder(SearchUriBuilder $searchUriBuilder) {
+    public function injectSearchUriBuilder(SearchUriBuilder $searchUriBuilder)
+    {
         $this->searchUriBuilder = $searchUriBuilder;
     }
 
@@ -83,7 +84,7 @@ class AbstractOptionViewHelper extends AbstractTagBasedViewHelper
             /** @var  $option Option */
             $option = $this->arguments['option'];
             $optionValue = $option->getValue();
-        } elseif($this->hasArgument('optionValue')) {
+        } elseif ($this->hasArgument('optionValue')) {
             $optionValue = $this->arguments['optionValue'];
         } else {
             throw new \InvalidArgumentException('No option was passed, please pass either option or optionValue');
@@ -96,7 +97,8 @@ class AbstractOptionViewHelper extends AbstractTagBasedViewHelper
      * @param $uri
      * @return string
      */
-    protected function returnTagOrUri($uri) {
+    protected function returnTagOrUri($uri)
+    {
         if (!$this->arguments['returnUrl']) {
             $this->tag->addAttribute('href', $uri, false);
             $this->tag->setContent($this->renderChildren());

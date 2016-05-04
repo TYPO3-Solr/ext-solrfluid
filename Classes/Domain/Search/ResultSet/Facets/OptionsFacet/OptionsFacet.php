@@ -32,7 +32,7 @@ class OptionsFacet extends AbstractFacet
      * String
      * @var string
      */
-    static protected $type = self::TYPE_OPTIONS;
+    protected static $type = self::TYPE_OPTIONS;
 
     /**
      * @var OptionCollection
@@ -65,7 +65,8 @@ class OptionsFacet extends AbstractFacet
     /**
      * @param Option $option
      */
-    public function addOption(Option $option) {
+    public function addOption(Option $option)
+    {
         $this->options->append($option);
     }
 
@@ -74,7 +75,8 @@ class OptionsFacet extends AbstractFacet
      *
      * @return string
      */
-    public function getPartialName() {
+    public function getPartialName()
+    {
         return !empty($this->configuration['partialName']) ? $this->configuration['partialName'] : 'Options';
     }
 }

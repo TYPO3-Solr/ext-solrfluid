@@ -67,16 +67,17 @@ class OptionsFacetParser implements FacetParserInterface
      * @param $fieldName
      * @return array
      */
-    protected function getUsedFacetOptionValues($response, $fieldName) {
+    protected function getUsedFacetOptionValues($response, $fieldName)
+    {
         $activeFacetValues = [];
-        if(!isset($response->responseHeader->params->fq)) {
+        if (!isset($response->responseHeader->params->fq)) {
             return $activeFacetValues;
         }
 
-        foreach($response->responseHeader->params->fq as $filterQuery) {
+        foreach ($response->responseHeader->params->fq as $filterQuery) {
             $expectedFilterStartSnipped = '(' .  $fieldName . ':"';
-            if(strpos($filterQuery, $expectedFilterStartSnipped) === 0) {
-                $facetValue = substr($filterQuery,strlen($expectedFilterStartSnipped), -2);
+            if (strpos($filterQuery, $expectedFilterStartSnipped) === 0) {
+                $facetValue = substr($filterQuery, strlen($expectedFilterStartSnipped), -2);
                 $activeFacetValues[] = $facetValue;
             }
         }

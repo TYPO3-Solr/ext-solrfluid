@@ -38,7 +38,8 @@ class OptionCollection extends \ArrayObject
      *
      * @return int
      */
-    public function getCount() {
+    public function getCount()
+    {
         return $this->count();
     }
 
@@ -48,9 +49,9 @@ class OptionCollection extends \ArrayObject
     public function getSelected()
     {
         $available = new OptionCollection();
-        foreach($this as $option) {
+        foreach ($this as $option) {
             /** @var $option Option */
-            if($option->getSelected()) {
+            if ($option->getSelected()) {
                 $available->addOption($option);
             }
         }

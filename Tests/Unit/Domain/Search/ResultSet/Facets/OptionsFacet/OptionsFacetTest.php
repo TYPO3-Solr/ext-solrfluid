@@ -58,10 +58,10 @@ class OptionsFacetTest extends UnitTest
         $option = new Option($optionsFacet);
 
             // before adding there should not be any facet present
-        $this->assertEquals(0 ,$optionsFacet->getOptions()->getCount());
+        $this->assertEquals(0, $optionsFacet->getOptions()->getCount());
         $optionsFacet->addOption($option);
 
             // now we should have 1 option present
-        $this->assertEquals(1 ,$optionsFacet->getOptions()->getCount());
+        $this->assertEquals(1, $optionsFacet->getOptions()->getCount());
     }
 }

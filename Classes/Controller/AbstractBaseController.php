@@ -149,8 +149,7 @@ abstract class AbstractBaseController extends ActionController
         }
         if ($pluginSettings !== []) {
             $this->solrConfigurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration(
-                $typoScriptService->convertPlainArrayToTypoScriptArray($pluginSettings)
-                ,
+                $typoScriptService->convertPlainArrayToTypoScriptArray($pluginSettings),
                 true,
                 false
             );

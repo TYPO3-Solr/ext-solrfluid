@@ -20,7 +20,13 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetCollection;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestion;
 
 /**
- * Adds the domain model to the SearchResult set that is missing in EXT:solr by now.
+ * SearchResultSet
+ *
+ * Aggregate root object for all result related entities
+ *
+ *  - Documents
+ *  - Facets
+ *  - Spellchecking suggestions
  *
  * @todo: the logic in this class can be added to the SearchResultSet after adding EXT:solrfluid to EXT:solr
  *
@@ -44,7 +50,8 @@ class SearchResultSet extends SolrSearchResultSet
     /**
      * @return \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->facets = new FacetCollection();
     }
 

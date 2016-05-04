@@ -55,7 +55,8 @@ class Option
      * @param int $count
      * @param bool $selected
      */
-    public function __construct(OptionsFacet $facet, $label = '', $value = '', $count = 0, $selected = false) {
+    public function __construct(OptionsFacet $facet, $label = '', $value = '', $count = 0, $selected = false)
+    {
         $this->facet = $facet;
         $this->label = $label;
         $this->value = $value;
