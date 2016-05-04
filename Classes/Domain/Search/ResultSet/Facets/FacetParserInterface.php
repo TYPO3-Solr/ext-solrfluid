@@ -20,4 +20,6 @@ interface FacetParserInterface
      * @return AbstractFacet|null
      */
     public function parse(SearchResultSet $resultSet, $facetName, array $facetConfiguration);
+
+
 }

@@ -138,7 +138,6 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
 
             // todo; swith to registry->getParser($options)
             switch ($type) {
-
                 default:
                     $parser = new OptionsFacetParser();
                     $facet = $parser->parse($resultSet, $facetName, $options);

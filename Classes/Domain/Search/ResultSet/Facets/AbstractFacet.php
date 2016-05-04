@@ -60,6 +60,16 @@ abstract class AbstractFacet
     protected $configuration;
 
     /**
+     * @var boolean
+     */
+    protected $isAvailable = false;
+
+    /**
+     * @var bool
+     */
+    protected $isUsed = false;
+
+    /**
      * AbstractFacet constructor.
      *
      * @param SearchResultSet $resultSet
@@ -114,11 +124,43 @@ abstract class AbstractFacet
     }
 
     /**
+     * @param boolean $isAvailable
+     */
+    public function setIsAvailable($isAvailable)
+    {
+        $this->isAvailable = $isAvailable;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsAvailable()
+    {
+        return $this->isAvailable;
+    }
+
+    /**
+     * @param boolean $isUsed
+     */
+    public function setIsUsed($isUsed)
+    {
+        $this->isUsed = $isUsed;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsUsed()
+    {
+        return $this->isUsed;
+    }
+
+    /**
      * @return string
      */
     public function getType()
     {
-        return $this->type;
+        return self::$type;
     }
 
     /**

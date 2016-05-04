@@ -18,6 +18,7 @@ use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\Option;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\Uri\SearchUriBuilder;
 use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractTagBasedViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -40,6 +41,18 @@ class FacetAddOptionViewHelper extends AbstractTagBasedViewHelper
     protected $tagName = 'a';
 
     /**
+     * @var SearchUriBuilder
+     */
+    protected $searchUriBuilder;
+
+    /**
+     * @param SearchUriBuilder $searchUriBuilder
+     */
+    public function injectSearchUriBuilder(SearchUriBuilder $searchUriBuilder) {
+        $this->searchUriBuilder = $searchUriBuilder;
+    }
+
+    /**
      * Arguments initialization
      *
      * @return void
@@ -58,7 +71,6 @@ class FacetAddOptionViewHelper extends AbstractTagBasedViewHelper
         $this->registerTagAttribute('facet', OptionsFacet::class, 'Specifies the facet', true);
         $this->registerTagAttribute('option', Option::class, 'Specifies the facet option');
         $this->registerTagAttribute('optionValue', 'string', 'Specifies the plain facet option value');
-
     }
 
     /**
@@ -68,7 +80,6 @@ class FacetAddOptionViewHelper extends AbstractTagBasedViewHelper
      */
     public function render()
     {
-
         /** @var  $facet OptionsFacet */
         $facet = $this->arguments['facet'];
         if ($this->hasArgument('option')) {
@@ -82,15 +93,8 @@ class FacetAddOptionViewHelper extends AbstractTagBasedViewHelper
             throw new \InvalidArgumentException('...');
         }
 
-        $arguments = $facet->getResultSet()
-                        ->getUsedSearchRequest()
-                        ->getCopyForSubRequest()->addFacetValue($facet->getName(), $optionValue)->getAsArray();
-
-        /** @var $uriBuilder UriBuilder */
-        $uriBuilder = $this->objectManager->get(UriBuilder::class);
-        $uriBuilder->setArguments($arguments)->setUseCacheHash(false);
-
-        $uri = $uriBuilder->build();
+        $previousRequest = $facet->getResultSet()->getUsedSearchRequest();
+        $uri = $this->searchUriBuilder->getAddFacetOptionUri($previousRequest, $facet->getName(), $optionValue);
 
         if (!$this->arguments['returnUrl']) {
             $this->tag->addAttribute('href', $uri, false);
