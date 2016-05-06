@@ -330,6 +330,38 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     }
 
     /**
+     * @test
+     */
+    public function emptyFacetIsKeptWhenNothingIsConfiguredGloballyButKeepingIsEnabledOnFacetLevel() {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_used_facet.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'facets.' => [
+                'type.' => [
+                    'label' => 'My Type',
+                    'field' => 'type',
+                ],
+                // category is configured but not available
+                'category.' => [
+                    'label' => 'My Category',
+                    'field' => 'category',
+                    'showEvenWhenEmpty' => 1
+                ]
+            ]
+        ];
+
+        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        $facets = $searchResultSet->getFacets();
+        $this->assertCount(2, $facets, 'we have two facets at all');
+    }
+
+    /**
      * @param $facetConfiguration
      * @param $searchResultSet
      * @return ResultSetReconstitutionProcessor
