@@ -18,12 +18,39 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserInterface;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * Class OptionsFacetParser
  */
 class OptionsFacetParser implements FacetParserInterface
 {
+    /**
+     * @var ContentObjectRenderer
+     */
+    protected static $reUseAbleContentObject;
+
+    /**
+     * Static array to cache the extracted options by fieldName
+
+     * @var array
+     */
+    protected static $usedFacetOptionsByFieldName;
+
+    /**
+     * @return ContentObjectRenderer
+     */
+    protected function getReUseAbleContentObject()
+    {
+        /** @var $contentObject ContentObjectRenderer */
+        if (self::$reUseAbleContentObject !== null) {
+            return self::$reUseAbleContentObject;
+        }
+
+        self::$reUseAbleContentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        return self::$reUseAbleContentObject;
+    }
+
     /**
      * @param SearchResultSet $resultSet
      * @param $facetName
@@ -34,6 +61,8 @@ class OptionsFacetParser implements FacetParserInterface
     {
         $response = $resultSet->getResponse();
         $fieldName = $facetConfiguration['field'];
+
+        // todo; allow content object for label
         $label = $facetConfiguration['label'];
 
         $noOptionsInResponse = empty($response->facet_counts->facet_fields->{$fieldName});
@@ -60,9 +89,10 @@ class OptionsFacetParser implements FacetParserInterface
         if (!$noOptionsInResponse) {
             $facet->setIsAvailable(true);
             foreach ($response->facet_counts->facet_fields->{$fieldName} as $value => $count) {
-                // todo; use configuration to enhance option label/sorting/etc
+                // todo; use configuration to enhance option sorting/etc
                 $isOptionsActive = in_array($value, $activeFacetValues);
-                $facet->addOption(new Option($facet, $value, $value, $count, $isOptionsActive));
+                $label = $this->getLabelFromRenderingInstructions($value, $count, $facetName, $facetConfiguration);
+                $facet->addOption(new Option($facet, $label, $value, $count, $isOptionsActive));
             }
         }
 
@@ -70,12 +100,37 @@ class OptionsFacetParser implements FacetParserInterface
     }
 
     /**
-     * @param $response
-     * @param $fieldName
+     * @param mixed $value
+     * @param integer $count
+     * @param string $facetName
+     * @param array $facetConfiguration
+     * @return string
+     */
+    protected function getLabelFromRenderingInstructions($value, $count, $facetName, $facetConfiguration)
+    {
+        $hasRenderingInstructions = isset($facetConfiguration['renderingInstruction']) && isset($facetConfiguration['renderingInstruction.']);
+        if (!$hasRenderingInstructions) {
+            return $value;
+        }
+
+        $this->getReUseAbleContentObject()->start(array('optionValue' => $value, 'optionCount' => $count, 'facetName' => $facetName));
+        return $this->getReUseAbleContentObject()->cObjGetSingle(
+            $facetConfiguration['renderingInstruction'],
+            $facetConfiguration['renderingInstruction.']
+        );
+    }
+
+    /**
+     * @param \Apache_Solr_Response $response
+     * @param string $fieldName
      * @return array
      */
-    protected function getUsedFacetOptionValues($response, $fieldName)
+    protected function getUsedFacetOptionValues(\Apache_Solr_Response $response, $fieldName)
     {
+        if (isset(self::$usedFacetOptionsByFieldName[$fieldName])) {
+            return self::$usedFacetOptionsByFieldName[$fieldName];
+        }
+
         $activeFacetValues = [];
         if (!isset($response->responseHeader->params->fq)) {
             return $activeFacetValues;
@@ -89,6 +144,6 @@ class OptionsFacetParser implements FacetParserInterface
             }
         }
 
-        return $activeFacetValues;
+        return self::$usedFacetOptionsByFieldName[$fieldName] = $activeFacetValues;
     }
 }

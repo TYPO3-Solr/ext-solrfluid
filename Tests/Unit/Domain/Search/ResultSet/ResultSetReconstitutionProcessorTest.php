@@ -31,6 +31,8 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\Opt
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\ResultSetReconstitutionProcessor;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Unit test case for the ObjectReconstitutionProcessor.
@@ -300,7 +302,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     /**
      * @test
      */
-    public function emptyFacetsAreNotReconstitutedWhenDisabled() {
+    public function emptyFacetsAreNotReconstitutedWhenDisabled()
+    {
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_used_facet.json');
 
         // before the reconstitution of the domain object from the response we expect that no facets
@@ -332,7 +335,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     /**
      * @test
      */
-    public function emptyFacetIsKeptWhenNothingIsConfiguredGloballyButKeepingIsEnabledOnFacetLevel() {
+    public function emptyFacetIsKeptWhenNothingIsConfiguredGloballyButKeepingIsEnabledOnFacetLevel()
+    {
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_used_facet.json');
 
         // before the reconstitution of the domain object from the response we expect that no facets
@@ -360,6 +364,64 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $facets = $searchResultSet->getFacets();
         $this->assertCount(2, $facets, 'we have two facets at all');
     }
+
+
+    /**
+     * @test
+     */
+    public function canApplyRenderingInstructionsOnOptions()
+    {
+        $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], array(
+            'TEXT'             => \TYPO3\CMS\Frontend\ContentObject\TextContentObject::class,
+            'CASE'             => \TYPO3\CMS\Frontend\ContentObject\CaseContentObject::class,
+        ));
+
+        $TSFE = GeneralUtility::makeInstance(TypoScriptFrontendController::class, array(), 1, 0);
+        $TSFE->cObjectDepthCounter = 5;
+        $GLOBALS['TSFE'] = $TSFE;
+        $GLOBALS['TT'] = $this->getMock('\\TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker', array(), array(), '', false);
+
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_multiple_fields_facets.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'facets.' => [
+                'type.' => [
+                    'label' => 'My Type with special rendering',
+                    'field' => 'type_stringS',
+                    'renderingInstruction' => 'CASE',
+                    'renderingInstruction.' => [
+                        'key.' => [
+                            'field' => 'optionValue'
+                        ],
+                        'page' => 'TEXT',
+                        'page.' => [
+                            'value' => 'Pages'
+                        ],
+                        'event' => 'TEXT',
+                        'event.' => [
+                            'value' => 'Events'
+                        ]
+
+                    ]
+                ]
+            ]
+        ];
+
+        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        /** @var $facet OptionsFacet */
+        $facet = $searchResultSet->getFacets()->offsetGet(0);
+
+        /** @var $option1 Option */
+        $option1 = $facet->getOptions()->offsetGet(0);
+        $this->assertSame('Pages', $option1->getLabel(), 'Rendering instructions have not been applied on the facet options');
+    }
+
 
     /**
      * @param $facetConfiguration
