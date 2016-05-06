@@ -61,9 +61,7 @@ class OptionsFacetParser implements FacetParserInterface
     {
         $response = $resultSet->getResponse();
         $fieldName = $facetConfiguration['field'];
-
-        // todo; allow content object for label
-        $label = $facetConfiguration['label'];
+        $label = $this->getPlainLabelOrApplyCObject($facetConfiguration);
 
         $noOptionsInResponse = empty($response->facet_counts->facet_fields->{$fieldName});
         $hideEmpty = !$resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->getSearchFacetingShowEmptyFacetsByName($facetName);
@@ -98,6 +96,27 @@ class OptionsFacetParser implements FacetParserInterface
 
         return $facet;
     }
+
+    /**
+     * @param array $configuration
+     * @return string
+     */
+    protected function getPlainLabelOrApplyCObject($configuration)
+    {
+        // when no label is configured we return an empty string
+        if (!isset($configuration['label'])) {
+            return '';
+        }
+
+        // when no sub configuration is set, we use the string, configured as label
+        if (!isset($configuration['label.'])) {
+            return $configuration['label'];
+        }
+
+        // when label and label. was set, we apply the cObject
+        return $this->getReUseAbleContentObject()->cObjGetSingle($configuration['label'], $configuration['label.']);
+    }
+
 
     /**
      * @param mixed $value

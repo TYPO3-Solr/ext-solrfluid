@@ -371,15 +371,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
      */
     public function canApplyRenderingInstructionsOnOptions()
     {
-        $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], array(
-            'TEXT'             => \TYPO3\CMS\Frontend\ContentObject\TextContentObject::class,
-            'CASE'             => \TYPO3\CMS\Frontend\ContentObject\CaseContentObject::class,
-        ));
-
-        $TSFE = GeneralUtility::makeInstance(TypoScriptFrontendController::class, array(), 1, 0);
-        $TSFE->cObjectDepthCounter = 5;
-        $GLOBALS['TSFE'] = $TSFE;
-        $GLOBALS['TT'] = $this->getMock('\\TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker', array(), array(), '', false);
+        $this->fakeTSFEToUseCObject();
 
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_multiple_fields_facets.json');
 
@@ -422,6 +414,67 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $this->assertSame('Pages', $option1->getLabel(), 'Rendering instructions have not been applied on the facet options');
     }
 
+    /**
+     * @test
+     */
+    public function labelCanBeConfiguredAsAPlainText()
+    {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_multiple_fields_facets.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'facets.' => [
+                'type.' => [
+                    'label' => 'My Type with special rendering',
+                    'field' => 'type_stringS',
+                ]
+            ]
+        ];
+
+        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        /** @var $facet OptionsFacet */
+        $facet = $searchResultSet->getFacets()->offsetGet(0);
+        $this->assertSame('My Type with special rendering', $facet->getLabel(), 'Could not get label for facet');
+    }
+
+    /**
+     * @test
+     */
+    public function labelCanBeUsedAsCObject()
+    {
+        $this->fakeTSFEToUseCObject();
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_multiple_fields_facets.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'facets.' => [
+                'type.' => [
+                    'label' => 'TEXT',
+                    'label.' => [
+                        'value' => 'My Type with special rendering',
+                        'stdWrap.' => ['case' => 'upper']
+                    ],
+                    'field' => 'type_stringS',
+                ]
+            ]
+        ];
+
+        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        /** @var $facet OptionsFacet */
+        $facet = $searchResultSet->getFacets()->offsetGet(0);
+        $this->assertSame('MY TYPE WITH SPECIAL RENDERING', $facet->getLabel(), 'Rendering instructions have not been applied on the facet options');
+    }
+
 
     /**
      * @param $facetConfiguration
@@ -437,5 +490,18 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
 
         $processor = new ResultSetReconstitutionProcessor();
         return $processor;
+    }
+
+    /**
+     *
+     */
+    protected function fakeTSFEToUseCObject()
+    {
+        $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], array('TEXT' => \TYPO3\CMS\Frontend\ContentObject\TextContentObject::class, 'CASE' => \TYPO3\CMS\Frontend\ContentObject\CaseContentObject::class, ));
+
+        $TSFE = GeneralUtility::makeInstance(TypoScriptFrontendController::class, array(), 1, 0);
+        $TSFE->cObjectDepthCounter = 5;
+        $GLOBALS['TSFE'] = $TSFE;
+        $GLOBALS['TT'] = $this->getMock('\\TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker', array(), array(), '', false);
     }
 }
