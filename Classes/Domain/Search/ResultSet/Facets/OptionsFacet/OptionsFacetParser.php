@@ -36,6 +36,13 @@ class OptionsFacetParser implements FacetParserInterface
         $fieldName = $facetConfiguration['field'];
         $label = $facetConfiguration['label'];
 
+        $noOptionsInResponse = empty($response->facet_counts->facet_fields->{$fieldName});
+        $hideEmpty = !$resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->getSearchFacetingShowEmptyFacetsByName($facetName);
+
+        if ($noOptionsInResponse && $hideEmpty) {
+            return null;
+        }
+
         /** @var $facet OptionsFacet */
         $facet = GeneralUtility::makeInstance(
             OptionsFacet::class,
@@ -50,7 +57,7 @@ class OptionsFacetParser implements FacetParserInterface
         $hasActiveOptions = count($activeFacetValues) > 0;
         $facet->setIsUsed($hasActiveOptions);
 
-        if (!empty($response->facet_counts->facet_fields->{$fieldName})) {
+        if (!$noOptionsInResponse) {
             $facet->setIsAvailable(true);
             foreach ($response->facet_counts->facet_fields->{$fieldName} as $value => $count) {
                 // todo; use configuration to enhance option label/sorting/etc

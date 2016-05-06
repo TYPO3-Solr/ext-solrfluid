@@ -91,17 +91,16 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
 
         $facetConfiguration = [
-            'type.' => [
-                'label' => 'My Type',
-                'field' => 'type',
-            ]
+            'showEmptyFacets' => 1,
+            'facets.' => [
+                'type.' => [
+                    'label' => 'My Type',
+                    'field' => 'type',
+                ]
+             ]
         ];
 
-        $typoScriptConfiguration = $this->getDumbMock(TypoScriptConfiguration::class);
-        $typoScriptConfiguration->expects($this->once())->method('getSearchFacetingFacets')->will($this->returnValue($facetConfiguration));
-        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getContextTypoScriptConfiguration')->will($this->returnValue($typoScriptConfiguration));
-
-        $processor = new ResultSetReconstitutionProcessor();
+        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
         $processor->process($searchResultSet);
 
         // after the reconstitution they should be 1 facet present
@@ -120,21 +119,20 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
 
         $facetConfiguration = [
-            'type.' => [
-                'label' => 'My Type',
-                'field' => 'type_stringS',
-            ],
-            'category.' => [
-                'label' => 'My Category',
-                'field' => 'category_stringM',
+            'showEmptyFacets' => 1,
+            'facets.' => [
+                'type.' => [
+                    'label' => 'My Type',
+                    'field' => 'type_stringS',
+                ],
+                'category.' => [
+                    'label' => 'My Category',
+                    'field' => 'category_stringM',
+                ]
             ]
         ];
 
-        $typoScriptConfiguration = $this->getDumbMock(TypoScriptConfiguration::class);
-        $typoScriptConfiguration->expects($this->once())->method('getSearchFacetingFacets')->will($this->returnValue($facetConfiguration));
-        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getContextTypoScriptConfiguration')->will($this->returnValue($typoScriptConfiguration));
-
-        $processor = new ResultSetReconstitutionProcessor();
+        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
         $processor->process($searchResultSet);
 
         // after the reconstitution they should be 1 facet present
@@ -153,25 +151,24 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
 
         $facetConfiguration = [
-            'type.' => [
-                'label' => 'My Type',
-                'field' => 'type_stringS',
-            ],
-            'category.' => [
-                'label' => 'My Category',
-                'field' => 'category_stringM'
-            ],
-            'category2.' => [
-                'label' => 'My Category again',
-                'field' => 'category_stringM'
+            'showEmptyFacets' => 1,
+            'facets.' => [
+                'type.' => [
+                    'label' => 'My Type',
+                    'field' => 'type_stringS',
+                ],
+                'category.' => [
+                    'label' => 'My Category',
+                    'field' => 'category_stringM'
+                ],
+                'category2.' => [
+                    'label' => 'My Category again',
+                    'field' => 'category_stringM'
+                ]
             ]
         ];
 
-        $typoScriptConfiguration = $this->getDumbMock(TypoScriptConfiguration::class);
-        $typoScriptConfiguration->expects($this->once())->method('getSearchFacetingFacets')->will($this->returnValue($facetConfiguration));
-        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getContextTypoScriptConfiguration')->will($this->returnValue($typoScriptConfiguration));
-
-        $processor = new ResultSetReconstitutionProcessor();
+        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
         $processor->process($searchResultSet);
 
         // after the reconstitution they should be 1 facet present
@@ -195,21 +192,20 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
 
         $facetConfiguration = [
-            'type.' => [
-                'label' => 'My Type',
-                'field' => 'type',
-            ],
-            'category.' => [
-                'label' => 'My Category',
-                'field' => 'category'
+            'showEmptyFacets' => 1,
+            'facets.' => [
+                'type.' => [
+                    'label' => 'My Type',
+                    'field' => 'type',
+                ],
+                'category.' => [
+                    'label' => 'My Category',
+                    'field' => 'category'
+                ]
             ]
         ];
 
-        $typoScriptConfiguration = $this->getDumbMock(TypoScriptConfiguration::class);
-        $typoScriptConfiguration->expects($this->once())->method('getSearchFacetingFacets')->will($this->returnValue($facetConfiguration));
-        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getContextTypoScriptConfiguration')->will($this->returnValue($typoScriptConfiguration));
-
-        $processor = new ResultSetReconstitutionProcessor();
+        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
         $processor->process($searchResultSet);
 
         // after the reconstitution we should have two facets present
@@ -240,22 +236,21 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
 
         $facetConfiguration = [
-            'type.' => [
-                'label' => 'My Type',
-                'field' => 'type',
-            ],
-            // category is configured but not available
-            'category.' => [
-                'label' => 'My Category',
-                'field' => 'category'
+            'showEmptyFacets' => 1,
+            'facets.' => [
+                'type.' => [
+                    'label' => 'My Type',
+                    'field' => 'type',
+                ],
+                 // category is configured but not available
+                'category.' => [
+                    'label' => 'My Category',
+                    'field' => 'category'
+                ]
             ]
         ];
 
-        $typoScriptConfiguration = $this->getDumbMock(TypoScriptConfiguration::class);
-        $typoScriptConfiguration->expects($this->once())->method('getSearchFacetingFacets')->will($this->returnValue($facetConfiguration));
-        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getContextTypoScriptConfiguration')->will($this->returnValue($typoScriptConfiguration));
-
-        $processor = new ResultSetReconstitutionProcessor();
+        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
         $processor->process($searchResultSet);
 
         $facets = $searchResultSet->getFacets();
@@ -277,18 +272,17 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
 
         $facetConfiguration = [
-            'type.' => [
-                'label' => 'My Type',
-                'field' => 'type',
+            'showEmptyFacets' => 1,
+            'facets.' => [
+                'type.' => [
+                    'label' => 'My Type',
+                    'field' => 'type',
+                ]
             ]
 
         ];
 
-        $typoScriptConfiguration = $this->getDumbMock(TypoScriptConfiguration::class);
-        $typoScriptConfiguration->expects($this->once())->method('getSearchFacetingFacets')->will($this->returnValue($facetConfiguration));
-        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getContextTypoScriptConfiguration')->will($this->returnValue($typoScriptConfiguration));
-
-        $processor = new ResultSetReconstitutionProcessor();
+        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
         $processor->process($searchResultSet);
 
         $facets = $searchResultSet->getFacets();
@@ -301,5 +295,53 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $this->assertEquals('pages', $firstOption->getValue());
         $this->assertEquals(5, $firstOption->getCount());
         $this->asserttrue($firstOption->getSelected());
+    }
+
+    /**
+     * @test
+     */
+    public function emptyFacetsAreNotReconstitutedWhenDisabled() {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_used_facet.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'showEmptyFacets' => 0,
+            'facets.' => [
+                'type.' => [
+                    'label' => 'My Type',
+                    'field' => 'type',
+                ],
+                // category is configured but not available
+                'category.' => [
+                    'label' => 'My Category',
+                    'field' => 'category'
+                ]
+            ]
+        ];
+
+        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        $facets = $searchResultSet->getFacets();
+        $this->assertCount(1, $facets, 'we have two facets at all');
+    }
+
+    /**
+     * @param $facetConfiguration
+     * @param $searchResultSet
+     * @return ResultSetReconstitutionProcessor
+     */
+    protected function getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet)
+    {
+        $configuration = array();
+        $configuration['plugin.']['tx_solr.']['search.']['faceting.'] = $facetConfiguration;
+        $typoScriptConfiguration = new TypoScriptConfiguration($configuration);
+        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getContextTypoScriptConfiguration')->will($this->returnValue($typoScriptConfiguration));
+
+        $processor = new ResultSetReconstitutionProcessor();
+        return $processor;
     }
 }
