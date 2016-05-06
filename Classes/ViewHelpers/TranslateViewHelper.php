@@ -15,6 +15,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
  */
 
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
 
 /**
  * Class TranslateViewHelper
@@ -41,34 +42,49 @@ class TranslateViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelp
      */
     public function render($key = null, $id = null, $default = null, $htmlEscape = null, array $arguments = null, $extensionName = null)
     {
-        foreach ($arguments as $key => $value) {
-            if (substr($key, 0, 1) === '@') {
-                return $this->renderSolrTranslation($id ? : $key);
-            }
-        }
-        return parent::render($key, $id, $default, $htmlEscape, $arguments, $extensionName);
+        return self::renderStatic(
+            array(
+                'key' => $key,
+                'id' => $id,
+                'default' => $default,
+                'htmlEscape' => $htmlEscape,
+                'arguments' => $arguments,
+                'extensionName' => $extensionName,
+            ),
+            $this->buildRenderChildrenClosure(),
+            $this->renderingContext
+        );
     }
 
     /**
-     * Translate a given key or use the tag body as default.
-     * Use strtr instead of vsprintf to replace the arguments
-     *
-     * @param string $id The locallang id
-     * @return string The translated key or tag body if key doesn't exist
+     * @param array $arguments
+     * @param callable $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
+     * @return string
      */
-    protected function renderSolrTranslation($id)
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
-        $request = $this->controllerContext->getRequest();
-        $extensionName = $this->arguments['extensionName'] === null ? $request->getControllerExtensionName() : $this->arguments['extensionName'];
-        $value = LocalizationUtility::translate($id, $extensionName, $this->arguments['arguments']);
-        if ($value === null) {
-            $value = $this->arguments['default'] !== null ? $this->arguments['default'] : $this->renderChildren();
-            if (is_array($this->arguments['arguments'])) {
-                $value = strtr($value, $this->arguments['arguments']);
-            }
-        } elseif ($this->arguments['htmlEscape']) {
-            $value = htmlspecialchars($value);
+        $arguments['extensionName'] = $arguments['extensionName'] === null ? 'Solr' : $arguments['extensionName'];
+        $result = parent::renderStatic($arguments, $renderChildrenClosure, $renderingContext);
+
+        $result = self::replaceTranslationPrefixesWithAtWithStringMarker($result);
+        if (trim($result) === '') {
+            $result = $arguments['default'] !== null ? $arguments['default'] : $renderChildrenClosure();
         }
-        return $value;
+
+        $result = vsprintf($result, $arguments['arguments']);
+        return $result;
+    }
+
+    /**
+     * @param $result
+     * @return mixed
+     */
+    protected static function replaceTranslationPrefixesWithAtWithStringMarker($result)
+    {
+        if (strpos($result, '@') !== false) {
+            $result = preg_replace('~\"?@[a-zA-Z]*\"?~', '%s ', $result);
+        }
+        return $result;
     }
 }
