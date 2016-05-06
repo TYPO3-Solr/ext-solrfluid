@@ -14,7 +14,6 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Format;
  * The TYPO3 project - inspiring people to share!
  */
 
-use ApacheSolrForTypo3\Solr\Facet\Facet;
 use ApacheSolrForTypo3\Solr\Util;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -22,13 +21,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
- * Class FacetLabelViewHelper
+ * Class FacetOptionLabelViewHelper
  *
  * @author Frans Saris <frans@beech.it>
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Format
  */
-class FacetLabelViewHelper extends AbstractViewHelper implements SingletonInterface
+class FacetOptionLabelViewHelper extends AbstractViewHelper implements SingletonInterface
 {
 
     /**
@@ -45,14 +44,32 @@ class FacetLabelViewHelper extends AbstractViewHelper implements SingletonInterf
     }
 
     /**
-     * @param Facet $facet
+     * Get facet option label
+     *
+     * @param \ApacheSolrForTypo3\Solr\Facet\Facet $facet
+     * @param string $optionValue
      * @return string
      */
-    public function render(Facet $facet)
+    public function render(\ApacheSolrForTypo3\Solr\Facet\Facet $facet, $optionValue = null)
     {
+        if ($optionValue === null) {
+            $optionValue = $this->renderChildren();
+        }
+
+        /** @var \ApacheSolrForTypo3\Solr\Facet\FacetOption $facetOption */
+        $facetOption = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\FacetOption', $facet->getName(), $optionValue);
+
         $facetConfiguration = $this->getTypoScriptConfiguration()->getSearchFacetingFacets();
-        $currentFacet = $facetConfiguration[$facet->getName() . '.'];
-        $facetLabel = $this->contentObjectRenderer->stdWrap($currentFacet['label'], $currentFacet['label.']);
-        return $facetLabel ? : $facet->getName();
+
+        // FIXME decouple this
+        if ($facetConfiguration[$facet->getName() . '.']['type'] == 'hierarchy') {
+            $filterEncoder = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Query\FilterEncoder\Hierarchy');
+            $facetRenderer = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Facet\HierarchicalFacetRenderer', $facet);
+            $optionValueLabel = $facetRenderer->getLastPathSegmentFromHierarchicalFacetOption($filterEncoder->decodeFilter($optionValue));
+        } else {
+            $optionValueLabel = $facetOption->render();
+        }
+
+        return $optionValueLabel;
     }
 }
