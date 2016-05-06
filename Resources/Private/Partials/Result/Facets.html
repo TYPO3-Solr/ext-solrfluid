@@ -27,7 +27,7 @@
 				<h3 class="csc-firstHeader">Narrow Search</h3>
 			</div>
 			<ul class="facets">
-				<f:for each="{resultSet.facets}" as="facet">
+				<f:for each="{resultSet.facets.available}" as="facet">
 					<li class="facet facet-type facet-type-{facet.type}">
 						<f:render partial="Facets/{facet.partialName}" arguments="{resultSet:resultSet, facet:facet}"/>
 					</li>
