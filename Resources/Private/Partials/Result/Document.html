@@ -21,7 +21,7 @@
 			<f:if condition="{0:document.type} == {0:'tx_solr_file'}">
 			<p>
 				<s:translate key="file_mimetype" />: {document.fileMimeType}<br />
-				<s:translate key="file_referenced" />: <s:link.typolink title="{document.fileReferenceTitle}" parameter="{document.fileReferenceUrl}">{document.fileReferenceTitle}</s:link.typolink>
+				<s:translate key="file_referenced" />: <f:link.typolink title="{document.fileReferenceTitle}" parameter="{document.fileReferenceUrl}">{document.fileReferenceTitle}</f:link.typolink>
 			</p>
 			</f:if>
 			<s:debug.documentScoreAnalyzer document="{document}" />
