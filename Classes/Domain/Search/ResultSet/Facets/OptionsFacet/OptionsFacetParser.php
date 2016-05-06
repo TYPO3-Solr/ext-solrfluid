@@ -156,10 +156,18 @@ class OptionsFacetParser implements FacetParserInterface
         }
 
         foreach ($response->responseHeader->params->fq as $filterQuery) {
-            $expectedFilterStartSnipped = '(' .  $fieldName . ':"';
-            if (strpos($filterQuery, $expectedFilterStartSnipped) === 0) {
-                $facetValue = substr($filterQuery, strlen($expectedFilterStartSnipped), -2);
-                $activeFacetValues[] = $facetValue;
+            // (title:"foo")
+            // (title:"foo" AND title:"bar")
+            $pattern = '~(\(|\s[A-Z]*\s)((?<fieldName>[^:]*):"(?<fieldValue>.*)(?<!\\\))"~U';
+            $matches = [];
+            preg_match_all($pattern, $filterQuery, $matches);
+            $matchedFieldsName = isset($matches['fieldName']) ? $matches['fieldName'] : [];
+            $matchedFieldsValues = isset($matches['fieldValue']) ? $matches['fieldValue'] : [];
+
+            foreach ($matchedFieldsName as $key => $fieldNamesInResponse) {
+                if ($fieldNamesInResponse === $fieldName && isset($matchedFieldsValues[$key])) {
+                    $activeFacetValues[] = stripslashes($matchedFieldsValues[$key]);
+                }
             }
         }
 

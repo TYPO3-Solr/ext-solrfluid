@@ -302,6 +302,43 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     /**
      * @test
      */
+    public function canGetTwoUsedFacetOptions()
+    {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_two_used_facets.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'showEmptyFacets' => 1,
+            'facets.' => [
+                'mytitle.' => [
+                    'label' => 'My Title',
+                    'field' => 'title',
+                ]
+            ]
+
+        ];
+
+        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        $facets = $searchResultSet->getFacets();
+
+        /** @var OptionsFacet $facet1 */
+        $facet1 = $facets[0];
+
+        /** @var $firstOption Option */
+        $firstOption = $facet1->getOptions()->offsetGet(0);
+        $this->assertEquals('jpeg', $firstOption->getValue());
+        $this->assertEquals(1, $firstOption->getCount());
+        $this->asserttrue($firstOption->getSelected());
+    }
+
+    /**
+     * @test
+     */
     public function emptyFacetsAreNotReconstitutedWhenDisabled()
     {
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_used_facet.json');
