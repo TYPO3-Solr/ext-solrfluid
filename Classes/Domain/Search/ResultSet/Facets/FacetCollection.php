@@ -38,4 +38,13 @@ class FacetCollection extends AbstractCollection
             function (AbstractFacet $facet) { return $facet->getIsAvailable(); }
         );
     }
+
+    /**
+     * @param $position
+     * @return AbstractFacet
+     */
+    public function getByPosition($position)
+    {
+        return parent::getByPosition($position);
+    }
 }

@@ -30,8 +30,21 @@ class OptionCollection extends AbstractCollection
      */
     public function addOption(Option $option)
     {
-        $this->data[] = $option;
+        if ($option === null) {
+            return $this;
+        }
+
+        $this->data[$option->getValue()] = $option;
         return $this;
+    }
+
+    /**
+     * @param string $value
+     * @return null
+     */
+    public function getByValue($value)
+    {
+        return isset($this->data[$value]) ? $this->data[$value] : null;
     }
 
     /**
@@ -52,5 +65,27 @@ class OptionCollection extends AbstractCollection
         return $this->getFilteredCopy(function (Option $option) {
             return $option->getSelected();
         });
+    }
+
+    /**
+     * @param array $manualSorting
+     * @return OptionCollection
+     */
+    public function getManualSortedCopy(array $manualSorting)
+    {
+        $result = clone $this;
+        $copiedOptions = $result->data;
+        $sortedOptions = [];
+        foreach ($manualSorting as $item) {
+            if (isset($copiedOptions[$item])) {
+                $sortedOptions[] = $copiedOptions[$item];
+                unset($copiedOptions[$item]);
+            }
+        }
+            // in the end all items get appended that are not configured in the manual sort order
+        $sortedOptions = $sortedOptions + $copiedOptions;
+        $result->data = $sortedOptions;
+
+        return $result;
     }
 }

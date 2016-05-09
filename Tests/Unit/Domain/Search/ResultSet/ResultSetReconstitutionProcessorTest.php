@@ -178,7 +178,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
 
         /** @var OptionsFacet $facet */
         $facets = $searchResultSet->getFacets();
-        $this->assertCount(2, $facets[0]->getOptions());
+        $this->assertCount(2, $facets->getByPosition(0)->getOptions());
     }
 
 
@@ -216,12 +216,12 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $facets = $searchResultSet->getFacets();
 
         /** @var OptionsFacet $facet1 */
-        $facet1 = $facets[0];
+        $facet1 = $facets->getByPosition(0);
         $this->assertEquals('My Type', $facet1->getLabel());
         $this->assertTrue($facet1->getIsUsed());
 
         /** @var OptionsFacet $facet2 */
-        $facet2 = $facets[1];
+        $facet2 = $facets->getByPosition(1);
         $this->assertEquals('My Category', $facet2->getLabel());
         $this->assertFalse($facet2->getIsUsed());
     }
@@ -290,10 +290,10 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $facets = $searchResultSet->getFacets();
 
         /** @var OptionsFacet $facet1 */
-        $facet1 = $facets[0];
+        $facet1 = $facets->getByPosition(0);
 
         /** @var $firstOption Option */
-        $firstOption = $facet1->getOptions()->offsetGet(0);
+        $firstOption = $facet1->getOptions()->getByPosition(0);
         $this->assertEquals('pages', $firstOption->getValue());
         $this->assertEquals(5, $firstOption->getCount());
         $this->asserttrue($firstOption->getSelected());
@@ -327,10 +327,10 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $facets = $searchResultSet->getFacets();
 
         /** @var OptionsFacet $facet1 */
-        $facet1 = $facets[0];
+        $facet1 = $facets->getByPosition(0);
 
         /** @var $firstOption Option */
-        $firstOption = $facet1->getOptions()->offsetGet(0);
+        $firstOption = $facet1->getOptions()->getByPosition(0);
         $this->assertEquals('jpeg', $firstOption->getValue());
         $this->assertEquals(1, $firstOption->getCount());
         $this->asserttrue($firstOption->getSelected());
@@ -444,10 +444,10 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $processor->process($searchResultSet);
 
         /** @var $facet OptionsFacet */
-        $facet = $searchResultSet->getFacets()->offsetGet(0);
+        $facet = $searchResultSet->getFacets()->getByPosition(0);
 
         /** @var $option1 Option */
-        $option1 = $facet->getOptions()->offsetGet(0);
+        $option1 = $facet->getOptions()->getByPosition(0);
         $this->assertSame('Pages', $option1->getLabel(), 'Rendering instructions have not been applied on the facet options');
     }
 
@@ -475,7 +475,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $processor->process($searchResultSet);
 
         /** @var $facet OptionsFacet */
-        $facet = $searchResultSet->getFacets()->offsetGet(0);
+        $facet = $searchResultSet->getFacets()->getByPosition(0);
         $this->assertSame('My Type with special rendering', $facet->getLabel(), 'Could not get label for facet');
     }
 
@@ -508,7 +508,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $processor->process($searchResultSet);
 
         /** @var $facet OptionsFacet */
-        $facet = $searchResultSet->getFacets()->offsetGet(0);
+        $facet = $searchResultSet->getFacets()->getByPosition(0);
         $this->assertSame('MY TYPE WITH SPECIAL RENDERING', $facet->getLabel(), 'Rendering instructions have not been applied on the facet options');
     }
 

@@ -87,12 +87,33 @@ class OptionsFacetParser implements FacetParserInterface
         if (!$noOptionsInResponse) {
             $facet->setIsAvailable(true);
             foreach ($response->facet_counts->facet_fields->{$fieldName} as $value => $count) {
-                // todo; use configuration to enhance option sorting/etc
                 $isOptionsActive = in_array($value, $activeFacetValues);
                 $label = $this->getLabelFromRenderingInstructions($value, $count, $facetName, $facetConfiguration);
                 $facet->addOption(new Option($facet, $label, $value, $count, $isOptionsActive));
             }
         }
+
+        // after all options have been created we apply a manualSortOrder if configured
+        // the sortBy (lex,..) is done by the solr server and triggered by the query, therefore it does not
+        // need to be handled in the frontend.
+        $facet = $this->applyManualSortOrder($facet, $facetConfiguration);
+
+        return $facet;
+    }
+
+    /**
+     * @param OptionsFacet $facet
+     * @param array $facetConfiguration
+     * @return OptionsFacet
+     */
+    protected function applyManualSortOrder($facet, array $facetConfiguration)
+    {
+        if (!isset($facetConfiguration['manualSortOrder'])) {
+            return $facet;
+        }
+        $fields = GeneralUtility::trimExplode(',', $facetConfiguration['manualSortOrder']);
+        $sortedOptions = $facet->getOptions()->getManualSortedCopy($fields);
+        $facet->setOptions($sortedOptions);
 
         return $facet;
     }

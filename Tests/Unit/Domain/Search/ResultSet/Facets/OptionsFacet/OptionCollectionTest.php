@@ -35,33 +35,28 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
  *
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  */
-class OptionsFacetTest extends UnitTest
+class OptionCollectionTest extends UnitTest
 {
-
     /**
      * @test
      */
-    public function canGetTitleFromOptionsFacet()
+    public function canGetManualSortedCopy()
     {
-        $resultSetMock = $this->getDumbMock(SearchResultSet::class);
-        $optionsFacet = new OptionsFacet($resultSetMock, 'myFacet', 'myFacetFieldName', 'myTitle');
-        $this->assertSame('myTitle', $optionsFacet->getLabel(), 'Could not get title from options facet');
-    }
+        $searchResultSetMock = $this->getDumbMock(SearchResultSet::class);
+        $facet = new OptionsFacet($searchResultSetMock, 'colors', 'colors_s');
 
-    /**
-     * @test
-     */
-    public function canAddOptionsToFacet()
-    {
-        $resultSetMock = $this->getDumbMock(SearchResultSet::class);
-        $optionsFacet = new OptionsFacet($resultSetMock, 'myFacet', 'myFacetFieldName', 'myTitle');
-        $option = new Option($optionsFacet);
+        $red = new Option($facet, 'Rubin Red', 'red', 9);
+        $blue = new Option($facet, 'Polar Blue', 'blue', 12);
+        $yellow = new Option($facet, 'Lemon Yellow', 'yellow', 3);
 
-            // before adding there should not be any facet present
-        $this->assertEquals(0, $optionsFacet->getOptions()->getCount());
-        $optionsFacet->addOption($option);
+        $facet->addOption($red);
+        $facet->addOption($blue);
+        $facet->addOption($yellow);
 
-            // now we should have 1 option present
-        $this->assertEquals(1, $optionsFacet->getOptions()->getCount());
+        $sortedOptions = $facet->getOptions()->getManualSortedCopy(['yellow', 'blue']);
+
+        $this->assertSame($yellow, $sortedOptions->getByPosition(0), 'First sorted item was not yellow');
+        $this->assertSame($blue, $sortedOptions->getByPosition(1), 'First sorted item was not blue');
+        $this->assertSame($red, $sortedOptions->getByPosition(2), 'First sorted item was not blue');
     }
 }

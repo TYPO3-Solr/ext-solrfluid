@@ -346,7 +346,6 @@ class SearchControllerTest extends IntegrationTest
      */
     public function canDefineAManualSortOrder()
     {
-        $this->markTestSkipped('todo');
         $this->importDataSetFromFixture('can_render_search_controller.xml');
         $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
 

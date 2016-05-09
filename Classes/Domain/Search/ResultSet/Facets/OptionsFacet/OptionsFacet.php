@@ -63,6 +63,14 @@ class OptionsFacet extends AbstractFacet
     }
 
     /**
+     * @param OptionCollection $options
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+    }
+
+    /**
      * @param Option $option
      */
     public function addOption(Option $option)
