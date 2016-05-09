@@ -13,6 +13,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFac
  *
  * The TYPO3 project - inspiring people to share!
  */
+use ApacheSolrForTypo3\Solrfluid\System\Data\AbstractCollection;
 
 /**
  * Collection for facet options.
@@ -21,7 +22,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFac
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
-class OptionCollection extends \ArrayObject
+class OptionCollection extends AbstractCollection
 {
     /**
      * @param Option $option
@@ -29,7 +30,7 @@ class OptionCollection extends \ArrayObject
      */
     public function addOption(Option $option)
     {
-        $this->append($option);
+        $this->data[] = $option;
         return $this;
     }
 
@@ -48,14 +49,8 @@ class OptionCollection extends \ArrayObject
      */
     public function getSelected()
     {
-        $available = new OptionCollection();
-        foreach ($this as $option) {
-            /** @var $option Option */
-            if ($option->getSelected()) {
-                $available->addOption($option);
-            }
-        }
-
-        return $available;
+        return $this->getFilteredCopy(function (Option $option) {
+            return $option->getSelected();
+        });
     }
 }

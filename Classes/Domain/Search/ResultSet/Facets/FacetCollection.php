@@ -2,11 +2,13 @@
 
 namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets;
 
+use ApacheSolrForTypo3\Solrfluid\System\Data\AbstractCollection;
+
 /**
  * Class FacetCollection
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets
  */
-class FacetCollection extends \ArrayObject
+class FacetCollection extends AbstractCollection
 {
 
     /**
@@ -14,7 +16,7 @@ class FacetCollection extends \ArrayObject
      */
     public function addFacet(AbstractFacet $facet)
     {
-        $this->append($facet);
+        $this->data[] = $facet;
     }
 
     /**
@@ -22,15 +24,9 @@ class FacetCollection extends \ArrayObject
      */
     public function getUsed()
     {
-        $used = new FacetCollection();
-        foreach ($this as $facet) {
-            /** @var $facet AbstractFacet */
-            if ($facet->getIsUsed()) {
-                $used->addFacet($facet);
-            }
-        }
-
-        return $used;
+        return $this->getFilteredCopy(
+            function (AbstractFacet $facet) { return $facet->getIsUsed(); }
+        );
     }
 
     /**
@@ -38,14 +34,8 @@ class FacetCollection extends \ArrayObject
      */
     public function getAvailable()
     {
-        $available = new FacetCollection();
-        foreach ($this as $facet) {
-            /** @var $facet AbstractFacet */
-            if ($facet->getIsAvailable()) {
-                $available->addFacet($facet);
-            }
-        }
-
-        return $available;
+        return $this->getFilteredCopy(
+            function (AbstractFacet $facet) { return $facet->getIsAvailable(); }
+        );
     }
 }

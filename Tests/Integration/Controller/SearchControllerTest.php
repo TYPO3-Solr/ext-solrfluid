@@ -273,7 +273,6 @@ class SearchControllerTest extends IntegrationTest
      */
     public function canSortFacetsByLex()
     {
-
         $this->importDataSetFromFixture('can_render_search_controller.xml');
         $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
 
@@ -341,6 +340,49 @@ class SearchControllerTest extends IntegrationTest
         $this->assertContains('class="facet-option-list fluidfacet"', $resultPage1, 'Could not find fluidfacet class that indicates the facet was rendered with fluid');
         $this->assertContains('pages</a> <span class="facet-result-count">', $resultPage1, 'Could not find facet option for pages');
     }
+
+    /**
+     * @test
+     */
+    public function canDefineAManualSortOrder()
+    {
+        $this->markTestSkipped('todo');
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $womanPages = [4,5,8];
+        $menPages = [2];
+        $this->indexPages($womanPages);
+        $this->indexPages($menPages);
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = '*';
+
+        // when we sort by lex "men" should appear before "woman" even when only one option is available
+        $overwriteConfiguration = array();
+        $overwriteConfiguration['search.']['faceting.']['facets.']['subtitle.']['manualSortOrder'] = 'men, woman';
+
+
+        /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
+        $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
+        $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
+
+        // since we overwrite the configuration in the testcase from outside we want to avoid that it will be resetted
+        $this->searchController->setResetConfigurationBeforeInitialize(false);
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $resultPage1 = $this->searchResponse->getContent();
+
+        $subtitleMenPosition = strpos($resultPage1, 'subtitle%3Amen">men</a> <span class="facet-result-count">(1)</span>');
+        $subtitleWomanPosition =  strpos($resultPage1, 'subtitle%3Awoman">woman</a> <span class="facet-result-count">(3)</span>');
+
+        $this->assertGreaterThan(0, $subtitleMenPosition);
+        $this->assertGreaterThan(0, $subtitleWomanPosition);
+        $this->assertGreaterThan($subtitleMenPosition, $subtitleWomanPosition);
+
+        $this->assertContains('class="facet-option-list fluidfacet"', $resultPage1, 'Could not find fluidfacet class that indicates the facet was rendered with fluid');
+        $this->assertContains('pages</a> <span class="facet-result-count">', $resultPage1, 'Could not find facet option for pages');
+    }
+
 
     /**
      * @test

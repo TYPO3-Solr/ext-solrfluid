@@ -67,7 +67,7 @@ class OptionsFacet extends AbstractFacet
      */
     public function addOption(Option $option)
     {
-        $this->options->append($option);
+        $this->options->addOption($option);
     }
 
     /**

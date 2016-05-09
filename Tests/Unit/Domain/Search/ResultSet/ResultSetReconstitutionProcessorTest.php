@@ -177,8 +177,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $this->assertCount(3, $searchResultSet->getFacets());
 
         /** @var OptionsFacet $facet */
-        $facet = reset($searchResultSet->getFacets());
-        $this->assertCount(2, $facet->getOptions());
+        $facets = $searchResultSet->getFacets();
+        $this->assertCount(2, $facets[0]->getOptions());
     }
 
 
