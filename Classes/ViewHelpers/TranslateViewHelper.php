@@ -83,7 +83,7 @@ class TranslateViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelp
     protected static function replaceTranslationPrefixesWithAtWithStringMarker($result)
     {
         if (strpos($result, '@') !== false) {
-            $result = preg_replace('~\"?@[a-zA-Z]*\"?~', '%s ', $result);
+            $result = preg_replace('~\"?@[a-zA-Z]*\"?~', '%s', $result);
         }
         return $result;
     }

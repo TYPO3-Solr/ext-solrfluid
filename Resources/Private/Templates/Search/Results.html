@@ -27,7 +27,9 @@
 		</f:if>
 
 		<f:if condition="{resultSet.usedSearch.numberOfResults}">
-			<span class="result-found"><s:translate key="results_found" arguments="{0:resultSet.usedSearch.numberOfResults, 1: resultSet.usedSearch.queryTime}">Found %d results in %d seconds</s:translate></span>
+			<span class="result-found">
+				<s:translate key="results_found" arguments="{0:resultSet.usedSearch.numberOfResults, 1: resultSet.usedSearch.queryTime}">Found %d results in %d seconds</s:translate>
+			</span>
 			<span class="result-range">
 			<s:pageBrowserRange>
 				<f:translate key="results_range" arguments="{0:from, 1: to, 2: total}">Results %d until %d of %d</f:translate>
