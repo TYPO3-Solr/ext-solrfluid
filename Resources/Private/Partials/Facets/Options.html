@@ -8,7 +8,7 @@
     <ul class="facet-option-list fluidfacet">
         <f:for each="{facet.options}" as="option" iteration="iteration">
             <li class="facet-option{f:if(condition:'{iteration.index} > 9', then:' tx-solr-facet-hidden')}">
-                + <s:link.facet.addOption facet="{facet}" option="{option}" class="facet">{option.label}</s:link.facet.addOption> <span class="facet-result-count">({option.count})</span>
+				+ <a class="facet" href="{s:uri.facet.addOption(facet: facet, option: option)}">{option.label}</a> <span class="facet-result-count">({option.count})</span>
             </li>
         </f:for>
         <f:if condition="{options -> f:count()} > 10">

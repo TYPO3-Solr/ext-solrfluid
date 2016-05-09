@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link\Facet;
+namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -33,22 +33,42 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link
  */
-class AddOptionViewHelper extends AbstractOptionViewHelper
+class AddOptionViewHelper extends AbstractOptionViewHelper implements CompilableInterface
 {
 
     /**
-     * Render
-     *
+     * @param OptionsFacet $facet
+     * @param Option $option
+     * @param string $optionValue
      * @return string
      */
-    public function render()
+    public function render($facet, $option = null, $optionValue = null)
+    {
+        return self::renderStatic(
+            array(
+                'facet' => $facet,
+                'option' => $option,
+                'optionValue' => $optionValue
+            ),
+            $this->buildRenderChildrenClosure(),
+            $this->renderingContext
+        );
+    }
+
+    /**
+     * @param array $arguments
+     * @param callable $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
+     * @return string
+     */
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
         /** @var  $facet OptionsFacet */
-        $facet = $this->arguments['facet'];
-        $optionValue = $this->getOptionValueFromArguments();
+        $facet = $arguments['facet'];
+        $optionValue = self::getOptionValueFromArguments($arguments);
         $previousRequest = $facet->getResultSet()->getUsedSearchRequest();
-        $uri = $this->searchUriBuilder->getAddFacetOptionUri($previousRequest, $facet->getName(), $optionValue);
-        $this->returnTagOrUri($uri);
-        return $this->returnTagOrUri($uri);
+        $uri = self::getSearchUriBuilder()->getAddFacetOptionUri($previousRequest, $facet->getName(), $optionValue);
+
+        return $uri;
     }
 }
