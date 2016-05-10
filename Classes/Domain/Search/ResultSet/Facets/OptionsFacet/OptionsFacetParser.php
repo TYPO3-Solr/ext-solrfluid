@@ -62,8 +62,9 @@ class OptionsFacetParser implements FacetParserInterface
         $response = $resultSet->getResponse();
         $fieldName = $facetConfiguration['field'];
         $label = $this->getPlainLabelOrApplyCObject($facetConfiguration);
+        $rawOptions = isset($response->facet_counts->facet_fields->{$fieldName}) ? $response->facet_counts->facet_fields->{$fieldName} : new \stdClass();
 
-        $noOptionsInResponse = empty($response->facet_counts->facet_fields->{$fieldName});
+        $noOptionsInResponse = empty(get_object_vars($rawOptions));
         $hideEmpty = !$resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->getSearchFacetingShowEmptyFacetsByName($facetName);
 
         if ($noOptionsInResponse && $hideEmpty) {
@@ -86,7 +87,7 @@ class OptionsFacetParser implements FacetParserInterface
 
         if (!$noOptionsInResponse) {
             $facet->setIsAvailable(true);
-            foreach ($response->facet_counts->facet_fields->{$fieldName} as $value => $count) {
+            foreach ($rawOptions as $value => $count) {
                 $isOptionsActive = in_array($value, $activeFacetValues);
                 $label = $this->getLabelFromRenderingInstructions($value, $count, $facetName, $facetConfiguration);
                 $facet->addOption(new Option($facet, $label, $value, $count, $isOptionsActive));
