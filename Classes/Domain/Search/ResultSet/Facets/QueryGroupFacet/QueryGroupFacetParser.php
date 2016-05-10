@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -13,29 +13,30 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFac
  *
  * The TYPO3 project - inspiring people to share!
  */
-
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetParser;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserInterface;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
- * Class OptionsFacetParser
+ * Class QueryGroupFacetParser
+ *
+ * @author Frans Saris <frans@beech.it>
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet
  */
-class OptionsFacetParser extends AbstractFacetParser
+class QueryGroupFacetParser extends AbstractFacetParser
 {
     /**
      * Static array to cache the extracted options by fieldName
      *
      * @var array
      */
-    protected static $usedFacetOptionsByFieldName;
+    protected static $usedOptionsByFieldName;
 
     /**
      * @param SearchResultSet $resultSet
-     * @param $facetName
+     * @param string $facetName
      * @param array $facetConfiguration
      * @return AbstractFacet|null
      */
@@ -44,18 +45,18 @@ class OptionsFacetParser extends AbstractFacetParser
         $response = $resultSet->getResponse();
         $fieldName = $facetConfiguration['field'];
         $label = $this->getPlainLabelOrApplyCObject($facetConfiguration);
-        $rawOptions = isset($response->facet_counts->facet_fields->{$fieldName}) ? $response->facet_counts->facet_fields->{$fieldName} : new \stdClass();
 
-        $noOptionsInResponse = empty(get_object_vars($rawOptions));
+        $rawOptions = $this->getRawOptions($response, $fieldName);
+        $noOptionsInResponse = $rawOptions === [];
         $hideEmpty = !$resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->getSearchFacetingShowEmptyFacetsByName($facetName);
 
         if ($noOptionsInResponse && $hideEmpty) {
             return null;
         }
 
-        /** @var $facet OptionsFacet */
+        /** @var QueryGroupFacet $facet */
         $facet = GeneralUtility::makeInstance(
-            OptionsFacet::class,
+            QueryGroupFacet::class,
             $resultSet,
             $facetName,
             $fieldName,
@@ -69,12 +70,24 @@ class OptionsFacetParser extends AbstractFacetParser
 
         if (!$noOptionsInResponse) {
             $facet->setIsAvailable(true);
-            foreach ($rawOptions as $value => $count) {
-                $isOptionsActive = in_array($value, $activeFacetValues);
-                $label = $this->getLabelFromRenderingInstructions($value, $count, $facetName, $facetConfiguration);
+            foreach ($rawOptions as $query => $count) {
+                $value = $this->getValueByQuery($query, $facetConfiguration);
+                // Skip unknown queries
+                if (!$value) {
+                    continue;
+                }
+
+                $isOptionsActive = in_array($query, $activeFacetValues, true);
+                $label = $this->getLabelFromRenderingInstructions(
+                    $value,
+                    $count,
+                    $facetName,
+                    $facetConfiguration
+                );
                 $facet->addOption(new Option($facet, $label, $value, $count, $isOptionsActive));
             }
         }
+
 
         // after all options have been created we apply a manualSortOrder if configured
         // the sortBy (lex,..) is done by the solr server and triggered by the query, therefore it does not
@@ -102,14 +115,52 @@ class OptionsFacetParser extends AbstractFacetParser
     }
 
     /**
+     * Get raw query options
+     *
+     * @param \Apache_Solr_Response $response
+     * @param string $fieldName
+     * @return []
+     */
+    protected function getRawOptions(\Apache_Solr_Response $response, $fieldName) {
+        $options = [];
+
+        foreach ($response->facet_counts->facet_queries as $rawValue => $count) {
+            if ((int)$count === 0) continue;
+
+            list($field, $query) = explode(':', $rawValue, 2);
+            if ($field === $fieldName) {
+                $options[$query] = $count;
+            }
+        }
+
+        return $options;
+    }
+
+    /**
+     * @param string $query
+     * @param array $facetConfiguration
+     * @return string|null
+     */
+    protected function getValueByQuery($query, array $facetConfiguration) {
+        $value = null;
+        foreach ($facetConfiguration['queryGroup.'] as $valueKey => $config) {
+            if (isset($config['query']) && $config['query'] === $query) {
+                $value = rtrim($valueKey, '.');
+                break;
+            }
+        }
+        return $value;
+    }
+
+    /**
      * @param \Apache_Solr_Response $response
      * @param string $fieldName
      * @return array
      */
     protected function getUsedFacetOptionValues(\Apache_Solr_Response $response, $fieldName)
     {
-        if (isset(self::$usedFacetOptionsByFieldName[$fieldName])) {
-            return self::$usedFacetOptionsByFieldName[$fieldName];
+        if (isset(self::$usedOptionsByFieldName[$fieldName])) {
+            return self::$usedOptionsByFieldName[$fieldName];
         }
 
         $activeFacetValues = [];
@@ -118,9 +169,9 @@ class OptionsFacetParser extends AbstractFacetParser
         }
 
         foreach ($response->responseHeader->params->fq as $filterQuery) {
-            // (title:"foo")
-            // (title:"foo" AND title:"bar")
-            $pattern = '~(\(|\s[A-Z]*\s)((?<fieldName>[^:]*):"(?<fieldValue>.*)(?<!\\\))"~U';
+            // (created:[NOW/DAY-7DAYS TO *])
+            // (created:[NOW/DAY-7DAYS TO *] AND created:[NOW/DAY-1MONTH TO NOW/DAY-7DAYS])
+            $pattern = '~(\(|\s[A-Z]*\s)((?<fieldName>[^:]*):\[(?<fieldValue>.*)(?<!\\\))\]~U';
             $matches = [];
             preg_match_all($pattern, $filterQuery, $matches);
             $matchedFieldsName = isset($matches['fieldName']) ? $matches['fieldName'] : [];
@@ -128,11 +179,11 @@ class OptionsFacetParser extends AbstractFacetParser
 
             foreach ($matchedFieldsName as $key => $fieldNamesInResponse) {
                 if ($fieldNamesInResponse === $fieldName && isset($matchedFieldsValues[$key])) {
-                    $activeFacetValues[] = stripslashes($matchedFieldsValues[$key]);
+                    $activeFacetValues[] = stripslashes('[' . $matchedFieldsValues[$key] . ']');
                 }
             }
         }
 
-        return self::$usedFacetOptionsByFieldName[$fieldName] = $activeFacetValues;
+        return self::$usedOptionsByFieldName[$fieldName] = $activeFacetValues;
     }
 }

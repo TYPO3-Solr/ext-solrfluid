@@ -16,6 +16,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet;
 
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet as SolrSearchResultSet;
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetProcessor;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserRegistry;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacetParser;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestion;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -127,6 +128,8 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
             return $resultSet;
         }
 
+        /** @var FacetParserRegistry $facetParserRegistry */
+        $facetParserRegistry = GeneralUtility::makeInstance(FacetParserRegistry::class);
         $facetsConfiguration = $resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->getSearchFacetingFacets();
 
         foreach ($facetsConfiguration as $name => $options) {
@@ -136,14 +139,10 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
             $facetName = rtrim($name, '.');
             $type = !empty($options['type']) ? $options['type'] : '';
 
-            // todo; swith to registry->getParser($options)
-            switch ($type) {
-                default:
-                    $parser = new OptionsFacetParser();
-                    $facet = $parser->parse($resultSet, $facetName, $options);
-                    if ($facet !== null) {
-                        $resultSet->addFacet($facet);
-                    }
+            $parser = $facetParserRegistry->getParser($type);
+            $facet = $parser->parse($resultSet, $facetName, $options);
+            if ($facet !== null) {
+                $resultSet->addFacet($facet);
             }
         }
 

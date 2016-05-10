@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\DateRangeFacet;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -14,16 +14,18 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets;
  * The TYPO3 project - inspiring people to share!
  */
 
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserInterface;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 
 /**
- * Interface FacetParserInterface
+ * Class DateRangeFacetParser
  *
  * @author Frans Saris <frans@beech.it>
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets
  */
-interface FacetParserInterface
+class DateRangeFacetParser implements FacetParserInterface
 {
     /**
      * @param SearchResultSet $resultSet
@@ -31,5 +33,9 @@ interface FacetParserInterface
      * @param array $facetConfiguration
      * @return AbstractFacet|null
      */
-    public function parse(SearchResultSet $resultSet, $facetName, array $facetConfiguration);
+    public function parse(SearchResultSet $resultSet, $facetName, array $facetConfiguration)
+    {
+        // todo: implement
+        return null;
+    }
 }
