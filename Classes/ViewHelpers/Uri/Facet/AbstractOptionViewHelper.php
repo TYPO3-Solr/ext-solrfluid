@@ -38,7 +38,7 @@ class AbstractOptionViewHelper extends AbstractUriViewHelper
      * @return string
      * @throws \InvalidArgumentException
      */
-    protected function getOptionValueFromArguments($arguments)
+    protected static function getOptionValueFromArguments($arguments)
     {
         if (isset($arguments['option'])) {
             /** @var  $option Option */

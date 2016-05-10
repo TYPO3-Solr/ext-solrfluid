@@ -60,6 +60,7 @@ class RemoveOptionViewHelper extends AbstractOptionViewHelper implements Compila
      * @param callable $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
      * @return string
+     * @throws \InvalidArgumentException
      */
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
