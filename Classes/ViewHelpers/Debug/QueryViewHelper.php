@@ -53,7 +53,7 @@ class QueryViewHelper extends AbstractViewHelper implements CompilableInterface
     {
         $content = '';
         $resultSet = $renderingContext->getControllerContext()->getSearchResultSet();
-        if (!empty($GLOBALS['TSFE']->beUserLogin) && $resultSet->getUsedSearch() !== null) {
+        if (!empty($GLOBALS['TSFE']->beUserLogin) && $resultSet && $resultSet->getUsedSearch() !== null) {
             $content = '<br><strong>Parsed Query:</strong><br>' . $resultSet->getUsedSearch()->getDebugResponse()->parsedquery;
         }
         return $content;
