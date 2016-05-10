@@ -15,6 +15,8 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
  */
 
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 
 /**
  * Class PageBrowserRangeViewHelper
@@ -23,7 +25,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
  * @author Timo Schmidt <timo.schmidt@dkd.de> *
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers
  */
-class PageBrowserRangeViewHelper extends AbstractViewHelper
+class PageBrowserRangeViewHelper extends AbstractViewHelper implements CompilableInterface
 {
 
     /**
@@ -35,8 +37,31 @@ class PageBrowserRangeViewHelper extends AbstractViewHelper
      */
     public function render($from = 'from', $to = 'to', $total = 'total')
     {
-        $search = $this->getSearchResultSet()->getUsedSearch();
-        $templateVariableContainer = $this->renderingContext->getTemplateVariableContainer();
+        return self::renderStatic(
+            array(
+                'from' => $from,
+                'to' => $to,
+                'total' => $total
+            ),
+            $this->buildRenderChildrenClosure(),
+            $this->renderingContext
+        );
+    }
+
+    /**
+     * @param array $arguments
+     * @param callable $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
+     * @return string
+     */
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
+    {
+        $from = $arguments['from'];
+        $to = $arguments['to'];
+        $total = $arguments['total'];
+
+        $search = $renderingContext->getControllerContext()->getSearchResultSet()->getUsedSearch();
+        $templateVariableContainer = $renderingContext->getTemplateVariableContainer();
 
         $resultsFrom = $search->getResponseBody()->start + 1;
         $resultsTo = $resultsFrom + count($search->getResultDocumentsRaw()) - 1;
@@ -44,7 +69,7 @@ class PageBrowserRangeViewHelper extends AbstractViewHelper
         $templateVariableContainer->add($to, $resultsTo);
         $templateVariableContainer->add($total, $search->getNumberOfResults());
 
-        $content = $this->renderChildren();
+        $content = $renderChildrenClosure();
 
         $templateVariableContainer->remove($from);
         $templateVariableContainer->remove($to);
