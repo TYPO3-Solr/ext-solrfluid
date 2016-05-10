@@ -11,8 +11,12 @@
 				+ <a class="facet" href="{s:uri.facet.addOption(facet: facet, option: option)}">{option.label}</a> <span class="facet-result-count">({option.count})</span>
             </li>
         </f:for>
-        <f:if condition="{options -> f:count()} > 10">
-            <li><a href="#" class="tx-solr-facet-show-all" data-label-more="Toon meer" data-label-less="Toon minder">Toon meer</a></li>
+        <f:if condition="{facet.options -> f:count()} > 10">
+            <li>
+                <a href="#" class="tx-solr-facet-show-all" data-label-more="{s:translate(key:'faceting_showMore', extensionName:'solr')}" data-label-less="{s:translate(key:'faceting_showFewer', extensionName:'solr')}">
+                    <s:translate key="faceting_showMore" extensionName="solr">Show more</s:translate>
+                </a>
+            </li>
         </f:if>
     </ul>
 
