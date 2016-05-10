@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet;
+namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Paginate;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -15,11 +15,9 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet;
  */
 
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\Option;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\AbstractUriViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 
@@ -30,26 +28,35 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link
  */
-class AbstractOptionViewHelper extends AbstractUriViewHelper
+class ResultPageViewHelper extends AbstractUriViewHelper implements CompilableInterface
 {
 
     /**
-     * @param $arguments
+     * @param integer $page
      * @return string
-     * @throws \InvalidArgumentException
      */
-    protected function getOptionValueFromArguments($arguments)
+    public function render($page = 0)
     {
-        if (isset($arguments['option'])) {
-            /** @var  $option Option */
-            $option = $arguments['option'];
-            $optionValue = $option->getValue();
-        } elseif (isset($arguments['optionValue'])) {
-            $optionValue = $arguments['optionValue'];
-        } else {
-            throw new \InvalidArgumentException('No option was passed, please pass either option or optionValue');
-        }
+        return self::renderStatic(
+            array(
+                'page' => $page
+            ),
+            $this->buildRenderChildrenClosure(),
+            $this->renderingContext
+        );
+    }
 
-        return $optionValue;
+    /**
+     * @param array $arguments
+     * @param callable $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
+     * @return string
+     */
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
+    {
+        $page = $arguments['page'];
+        $previousRequest = $renderingContext->getControllerContext()->getSearchResultSet()->getUsedSearchRequest();
+        $uri = self::getSearchUriBuilder()->getResultPageUri($previousRequest, $page);
+        return $uri;
     }
 }

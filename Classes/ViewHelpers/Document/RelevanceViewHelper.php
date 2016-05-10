@@ -57,7 +57,7 @@ class RelevanceViewHelper extends AbstractViewHelper implements CompilableInterf
      */
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
-            /** @var $document \Apache_Solr_Document */
+        /** @var $document \Apache_Solr_Document */
         $document = $arguments['document'];
 
             /** @var $resultSet SearchResultSet */

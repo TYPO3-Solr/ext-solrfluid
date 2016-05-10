@@ -55,14 +55,14 @@ class SearchUriBuilder
     }
 
     /**
-     * @param SearchRequest $searchRequest
+     * @param SearchRequest $previousSearchRequest
      * @param $facetName
      * @param $optionValue
      * @return string
      */
-    public function getAddFacetOptionUri(SearchRequest $searchRequest, $facetName, $optionValue)
+    public function getAddFacetOptionUri(SearchRequest $previousSearchRequest, $facetName, $optionValue)
     {
-        $persistentAndFacetArguments = $searchRequest
+        $persistentAndFacetArguments = $previousSearchRequest
             ->getCopyForSubRequest()->addFacetValue($facetName, $optionValue)
             ->getAsArray();
 
@@ -71,15 +71,30 @@ class SearchUriBuilder
     }
 
     /**
-     * @param SearchRequest $searchRequest
+     * @param SearchRequest $previousSearchRequest
      * @param $facetName
      * @param $optionValue
      * @return string
      */
-    public function getRemoveFacetOptionUri(SearchRequest $searchRequest, $facetName, $optionValue)
+    public function getRemoveFacetOptionUri(SearchRequest $previousSearchRequest, $facetName, $optionValue)
     {
-        $persistentAndFacetArguments = $searchRequest
+        $persistentAndFacetArguments = $previousSearchRequest
             ->getCopyForSubRequest()->removeFacetValue($facetName, $optionValue)
+            ->getAsArray();
+
+
+        return $this->buildLinkWithInMemoryCache($persistentAndFacetArguments);
+    }
+
+    /**
+     * @param SearchRequest $previousSearchRequest
+     * @param $page
+     * @return string
+     */
+    public function getResultPageUri(SearchRequest $previousSearchRequest, $page)
+    {
+        $persistentAndFacetArguments = $previousSearchRequest
+            ->getCopyForSubRequest()->setPage($page)
             ->getAsArray();
 
 
@@ -90,13 +105,14 @@ class SearchUriBuilder
      * @param array $arguments
      * @return string
      */
-    protected function buildLinkWithInMemoryCache(array $arguments) {
+    protected function buildLinkWithInMemoryCache(array $arguments)
+    {
         $values = array();
         $structure = $arguments;
         $this->getSubstitution($structure, $values);
         $hash = md5(json_encode($structure));
 
-        if(isset(self::$preCompiledLinks[$hash])) {
+        if (isset(self::$preCompiledLinks[$hash])) {
             self::$hitCount++;
             $template = self::$preCompiledLinks[$hash];
         } else {
@@ -105,8 +121,8 @@ class SearchUriBuilder
             self::$preCompiledLinks[$hash] = $template;
         }
 
-        $keys = array_map(function($value) { return urlencode($value); } , array_keys($values));
-        $values = array_map(function($value) { return urlencode($value); } ,$values);
+        $keys = array_map(function ($value) { return urlencode($value); }, array_keys($values));
+        $values = array_map(function ($value) { return urlencode($value); }, $values);
         $uri = str_replace($keys, $values, $template);
         return $uri;
     }
@@ -144,12 +160,12 @@ class SearchUriBuilder
      */
     protected function getSubstitution(array &$structure, array  &$values, array $branch = array())
     {
-        foreach($structure as $key => &$value) {
+        foreach ($structure as $key => &$value) {
             $branch[] = $key;
-            if(is_array($value)) {
+            if (is_array($value)) {
                 $this->getSubstitution($value, $values, $branch);
             } else {
-                $path = '###' . implode(':',$branch) . '###';
+                $path = '###' . implode(':', $branch) . '###';
                 $values[$path] = $value;
                 $structure[$key] = $path;
             }

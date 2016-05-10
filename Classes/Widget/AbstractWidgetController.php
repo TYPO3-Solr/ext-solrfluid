@@ -14,8 +14,12 @@ namespace ApacheSolrForTypo3\Solrfluid\Widget;
  * The TYPO3 project - inspiring people to share!
  */
 
+use ApacheSolrForTypo3\Solr\ConnectionManager;
+use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService;
+use ApacheSolrForTypo3\Solr\Search;
 use ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager;
 use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class AbstractWidgetController
@@ -66,8 +70,26 @@ class AbstractWidgetController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidg
             $controllerContext->setArguments($this->arguments);
         }
         $controllerContext->setUriBuilder($this->uriBuilder);
-        $controllerContext->setTypoScriptConfiguration($this->solrConfigurationManager->getTypoScriptConfiguration());
+
+        $typoScriptConfiguration = $this->solrConfigurationManager->getTypoScriptConfiguration();
+        $controllerContext->setTypoScriptConfiguration($typoScriptConfiguration);
+
+        $searchService = $this->initializeSearch($typoScriptConfiguration);
+        $controllerContext->setSearchResultSet($searchService->getLastResultSet());
 
         return $controllerContext;
+    }
+
+    /**
+     * @param $typoScriptConfiguration
+     * @return SearchResultSetService
+     */
+    protected function initializeSearch($typoScriptConfiguration)
+    {
+        /** @var \ApacheSolrForTypo3\Solr\ConnectionManager $solrConnection */
+        $solrConnection = GeneralUtility::makeInstance(ConnectionManager::class)->getConnectionByPageId($GLOBALS['TSFE']->id, $GLOBALS['TSFE']->sys_language_uid, $GLOBALS['TSFE']->MP);
+        $search = GeneralUtility::makeInstance(Search::class, $solrConnection);
+
+        return GeneralUtility::makeInstance(SearchResultSetService::class, $typoScriptConfiguration, $search);
     }
 }

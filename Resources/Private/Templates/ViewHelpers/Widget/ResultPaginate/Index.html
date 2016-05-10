@@ -17,10 +17,10 @@
 					<li class="previous">
 						<f:if condition="{pagination.previousPage} > 1">
 							<f:then>
-								<s:widget.link arguments="{page: pagination.previousPage}"><f:translate key="paginate_previous">&laquo;</f:translate></s:widget.link>
+								<a href="{s:uri.paginate.resultPage(page: pagination.previousPage)}"><f:translate key="paginate_previous">&laquo;</f:translate></a>
 							</f:then>
 							<f:else>
-								<s:widget.link><f:translate key="paginate_previous">&laquo;</f:translate></s:widget.link>
+								<a href="{s:uri.paginate.resultPage()}"><f:translate key="paginate_previous">&laquo;</f:translate></a>
 							</f:else>
 						</f:if>
 					</li>
@@ -32,17 +32,17 @@
 					<f:if condition="{page.isCurrent}">
 						<f:then>
 							<li class="active">
-								<s:widget.link>{page.number}</s:widget.link>
+								<a href="{s:uri.paginate.resultPage()}">{page.number}</a>
 							</li>
 						</f:then>
 						<f:else>
 							<li>
 								<f:if condition="{page.number} > 1">
 									<f:then>
-										<s:widget.link arguments="{page: page.number}">{page.number}</s:widget.link>
+										<a href="{s:uri.paginate.resultPage(page: page.number)}">{page.number}</a>
 									</f:then>
 									<f:else>
-										<s:widget.link>{page.number}</s:widget.link>
+										<a href="{s:uri.paginate.resultPage()}">{page.number}</a>
 									</f:else>
 								</f:if>
 							</li>
@@ -54,7 +54,7 @@
 				</f:if>
 				<f:if condition="{pagination.nextPage}">
 					<li class="last next">
-						<s:widget.link arguments="{page: pagination.nextPage}"><f:translate key="paginate_next">&raquo;</f:translate></s:widget.link>
+						<a href="{s:uri.paginate.resultPage(page: pagination.nextPage)}"><f:translate key="paginate_next">&raquo;</f:translate></a>
 					</li>
 				</f:if>
 			</ul>

@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet;
+namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -16,40 +16,46 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet;
 
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\Option;
-use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\AbstractUriViewHelper;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\Uri\SearchUriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 
 /**
  * Class FacetAddOptionViewHelper
  *
  * @author Frans Saris <frans@beech.it>
  * @author Timo Schmidt <timo.schmidt@dkd.de>
- * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link
+ * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri
  */
-class AbstractOptionViewHelper extends AbstractUriViewHelper
+class AbstractUriViewHelper extends AbstractViewHelper
 {
+    /**
+     * @var SearchUriBuilder
+     */
+    protected static $searchUriBuilder;
 
     /**
-     * @param $arguments
-     * @return string
-     * @throws \InvalidArgumentException
+     * @param SearchUriBuilder $searchUriBuilder
      */
-    protected function getOptionValueFromArguments($arguments)
+    public function injectSearchUriBuilder(SearchUriBuilder $searchUriBuilder)
     {
-        if (isset($arguments['option'])) {
-            /** @var  $option Option */
-            $option = $arguments['option'];
-            $optionValue = $option->getValue();
-        } elseif (isset($arguments['optionValue'])) {
-            $optionValue = $arguments['optionValue'];
-        } else {
-            throw new \InvalidArgumentException('No option was passed, please pass either option or optionValue');
+        self::$searchUriBuilder = $searchUriBuilder;
+    }
+
+    /**
+     * @return SearchUriBuilder|object
+     */
+    protected static function getSearchUriBuilder()
+    {
+        if (!isset(self::$searchUriBuilder)) {
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            self::$searchUriBuilder = $objectManager->get(SearchUriBuilder::class);
         }
 
-        return $optionValue;
+        return self::$searchUriBuilder;
     }
 }
