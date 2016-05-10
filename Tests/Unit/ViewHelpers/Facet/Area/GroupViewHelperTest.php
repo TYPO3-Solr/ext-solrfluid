@@ -1,0 +1,78 @@
+<?php
+namespace ApacheSolrForTypo3\Solrfluid\Test\ViewHelpers\Facet\Uri;
+
+/***************************************************************
+ *  Copyright notice
+ *
+ *  (c) 2015-2016 Timo Schmidt <timo.schmidt@dkd.de>
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+
+use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
+use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
+use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetCollection;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\Uri\SearchUriBuilder;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Facet\Area\GroupViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3\CMS\Fluid\Core\ViewHelper\TemplateVariableContainer;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+
+/**
+ * @author Timo Schmidt <timo.schmidt@dkd.de>
+ */
+class GroupViewHelperTest extends UnitTest
+{
+
+
+    /**
+     * @test
+     */
+    public function canMakeOnlyExpectedFacetsAvailable()
+    {
+        $variableContainer = $this->getMock(TemplateVariableContainer::class, array('remove'));
+        $facetCollection = new FacetCollection();
+        $resultSetMock = $this->getDumbMock(SearchResultSet::class);
+        $renderingContextMock = $this->getDumbMock(RenderingContextInterface::class);
+        $renderingContextMock->expects($this->any())->method('getTemplateVariableContainer')->will($this->returnValue($variableContainer));
+
+        $colorFacet = new OptionsFacet($resultSetMock, 'color', 'color_s', '', ['groupName' => 'left']);
+        $brandFacet = new OptionsFacet($resultSetMock, 'brand', 'brand_s', '', ['groupName' => 'left']);
+        $pageType = new OptionsFacet($resultSetMock, 'type', 'type', '', ['groupName' => 'top']);
+
+        $facetCollection->addFacet($colorFacet);
+        $facetCollection->addFacet($brandFacet);
+        $facetCollection->addFacet($pageType);
+
+
+        $testArguments['facets'] = $facetCollection;
+        $testArguments['groupName'] = 'left';
+        GroupViewHelper::renderStatic($testArguments, function() {}, $renderingContextMock);
+
+        $this->assertTrue($variableContainer->exists('areaFacets'), 'Expected that filteredFacets has been set');
+
+            /** @var  $facetCollection FacetCollection */
+        $facetCollection = $variableContainer->get('areaFacets');
+        $this->assertEquals(2, $facetCollection->getCount());
+    }
+}

@@ -190,4 +190,12 @@ abstract class AbstractFacet
     {
         return 'Default';
     }
+
+    /**
+     * @return string
+     */
+    public function getGroupName()
+    {
+        return isset($this->configuration['groupName']) ? $this->configuration['groupName'] : 'all';
+    }
 }

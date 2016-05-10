@@ -95,4 +95,12 @@ abstract class AbstractCollection implements \IteratorAggregate, \Countable
     {
         return count($this->data);
     }
+
+    /**
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->count();
+    }
 }

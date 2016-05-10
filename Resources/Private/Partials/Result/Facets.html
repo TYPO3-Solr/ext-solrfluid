@@ -22,18 +22,22 @@
 			</div>
 		</f:if>
 
-		<div class="solr-facets-available secondaryContentSection">
-			<div class="csc-header">
-				<h3 class="csc-firstHeader">Narrow Search</h3>
+		<s:facet.area.group groupName="all" facets="{resultSet.facets.available}">
+			<div class="facet-area-all">
+				<div class="solr-facets-available secondaryContentSection">
+					<div class="csc-header">
+						<h3 class="csc-firstHeader">Narrow Search</h3>
+					</div>
+					<ul class="facets">
+						<f:for each="{areaFacets}" as="facet">
+							<li class="facet facet-type facet-type-{facet.type}">
+								<f:render partial="Facets/{facet.partialName}" arguments="{resultSet:resultSet, facet:facet}"/>
+							</li>
+						</f:for>
+					</ul>
+				</div>
 			</div>
-			<ul class="facets">
-				<f:for each="{resultSet.facets.available}" as="facet">
-					<li class="facet facet-type facet-type-{facet.type}">
-						<f:render partial="Facets/{facet.partialName}" arguments="{resultSet:resultSet, facet:facet}"/>
-					</li>
-				</f:for>
-			</ul>
-		</div>
+		</s:facet.area.group>
 
 	</div>
 

@@ -40,6 +40,19 @@ class FacetCollection extends AbstractCollection
     }
 
     /**
+     * @param string $requiredGroup
+     * @return AbstractCollection
+     */
+    public function getByGroupName($requiredGroup = 'all')
+    {
+        return $this->getFilteredCopy(
+            function(AbstractFacet $facet) use ($requiredGroup) {
+                return $facet->getGroupName() == $requiredGroup;
+            }
+        );
+    }
+
+    /**
      * @param $position
      * @return AbstractFacet
      */
