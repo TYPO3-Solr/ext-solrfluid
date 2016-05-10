@@ -17,6 +17,8 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document;
 use ApacheSolrForTypo3\Solr\Search;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 
 /**
  * Class RelevanceViewHelper
@@ -25,7 +27,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document
  */
-class RelevanceViewHelper extends AbstractViewHelper
+class RelevanceViewHelper extends AbstractViewHelper implements CompilableInterface
 {
 
     /**
@@ -37,6 +39,30 @@ class RelevanceViewHelper extends AbstractViewHelper
      */
     public function render(SearchResultSet $resultSet, \Apache_Solr_Document $document)
     {
+        return self::renderStatic(
+            array(
+                'resultSet' => $resultSet,
+                'document' => $document
+            ),
+            $this->buildRenderChildrenClosure(),
+            $this->renderingContext
+        );
+    }
+
+    /**
+     * @param array $arguments
+     * @param callable $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
+     * @return string
+     */
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
+    {
+            /** @var $document \Apache_Solr_Document */
+        $document = $arguments['document'];
+
+            /** @var $resultSet SearchResultSet */
+        $resultSet = $arguments['resultSet'];
+
         $maximumScore = $document->__solr_grouping_groupMaximumScore ? : $resultSet->getUsedSearch()->getMaximumResultScore();
         $documentScore = $document->getScore();
         $content = 0;

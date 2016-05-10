@@ -16,6 +16,8 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Debug;
 
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 
 /**
  * Class QueryViewHelper
@@ -23,7 +25,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @author Frans Saris <frans@beech.it>
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  */
-class QueryViewHelper extends AbstractViewHelper
+class QueryViewHelper extends AbstractViewHelper implements CompilableInterface
 {
 
     /**
@@ -34,9 +36,25 @@ class QueryViewHelper extends AbstractViewHelper
      */
     public function render()
     {
+        return self::renderStatic(
+            [],
+            $this->buildRenderChildrenClosure(),
+            $this->renderingContext
+        );
+    }
+
+    /**
+     * @param array $arguments
+     * @param callable $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
+     * @return string
+     */
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
+    {
         $content = '';
-        if (!empty($GLOBALS['TSFE']->beUserLogin) && $this->getSearchResultSet() !== null && $this->getSearchResultSet()->getUsedSearch() !== null) {
-            $content = '<br><strong>Parsed Query:</strong><br>' . $this->getSearchResultSet()->getUsedSearch()->getDebugResponse()->parsedquery;
+        $resultSet = $renderingContext->getControllerContext()->getSearchResultSet();
+        if (!empty($GLOBALS['TSFE']->beUserLogin) && $resultSet->getUsedSearch() !== null) {
+            $content = '<br><strong>Parsed Query:</strong><br>' . $resultSet->getUsedSearch()->getDebugResponse()->parsedquery;
         }
         return $content;
     }

@@ -15,8 +15,11 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Debug;
  */
 
 use ApacheSolrForTypo3\Solr\Util;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 
 /**
  * Class DocumentScoreAnalyzerViewHelper
@@ -25,7 +28,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Debug
  */
-class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
+class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper implements CompilableInterface
 {
     /**
      * Get document relevance percentage
@@ -35,15 +38,36 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
      */
     public function render(\Apache_Solr_Document $document)
     {
+        return self::renderStatic(
+            ['document' => $document],
+            $this->buildRenderChildrenClosure(),
+            $this->renderingContext
+        );
+    }
+
+    /**
+     * @param array $arguments
+     * @param callable $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
+     * @return string
+     */
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
+    {
         $content = '';
+        $document = $arguments['document'];
 
         // only check whether a BE user is logged in, don't need to check
         // for enabled score analysis as we wouldn't be here if it was disabled
         if (!empty($GLOBALS['TSFE']->beUserLogin)) {
-            $debugData = $this->getSearchResultSet()->getUsedSearch()->getDebugResponse()->explain->{$document->getId()};
-            $highScores = $this->getHighScores($debugData);
+
+                /** @var $resultSet SearchResultSet */
+            $resultSet = $renderingContext->getControllerContext()->getSearchResultSet();
+            $debugData = $resultSet->getUsedSearch()->getDebugResponse()->explain->{$document->getId()};
+            $highScores = self::getHighScores($debugData);
             $score = $document->getField('score');
-            $content = $this->renderScoreAnalysis($highScores, (float)($score ? $score['value'] : 0), $debugData);
+            $queryFields = $resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->getSearchQueryQueryFields();
+
+            $content = self::renderScoreAnalysis($highScores, (float)($score ? $score['value'] : 0), $debugData, $queryFields);
         }
 
         return $content;
@@ -55,7 +79,7 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
      * @param string $debugData
      * @return array
      */
-    protected function getHighScores($debugData)
+    protected static function getHighScores($debugData)
     {
         $highScores = array();
 
@@ -101,14 +125,14 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper
      * @param array $highScores The result document which to analyse
      * @param float $realScore
      * @param string $debugData
+     * @param string $queryFields
      * @return string The HTML showing the score analysis
      */
-    protected function renderScoreAnalysis(array $highScores, $realScore, $debugData)
+    protected static function renderScoreAnalysis(array $highScores, $realScore, $debugData, $queryFields)
     {
         $scores = array();
         $totalScore = 0;
 
-        $queryFields = $this->getTypoScriptConfiguration()->getSearchQueryQueryFields();
         foreach ($highScores as $field => $highScore) {
             $pattern = '/' . $highScore['field'] . '\^([\d.]*)/';
             $matches = array();

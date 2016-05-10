@@ -16,7 +16,7 @@
 		<div class="results-teaser">
 			<f:render partial="Result/RelevanceBar" section="RelevanceBar" arguments="{resultSet:resultSet, document:document}" />
 
-			<p class="result-content">{s:document.highlightResult(document:document, field:'content')}</p>
+			<p class="result-content">{s:document.highlightResult(resultSet:resultSet, document:document, fieldName:'content')}</p>
 
 			<f:if condition="{0:document.type} == {0:'tx_solr_file'}">
 			<p>

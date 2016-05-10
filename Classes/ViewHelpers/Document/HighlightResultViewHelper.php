@@ -15,8 +15,11 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document;
  */
 
 use ApacheSolrForTypo3\Solr\Util;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 
 /**
  * Class HighlightResultViewHelper
@@ -25,23 +28,46 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document
  */
-class HighlightResultViewHelper extends AbstractViewHelper
+class HighlightResultViewHelper extends AbstractViewHelper implements CompilableInterface
 {
 
     /**
-     * Get high lighted field
-     *
+     * @param SearchResultSet $resultSet
      * @param \Apache_Solr_Document $document
-     * @param string $field
+     * @param string $fieldName
      * @return string
      */
-    public function render(\Apache_Solr_Document $document, $field)
+    public function render(SearchResultSet $resultSet, \Apache_Solr_Document $document, $fieldName)
     {
-        $fragmentSeparator = $this->getTypoScriptConfiguration()->getSearchResultsHighlightingFragmentSeparator();
-        $content = call_user_func(array($document, 'get' . $field));
-        $highlightedContent = $this->getSearchResultSet()->getUsedSearch()->getHighlightedContent();
-        if (!empty($highlightedContent->{$document->getId()}->{$field}[0])) {
-            $content = implode(' ' . $fragmentSeparator . ' ', $highlightedContent->{$document->getId()}->{$field});
+        return self::renderStatic(
+            array(
+                'resultSet' => $resultSet,
+                'document' => $document,
+                'fieldName' => $fieldName
+            ),
+            $this->buildRenderChildrenClosure(),
+            $this->renderingContext
+        );
+    }
+
+    /**
+     * @param array $arguments
+     * @param callable $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
+     * @return string
+     */
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
+    {
+        /** @var $resultSet SearchResultSet */
+        $resultSet = $arguments['resultSet'];
+        $fieldName = $arguments['fieldName'];
+        $document = $arguments['document'];
+
+        $fragmentSeparator = $resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->getSearchResultsHighlightingFragmentSeparator();
+        $content = call_user_func(array($document, 'get' . $fieldName));
+        $highlightedContent = $resultSet->getUsedSearch()->getHighlightedContent();
+        if (!empty($highlightedContent->{$document->getId()}->{$fieldName}[0])) {
+            $content = implode(' ' . $fragmentSeparator . ' ', $highlightedContent->{$document->getId()}->{$fieldName});
         }
         return $content;
     }
