@@ -14,7 +14,7 @@
 			<ul>
 				<f:for each="{frequentSearches}" as="searchedForInfo">
 					<li class="{searchedForInfo.class}">
-						<f:link.page additionalParams="{q:searchedForInfo.q}" noCacheHash="1">{searchedForInfo.q}</f:link.page>
+						<a href="{s:uri.search.startNewSearch(queryString: searchedForInfo.q)}">{searchedForInfo.q}</a>
 					</li>
 				</f:for>
 			</ul>

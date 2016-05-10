@@ -29,7 +29,6 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
  */
 class RelevanceViewHelper extends AbstractViewHelper implements CompilableInterface
 {
-
     /**
      * Get document relevance percentage
      *

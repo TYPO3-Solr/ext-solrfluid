@@ -16,6 +16,8 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\Uri;
 
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService;
 use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
+use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 
 /**
@@ -100,6 +102,25 @@ class SearchUriBuilder
 
         return $this->buildLinkWithInMemoryCache($persistentAndFacetArguments);
     }
+
+    /**
+     * @param SearchRequest $previousSearchRequest
+     * @param $queryString
+     * @return string
+     */
+    public function getNewSearchUri(SearchRequest $previousSearchRequest, $queryString)
+    {
+            /** @var $request SearchRequest */
+        $contextConfiguration = $previousSearchRequest->getContextTypoScriptConfiguration();
+        $contextSystemLanguage = $previousSearchRequest->getContextSystemLanguageUid();
+        $contextPageUid = $previousSearchRequest->getContextPageUid();
+
+        $request = GeneralUtility::makeInstance(SearchRequest::class, array(), $contextPageUid, $contextSystemLanguage, $contextConfiguration);
+        $arguments = $request->setRawQueryString($queryString)->getAsArray();
+
+        return $this->buildLinkWithInMemoryCache($arguments);
+    }
+
 
     /**
      * @param array $arguments
