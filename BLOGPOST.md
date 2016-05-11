@@ -7,7 +7,7 @@ The integration of fluid has several advantages:
 Reuse your knowledge: Many integrators already know how to use fluid, no need to learn a new templating language
 Reuse existing ViewHelpers: There a several existing ViewHelpers for standard tasks, now you can make use of them in your template
 
-Since there where several approaches already started in the community we started to watch out, if we could join the forces to bring the solr extension with fluid to the next level. Together with Frans Saris (beech.it) we started to bring the parts together that he has started back then.
+Since there where several approaches already started in the community, we started to watch out if we could join the forces to bring the solr extension with fluid to the next level. Together with Frans Saris (beech.it) we started to bring the parts together that he has started back then.
 
 We also had a very productive codesprint in Venlo at the beginning of may where we though about concepts and did a lot of the implementation.
 
@@ -36,7 +36,7 @@ In the first step we introduced the following classes and moved the existing cod
 
 @@@TODO: Add UML diagram @@@
 
-By having these parts in place we could start in solrfluid to build the logic on top and use them to trigger searches. Now the same logic was used in both plugins.
+By having these parts in place we could start in EXT:solrfluid to build the logic on top and use them to trigger searches. Now the same logic is used in both plugins.
 
 ## A new Domain Model for Results / Facets etc. with a flexible API
 
@@ -57,22 +57,22 @@ For the options facet for example we have the following components:
 * OptionsFacetParser
 ** Responsibility: Is responsible to build the OptionsFacet/Option object structure from the configuration and response data.
 
-The facets can be extended with own custom facet types and register an own Parser by using the ParserRegistry:
+The facets can be extended with own custom facet types and register an own Parser by using the FacetParserRegistry:
 
 @@@TODO: Add UML diagram @@@
 
 ## A smart UriBuilder
 
-To centralize and simplify the link creation, solrfluid ships the SearchUriBuilder. The SearchUriBuilder can be used to easily create subrequest. etc. for facets.
+To centralize and simplify the link creation, EXT:solrfluid ships the SearchUriBuilder. The SearchUriBuilder can be used to easily create subrequest. etc. for facets.
 In addition it provides a caching mechanism to reduce the needed typolink calls to a minimum.
 
 ## Performance Tuning
 
-Performance is important and it should not get worth when you are using fluid. Therefore we constantly check and tweak the performance during development.
+Performance is important and it should not get worse when you are using fluid. Therefore we constantly check and tweak the performance during development.
 
 ### Compileable ViewHelpers
 
-To speedup the rendering we used compileable ViewHelpers wherever it is possible. With these compiled ViewHelpers TYPO3 can cache the compiled view helpers in the filesystem and
+To speedup the rendering we used compilable ViewHelpers wherever it is possible. With these compiled ViewHelpers TYPO3 can cache the compiled view helpers in the filesystem and
 the rendering afterwards is much faster.
 
 ### Profiling with XHProf
@@ -82,7 +82,7 @@ We used the results from XHProf to optimize the performance constantly during th
 
 ## Powerful new Features
 
-Beside the feature that fluid provides on it’s own, we’ve implemented a few handy contents that help you to realize your requirements with less effort
+Beside the feature that fluid provides on it’s own, we’ve implemented a few handy features that help you to realize your requirements with less effort
 
 ### Grouping facets by using areas
 
@@ -95,7 +95,7 @@ facets in the context.
 The first implementation of an „area“ is the „grouping“ area. By default every facet is configured to be assigned to the group „all“. And by default this group is also rendered.
 You can change the configuration by changing the typoscript configuration „groupName“ to something else, and then render this group in another location.
 
-Beside the „Group“ area, we thing about other types e.g. „FieldWhitelist“ or „FieldBlacklist“ to allow other „strategies“ of grouping.
+Beside the „Group“ area, we thinking about other types e.g. „FieldWhitelist“ or „FieldBlacklist“ to allow other „strategies“ of grouping.
 
 ### Use the collections api to filter facets and options
 
@@ -109,6 +109,7 @@ The current state is just a working state. We don’t recommend to use it in pro
 The following things are planned and need to be done:
 
 * Support the complete feature set for options facets
+* Implement FacetParsers for all facet types provided by EXT:solr
 * Make sure the extension will work in TYPO3 8
 * Ship default partials for sortBy and perPage
 * Fix known open bugs
