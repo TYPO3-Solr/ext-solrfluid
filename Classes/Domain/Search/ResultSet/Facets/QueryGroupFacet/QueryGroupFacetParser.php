@@ -64,9 +64,8 @@ class QueryGroupFacetParser extends AbstractFacetParser
             $facetConfiguration
         );
 
-        $activeFacetValues = $this->getUsedFacetOptionValues($response, $fieldName);
-        $hasActiveOptions = count($activeFacetValues) > 0;
-        $facet->setIsUsed($hasActiveOptions);
+        $activeFacets  = $resultSet->getUsedSearchRequest()->getActiveFacetNames();
+        $facet->setIsUsed(in_array($facetName, $activeFacets, true));
 
         if (!$noOptionsInResponse) {
             $facet->setIsAvailable(true);
@@ -77,7 +76,7 @@ class QueryGroupFacetParser extends AbstractFacetParser
                     continue;
                 }
 
-                $isOptionsActive = in_array($query, $activeFacetValues, true);
+                $isOptionsActive = $resultSet->getUsedSearchRequest()->getHasFacetValue($facetName, $value);
                 $label = $this->getLabelFromRenderingInstructions(
                     $value,
                     $count,
