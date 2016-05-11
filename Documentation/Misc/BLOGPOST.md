@@ -9,7 +9,7 @@ Reuse existing ViewHelpers: There a several existing ViewHelpers for standard ta
 
 Since there where several approaches already started in the community, we started to watch out if we could join the forces to bring the solr extension with fluid to the next level. Together with Frans Saris (beech.it) we started to bring the parts together that he has started back then.
 
-We also had a very productive codesprint in Venlo at the beginning of may where we though about concepts and did a lot of the implementation.
+We also had a very productive codesprint in Venlo at the beginning of may. At that time we though about concepts and did a lot of the implementation.
 
 @@@TODO: Add pictures from codesprint@@@
 
@@ -119,5 +119,18 @@ The following things are planned and need to be done:
 We are happy about your feedback in our slack channel
 
 https://typo3.slack.com/messages/ext-solr/
+
+
+## Thx
+
+Finally we want to say "Thank you" to Edward Lenssen (beech.it) and Olivier Dobberkau (dkd.de) for supporting the work on the fluid integration.
+And last but not least we thank all our partner for supporting the further development of EXT:solr.
+
+
+## How to get the current state?
+
+If you want to see the current state in action, we provide the current working dev combination of "EXT:solr", "EXT:solrfal" and "EXT:solrfluid"
+for our partners in our partner area.
+
 
 Frans & Timo
