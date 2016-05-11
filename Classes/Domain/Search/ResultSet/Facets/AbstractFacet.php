@@ -196,6 +196,6 @@ abstract class AbstractFacet
      */
     public function getGroupName()
     {
-        return isset($this->configuration['groupName']) ? $this->configuration['groupName'] : 'all';
+        return isset($this->configuration['groupName']) ? $this->configuration['groupName'] : 'main';
     }
 }
