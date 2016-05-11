@@ -57,9 +57,15 @@ For the options facet for example we have the following components:
 * OptionsFacetParser
 ** Responsibility: Is responsible to build the OptionsFacet/Option object structure from the configuration and response data.
 
-The facets can be extended with own custom facet types and register an own Parser by using the FacetParserRegistry:
 
 @@@TODO: Add UML diagram @@@
+
+
+
+The facets can be extended with own custom facet types and register an own Parser by using the FacetParserRegistry:
+
+FacetParserRegistry::registerParser($className, $type)
+
 
 ## A smart UriBuilder
 
@@ -92,7 +98,7 @@ a „type“ facet on top, rendered as a tab and some other facets, like „bran
 To allow and simplify this we introduced the „ViewHelpers/Facets/Area“ package. An area is responsible to „filter“ the passed facets on a certain criteria and only provide the matching
 facets in the context.
 
-The first implementation of an „area“ is the „grouping“ area. By default every facet is configured to be assigned to the group „all“. And by default this group is also rendered.
+The first implementation of an „area“ is the „grouping“ area. By default every facet is configured to be assigned to the group „main“. And by default this group is also rendered.
 You can change the configuration by changing the typoscript configuration „groupName“ to something else, and then render this group in another location.
 
 Beside the „Group“ area, we thinking about other types e.g. „FieldWhitelist“ or „FieldBlacklist“ to allow other „strategies“ of grouping.
