@@ -73,7 +73,7 @@ abstract class AbstractCollection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @param $position
+     * @param int $position
      * @return Object
      */
     public function getByPosition($position)

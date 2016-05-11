@@ -70,11 +70,11 @@
   },
   "facet_counts": {
     "facet_queries": {
-      "created:[NOW/DAY-7DAYS TO *]": 0,
+      "created:[NOW/DAY-7DAYS TO *]": 1,
       "created:[NOW/DAY-1MONTH TO NOW/DAY-7DAYS]": 3,
-      "created:[NOW/DAY-6MONTHS TO NOW/DAY-1MONTH]": 0,
-      "created:[NOW/DAY-1YEAR TO NOW/DAY-6MONTHS]": 0,
-      "created:[* TO NOW/DAY-1YEAR]": 0
+      "created:[NOW/DAY-6MONTHS TO NOW/DAY-1MONTH]": 4,
+      "created:[NOW/DAY-1YEAR TO NOW/DAY-6MONTHS]": 7,
+      "created:[* TO NOW/DAY-1YEAR]": 7
     },
     "facet_fields": {
       "type": {

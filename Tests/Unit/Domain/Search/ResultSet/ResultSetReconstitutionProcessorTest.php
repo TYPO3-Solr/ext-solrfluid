@@ -29,6 +29,7 @@ use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\Option;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet\QueryGroupFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\ResultSetReconstitutionProcessor;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -512,6 +513,46 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $this->assertSame('MY TYPE WITH SPECIAL RENDERING', $facet->getLabel(), 'Rendering instructions have not been applied on the facet options');
     }
 
+    /**
+     * @test
+     */
+    public function returnsCorrectSetUpFacetTypeForAQueryGroupFacet()
+    {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_query_fields_facets.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'facets.' => [
+                'age.' => [
+                    'type' => 'queryGroup',
+                    'label' => 'Age',
+                    'field' => 'created',
+                    'queryGroup.' => [
+                        'week' => ['query' => '[NOW/DAY-7DAYS TO *]'],
+                        'month' => ['query' => '[NOW/DAY-1MONTH TO NOW/DAY-7DAYS]'],
+                        'halfYear' => ['query' => '[NOW/DAY-6MONTHS TO NOW/DAY-1MONTH]'],
+                        'year' => ['query' => '[NOW/DAY-1YEAR TO NOW/DAY-6MONTHS]'],
+                        'old' => ['query' => '[* TO NOW/DAY-1YEAR]']
+                    ]
+                ]
+            ]
+        ];
+
+        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        $facets = $searchResultSet->getFacets();
+        $this->assertCount(1, $facets, 'Facet not created');
+
+        /** @var QueryGroupFacet $facet */
+        $facet = $facets->getByPosition(0);
+        $this->assertInstanceOf(QueryGroupFacet::class, $facet);
+
+        $this->assertCount(3, $facet->getOptions());
+    }
 
     /**
      * @param $facetConfiguration
@@ -524,6 +565,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $configuration['plugin.']['tx_solr.']['search.']['faceting.'] = $facetConfiguration;
         $typoScriptConfiguration = new TypoScriptConfiguration($configuration);
         $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getContextTypoScriptConfiguration')->will($this->returnValue($typoScriptConfiguration));
+        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getActiveFacetNames')->will($this->returnValue([]));
 
         $processor = new ResultSetReconstitutionProcessor();
         return $processor;

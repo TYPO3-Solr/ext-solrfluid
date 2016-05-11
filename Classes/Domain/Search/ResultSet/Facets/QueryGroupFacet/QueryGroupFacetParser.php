@@ -64,7 +64,7 @@ class QueryGroupFacetParser extends AbstractFacetParser
             $facetConfiguration
         );
 
-        $activeFacets  = $resultSet->getUsedSearchRequest()->getActiveFacetNames();
+        $activeFacets = $resultSet->getUsedSearchRequest()->getActiveFacetNames();
         $facet->setIsUsed(in_array($facetName, $activeFacets, true));
 
         if (!$noOptionsInResponse) {
@@ -154,40 +154,5 @@ class QueryGroupFacetParser extends AbstractFacetParser
             }
         }
         return $value;
-    }
-
-    /**
-     * @param \Apache_Solr_Response $response
-     * @param string $fieldName
-     * @return array
-     */
-    protected function getUsedFacetOptionValues(\Apache_Solr_Response $response, $fieldName)
-    {
-        if (isset(self::$usedOptionsByFieldName[$fieldName])) {
-            return self::$usedOptionsByFieldName[$fieldName];
-        }
-
-        $activeFacetValues = [];
-        if (!isset($response->responseHeader->params->fq)) {
-            return $activeFacetValues;
-        }
-
-        foreach ($response->responseHeader->params->fq as $filterQuery) {
-            // (created:[NOW/DAY-7DAYS TO *])
-            // (created:[NOW/DAY-7DAYS TO *] AND created:[NOW/DAY-1MONTH TO NOW/DAY-7DAYS])
-            $pattern = '~(\(|\s[A-Z]*\s)((?<fieldName>[^:]*):\[(?<fieldValue>.*)(?<!\\\))\]~U';
-            $matches = [];
-            preg_match_all($pattern, $filterQuery, $matches);
-            $matchedFieldsName = isset($matches['fieldName']) ? $matches['fieldName'] : [];
-            $matchedFieldsValues = isset($matches['fieldValue']) ? $matches['fieldValue'] : [];
-
-            foreach ($matchedFieldsName as $key => $fieldNamesInResponse) {
-                if ($fieldNamesInResponse === $fieldName && isset($matchedFieldsValues[$key])) {
-                    $activeFacetValues[] = stripslashes('[' . $matchedFieldsValues[$key] . ']');
-                }
-            }
-        }
-
-        return self::$usedOptionsByFieldName[$fieldName] = $activeFacetValues;
     }
 }

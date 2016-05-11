@@ -53,7 +53,7 @@ class FacetCollection extends AbstractCollection
     }
 
     /**
-     * @param $position
+     * @param int $position
      * @return AbstractFacet
      */
     public function getByPosition($position)
