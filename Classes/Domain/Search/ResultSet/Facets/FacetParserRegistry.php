@@ -56,11 +56,11 @@ class FacetParserRegistry implements SingletonInterface
     /**
      * Set defaultParser
      *
-     * @param string $defaultParser
+     * @param string $defaultParserClassName
      */
-    public function setDefaultParser($defaultParser)
+    public function setDefaultParser($defaultParserClassName)
     {
-        $this->defaultParser = $defaultParser;
+        $this->defaultParser = $defaultParserClassName;
     }
 
     /**
@@ -104,6 +104,17 @@ class FacetParserRegistry implements SingletonInterface
             $className = $this->parsers[$type];
         }
 
+        return $this->createParserInstance($className);
+    }
+
+    /**
+     * Create an instance of a certain parser class
+     *
+     * @param string $className
+     * @return FacetParserInterface
+     */
+    protected function createParserInstance($className)
+    {
         return GeneralUtility::makeInstance($className);
     }
 }

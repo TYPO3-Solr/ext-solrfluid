@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets\OptionsFacet;
+namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets\QueryGroup;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -14,19 +14,18 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets\Optio
  * The TYPO3 project - inspiring people to share!
  */
 
-use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResult;
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\Option;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet\Option;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet\QueryGroupFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 
 /**
- * Unit test for the OptionsFacet
+ * Unit test for the QueryGroupFacet
  *
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @author Frans Saris <frans@beech.it>
  */
-class OptionsFacetTest extends UnitTest
+class QueryGroupFacetTest extends UnitTest
 {
 
     /**
@@ -35,8 +34,8 @@ class OptionsFacetTest extends UnitTest
     public function canGetTitleFromOptionsFacet()
     {
         $resultSetMock = $this->getDumbMock(SearchResultSet::class);
-        $optionsFacet = new OptionsFacet($resultSetMock, 'myFacet', 'myFacetFieldName', 'myTitle');
-        $this->assertSame('myTitle', $optionsFacet->getLabel(), 'Could not get title from options facet');
+        $optionsFacet = new QueryGroupFacet($resultSetMock, 'myFacet', 'myFacetFieldName', 'myTitle');
+        $this->assertSame('myTitle', $optionsFacet->getLabel(), 'Could not get title from queryGroup facet');
     }
 
     /**
@@ -45,15 +44,15 @@ class OptionsFacetTest extends UnitTest
     public function canAddOptionsToFacet()
     {
         $resultSetMock = $this->getDumbMock(SearchResultSet::class);
-        $optionsFacet = new OptionsFacet($resultSetMock, 'myFacet', 'myFacetFieldName', 'myTitle');
-        $option = new Option($optionsFacet);
+        $queryGroupFacet = new QueryGroupFacet($resultSetMock, 'myFacet', 'myFacetFieldName', 'myTitle');
+        $option = new Option($queryGroupFacet);
 
             // before adding there should not be any facet present
-        $this->assertEquals(0, $optionsFacet->getOptions()->getCount());
-        $optionsFacet->addOption($option);
+        $this->assertEquals(0, $queryGroupFacet->getOptions()->getCount());
+        $queryGroupFacet->addOption($option);
 
             // now we should have 1 option present
-        $this->assertEquals(1, $optionsFacet->getOptions()->getCount());
+        $this->assertEquals(1, $queryGroupFacet->getOptions()->getCount());
     }
 
     /**
@@ -62,7 +61,7 @@ class OptionsFacetTest extends UnitTest
     public function getDefaultPartialName()
     {
         $resultSetMock = $this->getDumbMock(SearchResultSet::class);
-        $queryGroupFacet = new OptionsFacet($resultSetMock, 'myFacet', 'myFacetFieldName', 'myTitle');
+        $queryGroupFacet = new QueryGroupFacet($resultSetMock, 'myFacet', 'myFacetFieldName', 'myTitle');
 
         $this->assertEquals('Options', $queryGroupFacet->getPartialName());
     }
@@ -73,7 +72,7 @@ class OptionsFacetTest extends UnitTest
     public function getCustomPartialName()
     {
         $resultSetMock = $this->getDumbMock(SearchResultSet::class);
-        $queryGroupFacet = new OptionsFacet($resultSetMock, 'myFacet', 'myFacetFieldName', 'myTitle', ['partialName' => 'MyPartial']);
+        $queryGroupFacet = new QueryGroupFacet($resultSetMock, 'myFacet', 'myFacetFieldName', 'myTitle', ['partialName' => 'MyPartial']);
 
         $this->assertEquals('MyPartial', $queryGroupFacet->getPartialName());
     }

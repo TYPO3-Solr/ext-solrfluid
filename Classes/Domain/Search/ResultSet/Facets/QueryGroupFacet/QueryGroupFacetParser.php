@@ -127,6 +127,11 @@ class QueryGroupFacetParser extends AbstractFacetParser
         foreach ($response->facet_counts->facet_queries as $rawValue => $count) {
             if ((int)$count === 0) continue;
 
+            // todo: add test cases to check if this is needed https://forge.typo3.org/issues/45440
+            // remove tags from the facet.query response, for facet.field
+            // and facet.range Solr does that on its own automatically
+            $rawValue = preg_replace('/^\{!ex=[^\}]*\}(.*)/', '\\1', $rawValue);
+
             list($field, $query) = explode(':', $rawValue, 2);
             if ($field === $fieldName) {
                 $options[$query] = $count;
