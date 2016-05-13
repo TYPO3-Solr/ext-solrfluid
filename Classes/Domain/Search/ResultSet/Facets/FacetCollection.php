@@ -46,7 +46,7 @@ class FacetCollection extends AbstractCollection
     public function getByGroupName($requiredGroup = 'all')
     {
         return $this->getFilteredCopy(
-            function(AbstractFacet $facet) use ($requiredGroup) {
+            function (AbstractFacet $facet) use ($requiredGroup) {
                 return $facet->getGroupName() == $requiredGroup;
             }
         );

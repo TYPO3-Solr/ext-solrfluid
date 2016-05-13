@@ -110,7 +110,7 @@ class SearchUriBuilder
      */
     public function getNewSearchUri(SearchRequest $previousSearchRequest, $queryString)
     {
-            /** @var $request SearchRequest */
+        /** @var $request SearchRequest */
         $contextConfiguration = $previousSearchRequest->getContextTypoScriptConfiguration();
         $contextSystemLanguage = $previousSearchRequest->getContextSystemLanguageUid();
         $contextPageUid = $previousSearchRequest->getContextPageUid();

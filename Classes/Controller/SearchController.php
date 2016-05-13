@@ -98,4 +98,15 @@ class SearchController extends AbstractBaseController
     public function frequentlySearchedAction()
     {
     }
+
+    /**
+     * Rendered when no search is available.
+     * @return string
+     */
+    public function solrNotAvailableAction()
+    {
+        if ($this->response instanceof \TYPO3\CMS\Extbase\Mvc\Web\Response) {
+            $this->response->setStatus(500);
+        }
+    }
 }

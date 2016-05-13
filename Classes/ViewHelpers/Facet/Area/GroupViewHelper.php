@@ -56,7 +56,7 @@ class GroupViewHelper extends AbstractViewHelper implements CompilableInterface
      */
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
-            /** @var  $facets FacetCollection */
+        /** @var  $facets FacetCollection */
         $facets = $arguments['facets'];
         $requiredGroup = isset($arguments['groupName']) ? $arguments['groupName'] :  'all';
         $filtered = $facets->getByGroupName($requiredGroup);

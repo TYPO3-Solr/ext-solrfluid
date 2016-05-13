@@ -405,6 +405,24 @@ class SearchControllerTest extends IntegrationTest
     }
 
     /**
+     * @test
+     */
+    public function frontendWillRenderErrorMessageWhenSolrIsNotAvailable()
+    {
+        $this->importDataSetFromFixture('can_render_error_message_when_solr_unavailable.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1));
+
+        $this->searchRequest->setControllerActionName('solrNotAvailable');
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $resultPage1 = $this->searchResponse->getContent();
+
+        $this->assertEquals('500 Internal Server Error', $this->searchResponse->getStatus());
+        $this->assertContains("Search is currently not available.", $resultPage1, 'Response did not contain solr unavailable error message');
+    }
+
+    /**
      * Assertion to check if the pagination markup is present in the response.
      *
      * @param string $content

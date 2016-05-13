@@ -77,7 +77,8 @@ class FacetParserRegistry implements SingletonInterface
      * @param $className
      * @param $type
      */
-    public function registerParser($className, $type) {
+    public function registerParser($className, $type)
+    {
 
         // check if the class is available for TYPO3 before registering the driver
         if (!class_exists($className)) {
@@ -97,7 +98,8 @@ class FacetParserRegistry implements SingletonInterface
      * @param string $type
      * @return FacetParserInterface
      */
-    public function getParser($type) {
+    public function getParser($type)
+    {
         $className = $this->defaultParser;
 
         if (isset($this->parsers[$type])) {

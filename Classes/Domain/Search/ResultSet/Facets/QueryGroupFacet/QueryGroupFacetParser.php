@@ -120,11 +120,14 @@ class QueryGroupFacetParser extends AbstractFacetParser
      * @param string $fieldName
      * @return []
      */
-    protected function getRawOptions(\Apache_Solr_Response $response, $fieldName) {
+    protected function getRawOptions(\Apache_Solr_Response $response, $fieldName)
+    {
         $options = [];
 
         foreach ($response->facet_counts->facet_queries as $rawValue => $count) {
-            if ((int)$count === 0) continue;
+            if ((int)$count === 0) {
+                continue;
+            }
 
             // todo: add test cases to check if this is needed https://forge.typo3.org/issues/45440
             // remove tags from the facet.query response, for facet.field
@@ -145,7 +148,8 @@ class QueryGroupFacetParser extends AbstractFacetParser
      * @param array $facetConfiguration
      * @return string|null
      */
-    protected function getValueByQuery($query, array $facetConfiguration) {
+    protected function getValueByQuery($query, array $facetConfiguration)
+    {
         $value = null;
         foreach ($facetConfiguration['queryGroup.'] as $valueKey => $config) {
             if (isset($config['query']) && $config['query'] === $query) {
