@@ -48,11 +48,32 @@ class SearchResultSet extends SolrSearchResultSet
     protected $facets = null;
 
     /**
+     * @var int
+     */
+    protected $allResultCount = 0;
+
+    /**
      * @return \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet
      */
     public function __construct()
     {
         $this->facets = new FacetCollection();
+    }
+
+    /**
+     * @param int $allResultCount
+     */
+    public function setAllResultCount($allResultCount)
+    {
+        $this->allResultCount = $allResultCount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAllResultCount()
+    {
+        return $this->allResultCount;
     }
 
     /**

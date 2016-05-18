@@ -423,6 +423,129 @@ class SearchControllerTest extends IntegrationTest
     }
 
     /**
+     * @test
+     */
+    public function canShowLastSearchesFromSessionInResponse()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = 'shoe';
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+
+        $searchRequest2 = $this->getPreparedRequest();
+        $searchResponse2 = $this->getPreparedResponse();
+        $this->searchController->processRequest($searchRequest2, $searchResponse2);
+        $resultPage2 = $this->searchResponse->getContent();
+
+
+        $this->assertContainerByIdContains('>shoe</a>', $resultPage2, 'tx-solr-lastsearches');
+    }
+
+    /**
+     * @test
+     */
+    public function canShowLastSearchesFromDatabaseInResponse()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+
+        $overwriteConfiguration = array();
+        $overwriteConfiguration['search.']['lastSearches.']['mode'] = 'global';
+
+        /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
+        $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
+        $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
+        $this->searchController->setResetConfigurationBeforeInitialize(false);
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = 'shoe';
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+
+        $searchRequest2 = $this->getPreparedRequest();
+        $searchResponse2 = $this->getPreparedResponse();
+        $this->searchController->processRequest($searchRequest2, $searchResponse2);
+        $resultPage2 = $this->searchResponse->getContent();
+
+        $this->assertContainerByIdContains('>shoe</a>', $resultPage2, 'tx-solr-lastsearches');
+    }
+
+    /**
+     * @test
+     */
+    public function canNotStoreQueyStringInLastSearchesWhenQueryDoesNotReturnAResult()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+
+        $overwriteConfiguration = array();
+        $overwriteConfiguration['search.']['lastSearches.']['mode'] = 'global';
+
+        /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
+        $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
+        $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
+        $this->searchController->setResetConfigurationBeforeInitialize(false);
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = 'nothingwillbefound';
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+
+        $searchRequest2 = $this->getPreparedRequest();
+        $searchResponse2 = $this->getPreparedResponse();
+        $this->searchController->processRequest($searchRequest2, $searchResponse2);
+        $resultPage2 = $this->searchResponse->getContent();
+
+        $this->assertContainerByIdNotContains('>nothingwillbefound</a>', $resultPage2, 'tx-solr-lastsearches');
+    }
+
+    /**
+     * @param string $content
+     * @param string $id
+     * @return string
+     */
+    protected function getIdContent($content, $id)
+    {
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom->loadHTML('<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL . $content);
+
+        return $dom->saveXML($dom->getElementById($id));
+    }
+
+    /**
+     * Assert that a docContainer with a specific id contains an expected content snipped.
+     *
+     * @param string $expectedToContain
+     * @param string $content
+     * @param $id
+     */
+    protected function assertContainerByIdContains($expectedToContain, $content, $id)
+    {
+        $containerContent = $this->getIdContent($content, $id);
+        $this->assertContains($expectedToContain, $containerContent, 'Failed asserting that container with id ' . $id .' contains ' . $expectedToContain);
+    }
+
+    /**
+     * Assert that a docContainer with a specific id contains an expected content snipped.
+     *
+     * @param string $expectedToContain
+     * @param string $content
+     * @param $id
+     */
+    protected function assertContainerByIdNotContains($expectedToContain, $content, $id)
+    {
+        $containerContent = $this->getIdContent($content, $id);
+        $this->assertNotContains($expectedToContain, $containerContent, 'Failed asserting that container with id ' . $id .' not contains ' . $expectedToContain);
+    }
+
+
+    /**
      * Assertion to check if the pagination markup is present in the response.
      *
      * @param string $content

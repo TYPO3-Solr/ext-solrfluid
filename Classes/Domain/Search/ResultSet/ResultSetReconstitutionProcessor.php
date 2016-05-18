@@ -48,12 +48,29 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
             return $resultSet;
         }
 
+        $resultSet = $this->parseResultCount($resultSet);
         $resultSet = $this->parseSpellCheckingResponseIntoObjects($resultSet);
 
         // here we can reconstitute other domain objects from the solr response
-
         $resultSet = $this->parseFacetsIntoObjects($resultSet);
 
+        $this->storeLastSearches($resultSet);
+
+        return $resultSet;
+    }
+
+    /**
+     * @param SearchResultSet $resultSet
+     * @return SearchResultSet
+     */
+    protected function parseResultCount(SearchResultSet $resultSet)
+    {
+        $response = $resultSet->getResponse();
+        if (!isset($response->response->numFound)) {
+            return $resultSet;
+        }
+
+        $resultSet->setAllResultCount($response->response->numFound);
         return $resultSet;
     }
 
@@ -147,5 +164,29 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
         }
 
         return $resultSet;
+    }
+
+    /**
+     * @param SearchResultSet $resultSet
+     */
+    protected function storeLastSearches(SearchResultSet $resultSet)
+    {
+        if ($resultSet->getAllResultCount() === 0) {
+            // when the search does not produce a result we do not store the last searches
+            return;
+        }
+
+        if (!isset($GLOBALS['TSFE']) || !isset($GLOBALS['TYPO3_DB'])) {
+            return;
+        }
+
+        /** @var $lastSearchesService \ApacheSolrForTypo3\Solr\Domain\Search\LastSearches\LastSearchesService */
+        $lastSearchesService = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Domain\Search\LastSearches\LastSearchesService',
+            $resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration(),
+            $GLOBALS['TSFE'],
+            $GLOBALS['TYPO3_DB']);
+
+
+        $lastSearchesService->addToLastSearches($resultSet->getUsedSearchRequest()->getRawUserQuery());
     }
 }
