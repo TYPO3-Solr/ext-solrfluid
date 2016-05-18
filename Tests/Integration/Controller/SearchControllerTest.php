@@ -418,7 +418,7 @@ class SearchControllerTest extends IntegrationTest
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
         $resultPage1 = $this->searchResponse->getContent();
 
-        $this->assertEquals('500 Internal Server Error', $this->searchResponse->getStatus());
+        $this->assertEquals('503 Service Unavailable', $this->searchResponse->getStatus());
         $this->assertContains("Search is currently not available.", $resultPage1, 'Response did not contain solr unavailable error message');
     }
 

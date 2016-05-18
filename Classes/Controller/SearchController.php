@@ -106,7 +106,7 @@ class SearchController extends AbstractBaseController
     public function solrNotAvailableAction()
     {
         if ($this->response instanceof \TYPO3\CMS\Extbase\Mvc\Web\Response) {
-            $this->response->setStatus(500);
+            $this->response->setStatus(503);
         }
     }
 }
