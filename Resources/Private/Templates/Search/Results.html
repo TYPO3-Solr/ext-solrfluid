@@ -53,6 +53,7 @@
 
 	<div id="tx-solr-search-functions">
 		<f:if condition="{hasSearched}">
+			<f:render partial="Result/Sorting" section="Sorting" arguments="{resultSet:resultSet}" />
 			<f:render partial="Result/Facets" section="Facets" arguments="{resultSet:resultSet}" />
 		</f:if>
 		<f:render partial="Search/LastSearches" section="LastSearches" arguments="{resultSet:resultSet}" />

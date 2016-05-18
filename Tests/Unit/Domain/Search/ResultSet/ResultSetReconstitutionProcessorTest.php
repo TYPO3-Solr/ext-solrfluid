@@ -103,7 +103,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
              ]
         ];
 
-        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
         // after the reconstitution they should be 1 facet present
@@ -135,7 +136,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
             ]
         ];
 
-        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
         // after the reconstitution they should be 1 facet present
@@ -171,7 +173,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
             ]
         ];
 
-        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
         // after the reconstitution they should be 1 facet present
@@ -208,7 +211,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
             ]
         ];
 
-        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
         // after the reconstitution we should have two facets present
@@ -253,7 +257,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
             ]
         ];
 
-        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
         $facets = $searchResultSet->getFacets();
@@ -285,7 +290,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
 
         ];
 
-        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
         $facets = $searchResultSet->getFacets();
@@ -322,7 +328,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
 
         ];
 
-        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
         $facets = $searchResultSet->getFacets();
@@ -363,7 +370,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
             ]
         ];
 
-        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
         $facets = $searchResultSet->getFacets();
@@ -396,7 +404,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
             ]
         ];
 
-        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
         $facets = $searchResultSet->getFacets();
@@ -441,7 +450,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
             ]
         ];
 
-        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
         /** @var $facet OptionsFacet */
@@ -472,7 +482,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
             ]
         ];
 
-        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
         /** @var $facet OptionsFacet */
@@ -505,7 +516,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
             ]
         ];
 
-        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
         /** @var $facet OptionsFacet */
@@ -541,7 +553,8 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
             ]
         ];
 
-        $processor = $this->getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet);
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
         $facets = $searchResultSet->getFacets();
@@ -555,14 +568,92 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     }
 
     /**
-     * @param $facetConfiguration
-     * @param $searchResultSet
-     * @return ResultSetReconstitutionProcessor
+     * @test
      */
-    protected function getConfiguredReconstitutionProcessor($facetConfiguration, $searchResultSet)
+    public function returnsResultSetWithConfiguredSortingOptions()
+    {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_query_fields_facets.json');
+
+        $configuration = [];
+        $configuration['plugin.']['tx_solr.']['search.'] = [
+            'sorting' => 1,
+            'sorting.' => [
+                'defaultOrder' => 'asc',
+                'options.' => [
+                    'relevance.' => [
+                        'field' => 'relevance',
+                        'label' => 'Relevance'
+                    ]
+                ]
+            ]
+        ];
+
+        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getHasSorting')->will($this->returnValue(false));
+
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        $this->assertEquals(1, $searchResultSet->getSortings()->getCount(), 'No sorting was created');
+        $this->assertFalse($searchResultSet->getSortings()->getHasSelected(), 'Expected that no selected sorting was present');
+    }
+
+
+    /**
+     * @test
+     */
+    public function canReturnSortingsAndMarkedSelectedAsActive()
+    {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_query_fields_facets.json');
+
+        $configuration = [];
+        $configuration['plugin.']['tx_solr.']['search.'] = [
+            'sorting' => 1,
+            'sorting.' => [
+                'defaultOrder' => 'asc',
+                'options.' => [
+                    'relevance.' => [
+                        'field' => 'relevance',
+                        'label' => 'Relevance'
+                    ],
+                    'title.' => [
+                        'field' => 'sortTitle',
+                        'label' => 'Title'
+                    ]
+
+                ]
+            ]
+        ];
+
+        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getHasSorting')->will($this->returnValue(true));
+        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getSortingName')->will($this->returnValue('title'));
+        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getSortingDirection')->will($this->returnValue('desc'));
+
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        $this->assertEquals(2, $searchResultSet->getSortings()->getCount(), 'Unexpected amount of sorting options have been created');
+        $this->assertTrue($searchResultSet->getSortings()->getHasSelected(), 'Expected that a selected sorting was present');
+        $this->assertSame('desc', $searchResultSet->getSortings()->getSelected()->getDirection(), 'Selected sorting as unexpected direction');
+    }
+
+    /**
+     * @param array $facetConfiguration
+     * @return array
+     */
+    protected function getConfigurationArrayFromFacetConfigurationArray($facetConfiguration)
     {
         $configuration = array();
         $configuration['plugin.']['tx_solr.']['search.']['faceting.'] = $facetConfiguration;
+        return $configuration;
+    }
+
+    /**
+     * @param array $configuration
+     * @param $searchResultSet
+     * @return ResultSetReconstitutionProcessor
+     */
+    protected function getConfiguredReconstitutionProcessor($configuration, $searchResultSet)
+    {
         $typoScriptConfiguration = new TypoScriptConfiguration($configuration);
         $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getContextTypoScriptConfiguration')->will($this->returnValue($typoScriptConfiguration));
         $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getActiveFacetNames')->will($this->returnValue([]));

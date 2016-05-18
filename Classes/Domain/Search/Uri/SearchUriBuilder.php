@@ -108,7 +108,6 @@ class SearchUriBuilder
             ->getCopyForSubRequest()->setPage($page)
             ->getAsArray();
 
-
         return $this->buildLinkWithInMemoryCache($persistentAndFacetArguments);
     }
 
@@ -128,6 +127,21 @@ class SearchUriBuilder
         $arguments = $request->setRawQueryString($queryString)->getAsArray();
 
         return $this->buildLinkWithInMemoryCache($arguments);
+    }
+
+    /**
+     * @param SearchRequest $previousSearchRequest
+     * @param $sortingName
+     * @param $sortingDirection
+     * @return string
+     */
+    public function getSetSortingUri(SearchRequest $previousSearchRequest, $sortingName, $sortingDirection)
+    {
+        $persistentAndFacetArguments = $previousSearchRequest
+            ->getCopyForSubRequest()->setSorting($sortingName, $sortingDirection)
+            ->getAsArray();
+
+        return $this->buildLinkWithInMemoryCache($persistentAndFacetArguments);
     }
 
     /**

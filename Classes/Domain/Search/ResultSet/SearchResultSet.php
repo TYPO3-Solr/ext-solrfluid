@@ -17,6 +17,8 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet;
 use \ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet as SolrSearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetCollection;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Sorting\Sorting;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Sorting\SortingCollection;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestion;
 
 /**
@@ -36,6 +38,10 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestio
  */
 class SearchResultSet extends SolrSearchResultSet
 {
+    /**
+     * @var int
+     */
+    protected $allResultCount = 0;
 
     /**
      * @var Suggestion[]
@@ -48,9 +54,9 @@ class SearchResultSet extends SolrSearchResultSet
     protected $facets = null;
 
     /**
-     * @var int
+     * @var SortingCollection
      */
-    protected $allResultCount = 0;
+    protected $sortings = null;
 
     /**
      * @return \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet
@@ -58,6 +64,7 @@ class SearchResultSet extends SolrSearchResultSet
     public function __construct()
     {
         $this->facets = new FacetCollection();
+        $this->sortings = new SortingCollection();
     }
 
     /**
@@ -122,5 +129,21 @@ class SearchResultSet extends SolrSearchResultSet
     public function addFacet(AbstractFacet $facet)
     {
         $this->facets->addFacet($facet);
+    }
+
+    /**
+     * @param Sorting $sorting
+     */
+    public function addSorting(Sorting $sorting)
+    {
+        $this->sortings->addSorting($sorting);
+    }
+
+    /**
+     * @return SortingCollection
+     */
+    public function getSortings()
+    {
+        return $this->sortings;
     }
 }

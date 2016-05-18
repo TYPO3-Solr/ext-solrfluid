@@ -18,6 +18,7 @@ use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet as SolrSearc
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetProcessor;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserRegistry;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacetParser;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Sorting\Sorting;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestion;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -50,6 +51,7 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
 
         $resultSet = $this->parseResultCount($resultSet);
         $resultSet = $this->parseSpellCheckingResponseIntoObjects($resultSet);
+        $resultSet = $this->parseSortingIntoObjects($resultSet);
 
         // here we can reconstitute other domain objects from the solr response
         $resultSet = $this->parseFacetsIntoObjects($resultSet);
@@ -71,6 +73,49 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
         }
 
         $resultSet->setAllResultCount($response->response->numFound);
+        return $resultSet;
+    }
+
+    /**
+     * @param SearchResultSet $resultSet
+     * @return SearchResultSet
+     */
+    protected function parseSortingIntoObjects(SearchResultSet $resultSet)
+    {
+        $configuration = $resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration();
+        $hasSorting = $resultSet->getUsedSearchRequest()->getHasSorting();
+        $activeSortingName = $resultSet->getUsedSearchRequest()->getSortingName();
+        $activeSortingDirection = $resultSet->getUsedSearchRequest()->getSortingDirection();
+
+        // no configuration available
+        if (!isset($configuration)) {
+            return $resultSet;
+        }
+
+        // no sorting enabled
+        if (!$configuration->getSearchSorting()) {
+            return $resultSet;
+        }
+        foreach ($configuration->getSearchSortingOptionsConfiguration() as $sortingKeyName => $sortingOptions) {
+            $sortingName = rtrim($sortingKeyName, '.');
+            $selected = false;
+            $direction = $configuration->getSearchSortingDefaultOrderBySortOptionName($sortingName);
+
+            // when we have an active sorting in the request we compare the sortingName and mark is as active and
+            // use the direction from the request
+            if ($hasSorting && $activeSortingName == $sortingName) {
+                $selected = true;
+                $direction = $activeSortingDirection;
+            }
+
+            $field = $sortingOptions['field'];
+            $label = $sortingOptions['label'];
+
+            // @todo allow stdWrap on label
+            $sorting = new Sorting($resultSet, $sortingName, $field, $direction, $label, $selected);
+            $resultSet->addSorting($sorting);
+        }
+
         return $resultSet;
     }
 
