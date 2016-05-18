@@ -148,6 +148,19 @@ class SearchUriBuilder
      * @param SearchRequest $previousSearchRequest
      * @return string
      */
+    public function getRemoveSortingUri(SearchRequest $previousSearchRequest)
+    {
+        $persistentAndFacetArguments = $previousSearchRequest
+            ->getCopyForSubRequest()->removeSorting()
+            ->getAsArray();
+
+        return $this->buildLinkWithInMemoryCache($persistentAndFacetArguments);
+    }
+
+    /**
+     * @param SearchRequest $previousSearchRequest
+     * @return string
+     */
     public function getCurrentSearchUri(SearchRequest $previousSearchRequest)
     {
         $persistentAndFacetArguments = $previousSearchRequest

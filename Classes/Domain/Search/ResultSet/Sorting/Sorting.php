@@ -44,15 +44,21 @@ class Sorting
     protected $selected = false;
 
     /**
+     * @var bool
+     */
+    protected $isResetOption = false;
+
+    /**
      * @param SearchResultSet $resultSet
      * @param string $name
      * @param string $field
      * @param string $direction
      * @param string $label
      * @param boolean $selected
+     * @param boolean $isResetOption
      * @throws \InvalidArgumentException
      */
-    public function __construct(SearchResultSet $resultSet, $name, $field, $direction, $label, $selected)
+    public function __construct(SearchResultSet $resultSet, $name, $field, $direction, $label, $selected, $isResetOption)
     {
         if (!self::getIsValidDirection($direction)) {
             throw new \InvalidArgumentException("Invalid sorting direction");
@@ -62,6 +68,7 @@ class Sorting
         $this->field = $field;
         $this->label = $label;
         $this->selected = $selected;
+        $this->isResetOption = $isResetOption;
     }
 
     /**
@@ -150,5 +157,21 @@ class Sorting
         } else {
             return self::DIRECTION_ASC;
         }
+    }
+
+    /**
+     * @param boolean $isResetOption
+     */
+    public function setIsResetOption($isResetOption)
+    {
+        $this->isResetOption = $isResetOption;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsResetOption()
+    {
+        return $this->isResetOption;
     }
 }
