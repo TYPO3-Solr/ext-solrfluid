@@ -24,5 +24,59 @@ use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResult as SolrSearchRe
 class SearchResult extends SolrSearchResult
 {
 
-    //@todo: implement native getters for common schema fields to accelerate the retrieval and avoid __call processing
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->_fields['content'];
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsElevated()
+    {
+        return $this->_fields['isElevated'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->_fields['type'];
+    }
+
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->_fields['id'];
+    }
+
+    /**
+     * @return float
+     */
+    public function getScore()
+    {
+        return $this->_fields['score'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->_fields['url'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->_fields['title'];
+    }
 }
