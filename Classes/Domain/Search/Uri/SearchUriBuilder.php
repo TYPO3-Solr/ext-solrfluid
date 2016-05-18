@@ -42,10 +42,19 @@ class SearchUriBuilder
      */
     protected $uriBuilder;
 
+    /**
+     * @var array
+     */
     protected static $preCompiledLinks = array();
 
+    /**
+     * @var integer
+     */
     protected static $hitCount;
 
+    /**
+     * @var integer
+     */
     protected static $missCount;
 
     /**
@@ -121,6 +130,19 @@ class SearchUriBuilder
         return $this->buildLinkWithInMemoryCache($arguments);
     }
 
+    /**
+     * @param SearchRequest $previousSearchRequest
+     * @return string
+     */
+    public function getCurrentSearchUri(SearchRequest $previousSearchRequest)
+    {
+        $persistentAndFacetArguments = $previousSearchRequest
+            ->getCopyForSubRequest()
+            ->getAsArray();
+
+
+        return $this->buildLinkWithInMemoryCache($persistentAndFacetArguments);
+    }
 
     /**
      * @param array $arguments

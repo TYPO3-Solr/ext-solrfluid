@@ -448,6 +448,28 @@ class SearchControllerTest extends IntegrationTest
     /**
      * @test
      */
+    public function canChangeResultsPerPage()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = '*';
+
+        $this->searchRequest->setArgument('resultsPerPage', 10);
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+
+        $resultPage = $this->searchResponse->getContent();
+        $this->assertContains("Results 1 until 8 of 8", $resultPage, '');
+        $this->assertContainerByIdContains('<option selected="selected" value="10">10</option>', $resultPage, 'results-per-page');
+    }
+
+
+    /**
+     * @test
+     */
     public function canShowLastSearchesFromDatabaseInResponse()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');

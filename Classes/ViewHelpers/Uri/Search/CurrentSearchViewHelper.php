@@ -22,23 +22,22 @@ use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 
 /**
- * Class FacetAddOptionViewHelper
+ * Class CurrentSearchViewHelper
  *
  * @author Frans Saris <frans@beech.it>
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link
  */
-class StartNewSearchViewHelper extends AbstractUriViewHelper implements CompilableInterface
+class CurrentSearchViewHelper extends AbstractUriViewHelper implements CompilableInterface
 {
 
     /**
-     * @param string $queryString
      * @return string
      */
-    public function render($queryString = '')
+    public function render()
     {
         return self::renderStatic(
-            ['queryString' => $queryString],
+            [],
             $this->buildRenderChildrenClosure(),
             $this->renderingContext
         );
@@ -52,10 +51,9 @@ class StartNewSearchViewHelper extends AbstractUriViewHelper implements Compilab
      */
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
-        $queryString = $arguments['queryString'];
         $previousRequest = $renderingContext->getControllerContext()->getSearchResultSet()->getUsedSearchRequest();
 
-        $uri = self::getSearchUriBuilder()->getNewSearchUri($previousRequest, $queryString);
+        $uri = self::getSearchUriBuilder()->getCurrentSearchUri($previousRequest);
         return $uri;
     }
 }

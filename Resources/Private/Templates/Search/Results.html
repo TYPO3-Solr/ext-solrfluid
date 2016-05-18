@@ -10,7 +10,6 @@
 
 		<f:render partial="Search/Form" section="Form" arguments="{search:search, additionalFilters:additionalFilters}" />
 
-
 		<f:if condition="{resultSet.usedQuery.keywordsCleaned}">
 			<span class="searched-for">
 				<s:translate key="results_searched_for" arguments="{0:'\"{resultSet.usedQuery.keywordsCleaned}\"'}">Searched for %s</s:translate>
@@ -30,15 +29,17 @@
 			<span class="result-found">
 				<s:translate key="results_found" arguments="{0:resultSet.usedSearch.numberOfResults, 1: resultSet.usedSearch.queryTime}">Found %d results in %d seconds</s:translate>
 			</span>
+
 			<span class="result-range">
-			<s:pageBrowserRange>
-				<f:translate key="results_range" arguments="{0:from, 1: to, 2: total}">Results %d until %d of %d</f:translate>
-			</s:pageBrowserRange>
+				<s:pageBrowserRange>
+					<f:translate key="results_range" arguments="{0:from, 1: to, 2: total}">Results %d until %d of %d</f:translate>
+				</s:pageBrowserRange>
 			</span>
 		</f:if>
 
-
 		<f:if condition="{hasSearched}">
+			<f:render partial="Result/PerPage" section="PerPage" arguments="{resultSet: resultSet}" />
+
 			<s:widget.resultPaginate resultSet="{resultSet}">
 				<ol start="{pagination.displayRangeStart}" class="results-list">
 					<f:for each="{documents}" as="document">
