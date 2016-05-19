@@ -297,9 +297,8 @@ class SearchControllerTest extends IntegrationTest
         $this->searchController->setResetConfigurationBeforeInitialize(false);
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
         $resultPage1 = $this->searchResponse->getContent();
-
-        $subtitleMenPosition = strpos($resultPage1, 'subtitle%3Amen">men</a> <span class="facet-result-count">(1)</span>');
-        $subtitleWomanPosition =  strpos($resultPage1, 'subtitle%3Awoman">woman</a> <span class="facet-result-count">(3)</span>');
+        $subtitleMenPosition = strpos($resultPage1, 'subtitle%3Amen&foo=bar">men</a> <span class="facet-result-count">(1)</span>');
+        $subtitleWomanPosition =  strpos($resultPage1, 'subtitle%3Awoman&foo=bar">woman</a> <span class="facet-result-count">(3)</span>');
 
         $this->assertGreaterThan(0, $subtitleMenPosition);
         $this->assertGreaterThan(0, $subtitleWomanPosition);
@@ -330,8 +329,8 @@ class SearchControllerTest extends IntegrationTest
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
         $resultPage1 = $this->searchResponse->getContent();
 
-        $subtitleMenPosition = strpos($resultPage1, 'subtitle%3Amen">men</a> <span class="facet-result-count">(1)</span>');
-        $subtitleWomanPosition =  strpos($resultPage1, 'subtitle%3Awoman">woman</a> <span class="facet-result-count">(3)</span>');
+        $subtitleMenPosition = strpos($resultPage1, 'subtitle%3Amen&foo=bar">men</a> <span class="facet-result-count">(1)</span>');
+        $subtitleWomanPosition =  strpos($resultPage1, 'subtitle%3Awoman&foo=bar">woman</a> <span class="facet-result-count">(3)</span>');
 
         $this->assertGreaterThan(0, $subtitleMenPosition);
         $this->assertGreaterThan(0, $subtitleWomanPosition);
@@ -371,8 +370,8 @@ class SearchControllerTest extends IntegrationTest
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
         $resultPage1 = $this->searchResponse->getContent();
 
-        $subtitleMenPosition = strpos($resultPage1, 'subtitle%3Amen">men</a> <span class="facet-result-count">(1)</span>');
-        $subtitleWomanPosition =  strpos($resultPage1, 'subtitle%3Awoman">woman</a> <span class="facet-result-count">(3)</span>');
+        $subtitleMenPosition = strpos($resultPage1, 'subtitle%3Amen&foo=bar">men</a> <span class="facet-result-count">(1)</span>');
+        $subtitleWomanPosition =  strpos($resultPage1, 'subtitle%3Awoman&foo=bar">woman</a> <span class="facet-result-count">(3)</span>');
 
         $this->assertGreaterThan(0, $subtitleMenPosition);
         $this->assertGreaterThan(0, $subtitleWomanPosition);

@@ -58,6 +58,11 @@ class SearchUriBuilder
     protected static $missCount;
 
     /**
+     * @var array
+     */
+    protected static $additionalArgumentsCache = array();
+
+    /**
      * @param UriBuilder $uriBuilder
      */
     public function injectUriBuilder(UriBuilder $uriBuilder)
@@ -77,8 +82,10 @@ class SearchUriBuilder
             ->getCopyForSubRequest()->addFacetValue($facetName, $optionValue)
             ->getAsArray();
 
+        $additionalArguments = $this->getAdditionalArgumentsFromRequestConfiguration($previousSearchRequest);
+        $arguments = $persistentAndFacetArguments + $additionalArguments;
 
-        return $this->buildLinkWithInMemoryCache($persistentAndFacetArguments);
+        return $this->buildLinkWithInMemoryCache($arguments);
     }
 
     /**
@@ -93,8 +100,13 @@ class SearchUriBuilder
             ->getCopyForSubRequest()->removeFacetValue($facetName, $optionValue)
             ->getAsArray();
 
+        $additionalArguments = [];
+        if ($previousSearchRequest->getContextTypoScriptConfiguration()->getSearchFacetingFacetLinkUrlParametersUseForFacetResetLinkUrl()) {
+            $additionalArguments = $this->getAdditionalArgumentsFromRequestConfiguration($previousSearchRequest);
+        }
 
-        return $this->buildLinkWithInMemoryCache($persistentAndFacetArguments);
+        $arguments = $persistentAndFacetArguments + $additionalArguments;
+        return $this->buildLinkWithInMemoryCache($arguments);
     }
 
     /**
@@ -169,6 +181,27 @@ class SearchUriBuilder
 
 
         return $this->buildLinkWithInMemoryCache($persistentAndFacetArguments);
+    }
+
+    /**
+     * @param SearchRequest $request
+     * @return array
+     */
+    protected function getAdditionalArgumentsFromRequestConfiguration(SearchRequest $request)
+    {
+        if ($request->getContextTypoScriptConfiguration() == null) {
+            return [];
+        }
+
+        $reQuestId = $request->getId();
+        if (isset(self::$additionalArgumentsCache[$reQuestId])) {
+            return self::$additionalArgumentsCache[$reQuestId];
+        }
+
+        self::$additionalArgumentsCache[$reQuestId] = $request->getContextTypoScriptConfiguration()
+            ->getSearchFacetingFacetLinkUrlParametersAsArray();
+
+        return self::$additionalArgumentsCache[$reQuestId];
     }
 
     /**

@@ -51,7 +51,6 @@ class RemoveSortingViewHelper extends AbstractUriViewHelper implements Compilabl
      */
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
-
         $previousRequest = $renderingContext->getControllerContext()->getSearchResultSet()->getUsedSearchRequest();
 
         $uri = self::getSearchUriBuilder()->getRemoveSortingUri($previousRequest);

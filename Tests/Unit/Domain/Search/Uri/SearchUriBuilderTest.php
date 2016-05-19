@@ -77,6 +77,26 @@ class SearchUriBuilderTest extends UnitTest
     /**
      * @test
      */
+    public function addFacetLinkWillAddAdditionalConfiguredArguments()
+    {
+        $expectedArguments = ['tx_solr' => ['filter' => ['###tx_solr:filter:0###']], '###tx_solr:0###'];
+        $this->extBaseUriBuilderMock->expects($this->once())->method('setArguments')->with($expectedArguments)->will($this->returnValue($this->extBaseUriBuilderMock));
+        $this->extBaseUriBuilderMock->expects($this->once())->method('setUseCacheHash')->with(false)->will($this->returnValue($this->extBaseUriBuilderMock));
+
+        $result = 'filter='.urlencode('###tx_solr:filter:0###').'&'.urlencode('###tx_solr:0###');
+        $this->extBaseUriBuilderMock->expects($this->once())->method('build')->with()->will($this->returnValue($result));
+
+        $configurationMock = $this->getDumbMock(TypoScriptConfiguration::class);
+        $configurationMock->expects($this->once())->method('getSearchFacetingFacetLinkUrlParametersAsArray')->will($this->returnValue(array('foo=bar')));
+        $previousRequest =  new SearchRequest(array(), 1, 0, $configurationMock);
+        $result = $this->searchUrlBuilder->getAddFacetOptionUri($previousRequest, 'option', 'value');
+
+        $this->assertEquals($result, 'filter=option%3Avalue&foo%3Dbar');
+    }
+
+    /**
+     * @test
+     */
     public function setArgumentsIsOnlyCalledOnceEvenWhenMultipleFacetsGetRendered()
     {
         $expectedArguments = ['tx_solr' => ['filter' => ['###tx_solr:filter:0###']]];
