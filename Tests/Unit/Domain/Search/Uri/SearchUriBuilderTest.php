@@ -88,7 +88,7 @@ class SearchUriBuilderTest extends UnitTest
 
         $configurationMock = $this->getDumbMock(TypoScriptConfiguration::class);
         $configurationMock->expects($this->once())->method('getSearchFacetingFacetLinkUrlParametersAsArray')->will($this->returnValue(array('foo=bar')));
-        $previousRequest =  new SearchRequest(array(), 1, 0, $configurationMock);
+        $previousRequest =  new SearchRequest([], 1, 0, $configurationMock);
         $result = $this->searchUrlBuilder->getAddFacetOptionUri($previousRequest, 'option', 'value');
 
         $this->assertEquals($result, 'filter=option%3Avalue&foo%3Dbar');
@@ -112,5 +112,50 @@ class SearchUriBuilderTest extends UnitTest
 
         $previousRequest->removeAllFacets();
         $this->searchUrlBuilder->getAddFacetOptionUri($previousRequest, 'color', 'red');
+    }
+
+
+    /**
+     * @test
+     */
+    public function targetPageUidIsPassedWhenSortingIsAdded()
+    {
+        $configurationMock = $this->getDumbMock(TypoScriptConfiguration::class);
+        $configurationMock->expects($this->once())->method('getSearchTargetPage')->will($this->returnValue(4711));
+        $previousRequest =  new SearchRequest([], 0, 0, $configurationMock);
+
+        $expectedArguments = ['tx_solr' => ['sort' => '###tx_solr:sort###']];
+
+            // we expect that the page uid from the configruation will be used to build the url with the uri builder
+        $this->extBaseUriBuilderMock->expects($this->once())->method('setTargetPageUid')->with(4711)->will($this->returnValue($this->extBaseUriBuilderMock));
+        $this->extBaseUriBuilderMock->expects($this->once())->method('setArguments')->with($expectedArguments)->will($this->returnValue($this->extBaseUriBuilderMock));
+        $this->extBaseUriBuilderMock->expects($this->once())->method('setUseCacheHash')->with(false)->will($this->returnValue($this->extBaseUriBuilderMock));
+        $this->extBaseUriBuilderMock->expects($this->once())->method('build')->will($this->returnValue('tx_solr[sort]='.urlencode('###tx_solr:sort###')));
+        $result = $this->searchUrlBuilder->getSetSortingUri($previousRequest, 'title', 'desc');
+        $this->assertEquals('tx_solr[sort]=title+desc', $result);
+    }
+
+    /**
+     * @test
+     */
+    public function canGetRemoveFacetOptionUri()
+    {
+        $configurationMock = $this->getDumbMock(TypoScriptConfiguration::class);
+        $previousRequest =  new SearchRequest([
+                    'tx_solr' => [
+                        'filter' => [
+                            'type:pages'
+                        ]
+                    ]
+                ],
+                0,
+                0,
+                $configurationMock);
+
+        // we expect that the filters are empty after remove
+        $expectedArguments = ['tx_solr' => ['filter' => []]];
+        $this->extBaseUriBuilderMock->expects($this->once())->method('setArguments')->with($expectedArguments)->will($this->returnValue($this->extBaseUriBuilderMock));
+        $this->extBaseUriBuilderMock->expects($this->once())->method('setUseCacheHash')->with(false)->will($this->returnValue($this->extBaseUriBuilderMock));
+        $this->searchUrlBuilder->getRemoveFacetOptionUri($previousRequest, 'type', 'pages');
     }
 }

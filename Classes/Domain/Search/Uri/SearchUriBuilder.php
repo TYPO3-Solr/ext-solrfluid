@@ -85,7 +85,8 @@ class SearchUriBuilder
         $additionalArguments = $this->getAdditionalArgumentsFromRequestConfiguration($previousSearchRequest);
         $arguments = $persistentAndFacetArguments + $additionalArguments;
 
-        return $this->buildLinkWithInMemoryCache($arguments);
+        $pageUid = $this->getTargetPageUidFromRequestConfiguration($previousSearchRequest);
+        return $this->buildLinkWithInMemoryCache($pageUid, $arguments);
     }
 
     /**
@@ -106,7 +107,9 @@ class SearchUriBuilder
         }
 
         $arguments = $persistentAndFacetArguments + $additionalArguments;
-        return $this->buildLinkWithInMemoryCache($arguments);
+
+        $pageUid = $this->getTargetPageUidFromRequestConfiguration($previousSearchRequest);
+        return $this->buildLinkWithInMemoryCache($pageUid, $arguments);
     }
 
     /**
@@ -120,7 +123,8 @@ class SearchUriBuilder
             ->getCopyForSubRequest()->setPage($page)
             ->getAsArray();
 
-        return $this->buildLinkWithInMemoryCache($persistentAndFacetArguments);
+        $pageUid = $this->getTargetPageUidFromRequestConfiguration($previousSearchRequest);
+        return $this->buildLinkWithInMemoryCache($pageUid, $persistentAndFacetArguments);
     }
 
     /**
@@ -138,7 +142,8 @@ class SearchUriBuilder
         $request = GeneralUtility::makeInstance(SearchRequest::class, array(), $contextPageUid, $contextSystemLanguage, $contextConfiguration);
         $arguments = $request->setRawQueryString($queryString)->getAsArray();
 
-        return $this->buildLinkWithInMemoryCache($arguments);
+        $pageUid = $this->getTargetPageUidFromRequestConfiguration($previousSearchRequest);
+        return $this->buildLinkWithInMemoryCache($pageUid, $arguments);
     }
 
     /**
@@ -153,7 +158,8 @@ class SearchUriBuilder
             ->getCopyForSubRequest()->setSorting($sortingName, $sortingDirection)
             ->getAsArray();
 
-        return $this->buildLinkWithInMemoryCache($persistentAndFacetArguments);
+        $pageUid = $this->getTargetPageUidFromRequestConfiguration($previousSearchRequest);
+        return $this->buildLinkWithInMemoryCache($pageUid, $persistentAndFacetArguments);
     }
 
     /**
@@ -166,7 +172,8 @@ class SearchUriBuilder
             ->getCopyForSubRequest()->removeSorting()
             ->getAsArray();
 
-        return $this->buildLinkWithInMemoryCache($persistentAndFacetArguments);
+        $pageUid = $this->getTargetPageUidFromRequestConfiguration($previousSearchRequest);
+        return $this->buildLinkWithInMemoryCache($pageUid, $persistentAndFacetArguments);
     }
 
     /**
@@ -180,7 +187,8 @@ class SearchUriBuilder
             ->getAsArray();
 
 
-        return $this->buildLinkWithInMemoryCache($persistentAndFacetArguments);
+        $pageUid = $this->getTargetPageUidFromRequestConfiguration($previousSearchRequest);
+        return $this->buildLinkWithInMemoryCache($pageUid, $persistentAndFacetArguments);
     }
 
     /**
@@ -205,21 +213,36 @@ class SearchUriBuilder
     }
 
     /**
+     * @param SearchRequest $request
+     * @return integer|null
+     */
+    protected function getTargetPageUidFromRequestConfiguration(SearchRequest $request)
+    {
+        if ($request->getContextTypoScriptConfiguration() == null) {
+            return null;
+        }
+
+        return $request->getContextTypoScriptConfiguration()->getSearchTargetPage();
+    }
+
+    /**
+     * @param integer $pageUid
      * @param array $arguments
      * @return string
      */
-    protected function buildLinkWithInMemoryCache(array $arguments)
+    protected function buildLinkWithInMemoryCache($pageUid, array $arguments)
     {
         $values = array();
         $structure = $arguments;
         $this->getSubstitution($structure, $values);
-        $hash = md5(json_encode($structure));
+        $hash = md5($pageUid . json_encode($structure));
 
         if (isset(self::$preCompiledLinks[$hash])) {
             self::$hitCount++;
             $template = self::$preCompiledLinks[$hash];
         } else {
             self::$missCount++;
+            $this->uriBuilder->setTargetPageUid($pageUid);
             $template = $this->uriBuilder->setArguments($structure)->setUseCacheHash(false)->build();
             self::$preCompiledLinks[$hash] = $template;
         }
