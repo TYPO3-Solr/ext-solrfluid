@@ -41,7 +41,7 @@ class SolrControllerContext extends ControllerContext
     /**
      * @param TypoScriptConfiguration $typoScriptConfiguration
      */
-    public function setTypoScriptConfiguration($typoScriptConfiguration)
+    public function setTypoScriptConfiguration(TypoScriptConfiguration $typoScriptConfiguration)
     {
         $this->typoScriptConfiguration = $typoScriptConfiguration;
     }
@@ -55,15 +55,15 @@ class SolrControllerContext extends ControllerContext
     }
 
     /**
-     * @param \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet $searchResultSet
+     * @param SearchResultSet $searchResultSet
      */
-    public function setSearchResultSet($searchResultSet)
+    public function setSearchResultSet(SearchResultSet $searchResultSet)
     {
         $this->searchResultSet = $searchResultSet;
     }
 
     /**
-     * @return \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet
+     * @return SearchResultSet
      */
     public function getSearchResultSet()
     {
