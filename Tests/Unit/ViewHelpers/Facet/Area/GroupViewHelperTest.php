@@ -43,18 +43,59 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  */
 class GroupViewHelperTest extends UnitTest
 {
+    /**
+     * @test
+     */
+    public function canMakeOnlyExpectedFacetsAvailableInStaticContext()
+    {
+        $facetCollection = $this->getTestFacetCollection();
+
+
+        $variableContainer = $this->getMock(TemplateVariableContainer::class, array('remove'));
+        $renderingContextMock = $this->getDumbMock(RenderingContextInterface::class);
+        $renderingContextMock->expects($this->any())->method('getTemplateVariableContainer')->will($this->returnValue($variableContainer));
+
+        $testArguments['facets'] = $facetCollection;
+        $testArguments['groupName'] = 'left';
+
+        GroupViewHelper::renderStatic($testArguments, function () {}, $renderingContextMock);
+        $this->assertTrue($variableContainer->exists('areaFacets'), 'Expected that filteredFacets has been set');
+
+            /** @var  $facetCollection FacetCollection */
+        $facetCollection = $variableContainer->get('areaFacets');
+        $this->assertEquals(2, $facetCollection->getCount());
+    }
 
 
     /**
      * @test
      */
-    public function canMakeOnlyExpectedFacetsAvailable()
+    public function canMakeOnlyExpectedFacetsAvailableInstanceContext()
     {
-        $facetCollection = new FacetCollection();
-        $resultSetMock = $this->getDumbMock(SearchResultSet::class);
+        $facetCollection = $this->getTestFacetCollection();
+
         $variableContainer = $this->getMock(TemplateVariableContainer::class, array('remove'));
         $renderingContextMock = $this->getDumbMock(RenderingContextInterface::class);
         $renderingContextMock->expects($this->any())->method('getTemplateVariableContainer')->will($this->returnValue($variableContainer));
+
+        $viewHelper = $this->getMock(GroupViewHelper::class, array('renderChildren'));
+        $viewHelper->setRenderingContext($renderingContextMock);
+        $viewHelper->render($facetCollection, 'left');
+
+        $this->assertTrue($variableContainer->exists('areaFacets'), 'Expected that filteredFacets has been set');
+
+        /** @var  $facetCollection FacetCollection */
+        $facetCollection = $variableContainer->get('areaFacets');
+        $this->assertEquals(2, $facetCollection->getCount());
+    }
+
+    /**
+     * @return FacetCollection
+     */
+    protected function getTestFacetCollection()
+    {
+        $facetCollection = new FacetCollection();
+        $resultSetMock = $this->getDumbMock(SearchResultSet::class);
 
         $colorFacet = new OptionsFacet($resultSetMock, 'color', 'color_s', '', ['groupName' => 'left']);
         $brandFacet = new OptionsFacet($resultSetMock, 'brand', 'brand_s', '', ['groupName' => 'left']);
@@ -63,16 +104,6 @@ class GroupViewHelperTest extends UnitTest
         $facetCollection->addFacet($colorFacet);
         $facetCollection->addFacet($brandFacet);
         $facetCollection->addFacet($pageType);
-
-
-        $testArguments['facets'] = $facetCollection;
-        $testArguments['groupName'] = 'left';
-        GroupViewHelper::renderStatic($testArguments, function () {}, $renderingContextMock);
-
-        $this->assertTrue($variableContainer->exists('areaFacets'), 'Expected that filteredFacets has been set');
-
-            /** @var  $facetCollection FacetCollection */
-        $facetCollection = $variableContainer->get('areaFacets');
-        $this->assertEquals(2, $facetCollection->getCount());
+        return $facetCollection;
     }
 }

@@ -36,7 +36,7 @@ class GroupViewHelper extends AbstractViewHelper implements CompilableInterface
      * @param string $groupName
      * @return string
      */
-    public function render(FacetCollection $facets, $groupName = 'all')
+    public function render(FacetCollection $facets, $groupName = 'main')
     {
         return self::renderStatic(
             array(
@@ -58,7 +58,7 @@ class GroupViewHelper extends AbstractViewHelper implements CompilableInterface
     {
         /** @var  $facets FacetCollection */
         $facets = $arguments['facets'];
-        $requiredGroup = isset($arguments['groupName']) ? $arguments['groupName'] :  'all';
+        $requiredGroup = isset($arguments['groupName']) ? $arguments['groupName'] :  'main';
         $filtered = $facets->getByGroupName($requiredGroup);
 
         $templateVariableContainer = $renderingContext->getTemplateVariableContainer();
