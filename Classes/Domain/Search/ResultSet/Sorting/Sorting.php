@@ -160,14 +160,6 @@ class Sorting
     }
 
     /**
-     * @param boolean $isResetOption
-     */
-    public function setIsResetOption($isResetOption)
-    {
-        $this->isResetOption = $isResetOption;
-    }
-
-    /**
      * @return boolean
      */
     public function getIsResetOption()
