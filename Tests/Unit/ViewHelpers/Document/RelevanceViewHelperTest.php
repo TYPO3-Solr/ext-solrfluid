@@ -25,13 +25,12 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\ViewHelpers\Facet\Uri;
  ***************************************************************/
 
 use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
+use ApacheSolrForTypo3\Solr\Search;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetCollection;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResult;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\Uri\SearchUriBuilder;
-use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Facet\Area\GroupViewHelper;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document\RelevanceViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
@@ -41,38 +40,29 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 /**
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  */
-class GroupViewHelperTest extends UnitTest
+class RelevanceViewHelperTest extends UnitTest
 {
-
 
     /**
      * @test
      */
-    public function canMakeOnlyExpectedFacetsAvailable()
+    public function canCalculateRelevance()
     {
-        $facetCollection = new FacetCollection();
+        $searchMock = $this->getDumbMock(Search::class);
+        $searchMock->expects($this->once())->method('getMaximumResultScore')->will($this->returnValue(5.5));
         $resultSetMock = $this->getDumbMock(SearchResultSet::class);
-        $variableContainer = $this->getMock(TemplateVariableContainer::class, array('remove'));
+        $resultSetMock->expects($this->any())->method('getUsedSearch')->will($this->returnValue($searchMock));
+
+        $documentMock = $this->getDumbMock(SearchResult::class);
+        $documentMock->expects($this->once())->method('getScore')->will($this->returnValue(0.55));
+
+        $arguments = [
+            'resultSet' => $resultSetMock,
+            'document' => $documentMock
+        ];
         $renderingContextMock = $this->getDumbMock(RenderingContextInterface::class);
-        $renderingContextMock->expects($this->any())->method('getTemplateVariableContainer')->will($this->returnValue($variableContainer));
+        $score = RelevanceViewHelper::renderStatic($arguments, function() {}, $renderingContextMock);
 
-        $colorFacet = new OptionsFacet($resultSetMock, 'color', 'color_s', '', ['groupName' => 'left']);
-        $brandFacet = new OptionsFacet($resultSetMock, 'brand', 'brand_s', '', ['groupName' => 'left']);
-        $pageType = new OptionsFacet($resultSetMock, 'type', 'type', '', ['groupName' => 'top']);
-
-        $facetCollection->addFacet($colorFacet);
-        $facetCollection->addFacet($brandFacet);
-        $facetCollection->addFacet($pageType);
-
-
-        $testArguments['facets'] = $facetCollection;
-        $testArguments['groupName'] = 'left';
-        GroupViewHelper::renderStatic($testArguments, function () {}, $renderingContextMock);
-
-        $this->assertTrue($variableContainer->exists('areaFacets'), 'Expected that filteredFacets has been set');
-
-            /** @var  $facetCollection FacetCollection */
-        $facetCollection = $variableContainer->get('areaFacets');
-        $this->assertEquals(2, $facetCollection->getCount());
+        $this->assertEquals(10.0, $score, 'Unexpected score');
     }
 }

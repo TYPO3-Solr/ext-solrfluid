@@ -28,10 +28,12 @@ use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetCollection;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\Option;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\Uri\SearchUriBuilder;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Facet\Area\GroupViewHelper;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet\AddOptionViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
@@ -41,38 +43,35 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 /**
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  */
-class GroupViewHelperTest extends UnitTest
+class AddOptionViewHelperTest extends UnitTest
 {
 
 
     /**
      * @test
      */
-    public function canMakeOnlyExpectedFacetsAvailable()
+    public function addOptionWillUseUriBuilderAsExpected()
     {
-        $facetCollection = new FacetCollection();
-        $resultSetMock = $this->getDumbMock(SearchResultSet::class);
-        $variableContainer = $this->getMock(TemplateVariableContainer::class, array('remove'));
-        $renderingContextMock = $this->getDumbMock(RenderingContextInterface::class);
-        $renderingContextMock->expects($this->any())->method('getTemplateVariableContainer')->will($this->returnValue($variableContainer));
 
-        $colorFacet = new OptionsFacet($resultSetMock, 'color', 'color_s', '', ['groupName' => 'left']);
-        $brandFacet = new OptionsFacet($resultSetMock, 'brand', 'brand_s', '', ['groupName' => 'left']);
-        $pageType = new OptionsFacet($resultSetMock, 'type', 'type', '', ['groupName' => 'top']);
+        $searchRequest = new SearchRequest();
+        $searchResultSetMock = $this->getDumbMock(SearchResultSet::class);
+        $searchResultSetMock->expects($this->once())->method('getUsedSearchRequest')->will($this->returnValue($searchRequest));
 
-        $facetCollection->addFacet($colorFacet);
-        $facetCollection->addFacet($brandFacet);
-        $facetCollection->addFacet($pageType);
+        $facet = new OptionsFacet($searchResultSetMock,'Color','color');
+        $option = new Option($facet, 'Red', 'red', 4);
+        $facet->addOption($option);
 
+        $renderContextMock = $this->getDumbMock(RenderingContextInterface::class);
+        $viewHelper = new AddOptionViewHelper();
+        $viewHelper->setRenderingContext($renderContextMock);
 
-        $testArguments['facets'] = $facetCollection;
-        $testArguments['groupName'] = 'left';
-        GroupViewHelper::renderStatic($testArguments, function () {}, $renderingContextMock);
+        $searchUriBuilderMock = $this->getDumbMock(SearchUriBuilder::class);
 
-        $this->assertTrue($variableContainer->exists('areaFacets'), 'Expected that filteredFacets has been set');
+            // we expected that the getAddFacetOptionUri will be called on the searchUriBuilder in the end.
+        $searchUriBuilderMock->expects($this->once())->method('getAddFacetOptionUri')->with($searchRequest, 'Color', 'red');
+        $viewHelper->injectSearchUriBuilder($searchUriBuilderMock);
 
-            /** @var  $facetCollection FacetCollection */
-        $facetCollection = $variableContainer->get('areaFacets');
-        $this->assertEquals(2, $facetCollection->getCount());
+        $viewHelper->render($facet, $option);
+
     }
 }
