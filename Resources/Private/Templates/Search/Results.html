@@ -38,8 +38,9 @@
 		</f:if>
 
 		<f:if condition="{hasSearched}">
-			<f:render partial="Result/PerPage" section="PerPage" arguments="{resultSet: resultSet}" />
-
+			<f:if condition="{resultSet.usedSearch.numberOfResults}">
+				<f:render partial="Result/PerPage" section="PerPage" arguments="{resultSet: resultSet}" />
+			</f:if>
 			<s:widget.resultPaginate resultSet="{resultSet}">
 				<ol start="{pagination.displayRangeStart}" class="results-list">
 					<f:for each="{documents}" as="document">
