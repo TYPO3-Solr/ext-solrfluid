@@ -35,7 +35,7 @@ class OptionsFacetParser extends AbstractFacetParser
 
     /**
      * @param SearchResultSet $resultSet
-     * @param $facetName
+     * @param string $facetName
      * @param array $facetConfiguration
      * @return AbstractFacet|null
      */
@@ -44,12 +44,15 @@ class OptionsFacetParser extends AbstractFacetParser
         $response = $resultSet->getResponse();
         $fieldName = $facetConfiguration['field'];
         $label = $this->getPlainLabelOrApplyCObject($facetConfiguration);
-        $rawOptions = isset($response->facet_counts->facet_fields->{$fieldName}) ? $response->facet_counts->facet_fields->{$fieldName} : new \stdClass();
+        $optionsFromSolrResponse = isset($response->facet_counts->facet_fields->{$fieldName}) ? get_object_vars($response->facet_counts->facet_fields->{$fieldName}) : [];
+        $optionsFromRequest = $this->getActiveFacetOptionValuesFromRequest($resultSet, $facetName);
 
-        $noOptionsInResponse = empty(get_object_vars($rawOptions));
+        $hasOptionsInResponse = !empty($optionsFromSolrResponse);
+        $hasSelectedOptionsInRequest = count($optionsFromRequest) > 0;
+        $hasNoOptionsToShow = !$hasOptionsInResponse && !$hasSelectedOptionsInRequest;
         $hideEmpty = !$resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->getSearchFacetingShowEmptyFacetsByName($facetName);
 
-        if ($noOptionsInResponse && $hideEmpty) {
+        if ($hasNoOptionsToShow && $hideEmpty) {
             return null;
         }
 
@@ -63,17 +66,15 @@ class OptionsFacetParser extends AbstractFacetParser
             $facetConfiguration
         );
 
-        $activeFacetValues = $this->getUsedFacetOptionValues($response, $fieldName);
-        $hasActiveOptions = count($activeFacetValues) > 0;
+        $hasActiveOptions = count($optionsFromRequest) > 0;
         $facet->setIsUsed($hasActiveOptions);
+        $facet->setIsAvailable($hasOptionsInResponse);
 
-        if (!$noOptionsInResponse) {
-            $facet->setIsAvailable(true);
-            foreach ($rawOptions as $value => $count) {
-                $isOptionsActive = in_array($value, $activeFacetValues);
-                $label = $this->getLabelFromRenderingInstructions($value, $count, $facetName, $facetConfiguration);
-                $facet->addOption(new Option($facet, $label, $value, $count, $isOptionsActive));
-            }
+        $optionsToCreate = $this->getMergedOptionsFromRequestAndResponse($optionsFromSolrResponse, $optionsFromRequest);
+        foreach ($optionsToCreate as $optionsValue => $count) {
+           $isOptionsActive = in_array($optionsValue, $optionsFromRequest);
+           $label = $this->getLabelFromRenderingInstructions($optionsValue, $count, $facetName, $facetConfiguration);
+           $facet->addOption(new Option($facet, $label, $optionsValue, $count, $isOptionsActive));
         }
 
         // after all options have been created we apply a manualSortOrder if configured
@@ -102,37 +103,34 @@ class OptionsFacetParser extends AbstractFacetParser
     }
 
     /**
-     * @param \Apache_Solr_Response $response
-     * @param string $fieldName
+     * Retrieves the active facetValue for a facet from the search request.
+     * @param SearchResultSet $resultSet
+     * @param string $facetName
      * @return array
      */
-    protected function getUsedFacetOptionValues(\Apache_Solr_Response $response, $fieldName)
+    protected function getActiveFacetOptionValuesFromRequest(SearchResultSet $resultSet, $facetName)
     {
-        if (isset(self::$usedFacetOptionsByFieldName[$fieldName])) {
-            return self::$usedFacetOptionsByFieldName[$fieldName];
-        }
+        $activeFacetValues = $resultSet->getUsedSearchRequest()->getActiveFacetValuesByName($facetName);
+        $activeFacetValues = is_array($activeFacetValues) ? $activeFacetValues : [];
 
-        $activeFacetValues = [];
-        if (!isset($response->responseHeader->params->fq)) {
-            return $activeFacetValues;
-        }
+        return $activeFacetValues;
+    }
 
-        foreach ($response->responseHeader->params->fq as $filterQuery) {
-            // (title:"foo")
-            // (title:"foo" AND title:"bar")
-            $pattern = '~(\(|\s[A-Z]*\s)((?<fieldName>[^:]*):"(?<fieldValue>.*)(?<!\\\))"~U';
-            $matches = [];
-            preg_match_all($pattern, $filterQuery, $matches);
-            $matchedFieldsName = isset($matches['fieldName']) ? $matches['fieldName'] : [];
-            $matchedFieldsValues = isset($matches['fieldValue']) ? $matches['fieldValue'] : [];
+    /**
+     * @param $optionsFromSolrResponse
+     * @param $optionsFromRequest
+     * @return mixed
+     */
+    protected function getMergedOptionsFromRequestAndResponse($optionsFromSolrResponse, $optionsFromRequest)
+    {
+        $optionsToCreate = $optionsFromSolrResponse;
 
-            foreach ($matchedFieldsName as $key => $fieldNamesInResponse) {
-                if ($fieldNamesInResponse === $fieldName && isset($matchedFieldsValues[$key])) {
-                    $activeFacetValues[] = stripslashes($matchedFieldsValues[$key]);
-                }
+        foreach ($optionsFromRequest as $optionFromRequest) {
+            // if we have options in the request that have not been in the response we add them with a count of 0
+            if (!isset($optionsToCreate[$optionFromRequest])) {
+                $optionsToCreate[$optionFromRequest] = 0;
             }
         }
-
-        return self::$usedFacetOptionsByFieldName[$fieldName] = $activeFacetValues;
+        return $optionsToCreate;
     }
 }

@@ -192,6 +192,12 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     public function canReconstituteUsedFacet()
     {
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_used_facet.json');
+        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getActiveFacetValuesByName')->will(
+            $this->returnCallback(function($name) {
+                return $name == 'type' ? ['tx_solr_file'] : [];
+
+            })
+        );
 
         // before the reconstitution of the domain object from the response we expect that no facets
         // are present
@@ -237,6 +243,12 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     public function canMarkUsedOptionAsSelected()
     {
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_used_facet.json');
+        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getActiveFacetValuesByName')->will(
+            $this->returnCallback(function($name) {
+                return $name == 'type' ? ['tx_solr_file'] : [];
+
+            })
+        );
 
         // before the reconstitution of the domain object from the response we expect that no facets
         // are present
@@ -274,6 +286,12 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     public function canGetConfiguredFacetNotInResponseAsUnavailableFacet()
     {
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_used_facet.json');
+        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getActiveFacetValuesByName')->will(
+            $this->returnCallback(function($name) {
+                return $name == 'type' ? ['pages'] : [];
+
+            })
+        );
 
         // before the reconstitution of the domain object from the response we expect that no facets
         // are present
@@ -312,6 +330,16 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     public function canGetTwoUsedFacetOptions()
     {
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_two_used_facets.json');
+        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getActiveFacetValuesByName')->will(
+            $this->returnCallback(function($name) {
+                if($name == 'mytitle') {
+                    return ['jpeg','kasper"s'];
+                } else {
+                    return [];
+                }
+
+            })
+        );
 
         // before the reconstitution of the domain object from the response we expect that no facets
         // are present
@@ -341,7 +369,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $firstOption = $facet1->getOptions()->getByPosition(0);
         $this->assertEquals('jpeg', $firstOption->getValue());
         $this->assertEquals(1, $firstOption->getCount());
-        $this->asserttrue($firstOption->getSelected());
+        $this->assertTrue($firstOption->getSelected());
     }
 
     /**
