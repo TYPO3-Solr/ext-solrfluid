@@ -71,7 +71,7 @@ class SearchUriBuilderTest extends UnitTest
         $this->extBaseUriBuilderMock->expects($this->once())->method('setUseCacheHash')->with(false)->will($this->returnValue($this->extBaseUriBuilderMock));
 
         $previousRequest =  new SearchRequest();
-        $this->searchUrlBuilder->getAddFacetOptionUri($previousRequest, 'foo', 'bar');
+        $this->searchUrlBuilder->getAddFacetValueUri($previousRequest, 'foo', 'bar');
     }
 
     /**
@@ -89,7 +89,7 @@ class SearchUriBuilderTest extends UnitTest
         $configurationMock = $this->getDumbMock(TypoScriptConfiguration::class);
         $configurationMock->expects($this->once())->method('getSearchFacetingFacetLinkUrlParametersAsArray')->will($this->returnValue(array('foo=bar')));
         $previousRequest =  new SearchRequest([], 1, 0, $configurationMock);
-        $result = $this->searchUrlBuilder->getAddFacetOptionUri($previousRequest, 'option', 'value');
+        $result = $this->searchUrlBuilder->getAddFacetValueUri($previousRequest, 'option', 'value');
 
         $this->assertEquals($result, 'filter=option%3Avalue&foo%3Dbar');
     }
@@ -105,13 +105,13 @@ class SearchUriBuilderTest extends UnitTest
         $this->extBaseUriBuilderMock->expects($this->once())->method('build')->will($this->returnValue(urlencode('tx_solr[filter][0]=###tx_solr:filter:0###')));
         $previousRequest =  new SearchRequest();
         $previousRequest->removeAllFacets();
-        $this->searchUrlBuilder->getAddFacetOptionUri($previousRequest, 'color', 'green');
+        $this->searchUrlBuilder->getAddFacetValueUri($previousRequest, 'color', 'green');
 
         $previousRequest->removeAllFacets();
-        $this->searchUrlBuilder->getAddFacetOptionUri($previousRequest, 'color', 'blue');
+        $this->searchUrlBuilder->getAddFacetValueUri($previousRequest, 'color', 'blue');
 
         $previousRequest->removeAllFacets();
-        $this->searchUrlBuilder->getAddFacetOptionUri($previousRequest, 'color', 'red');
+        $this->searchUrlBuilder->getAddFacetValueUri($previousRequest, 'color', 'red');
     }
 
 
@@ -156,6 +156,6 @@ class SearchUriBuilderTest extends UnitTest
         $expectedArguments = ['tx_solr' => ['filter' => []]];
         $this->extBaseUriBuilderMock->expects($this->once())->method('setArguments')->with($expectedArguments)->will($this->returnValue($this->extBaseUriBuilderMock));
         $this->extBaseUriBuilderMock->expects($this->once())->method('setUseCacheHash')->with(false)->will($this->returnValue($this->extBaseUriBuilderMock));
-        $this->searchUrlBuilder->getRemoveFacetOptionUri($previousRequest, 'type', 'pages');
+        $this->searchUrlBuilder->getRemoveFacetValueUri($previousRequest, 'type', 'pages');
     }
 }

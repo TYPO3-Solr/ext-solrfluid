@@ -48,7 +48,8 @@ class SortingTest extends UnitTest
     /**
      * @test
      */
-    public function setUp() {
+    public function setUp()
+    {
         $this->resultSetMock = $this->getDumbMock(SearchResultSet::class);
 
         $name = 'Price';
@@ -63,7 +64,8 @@ class SortingTest extends UnitTest
     /**
      * @test
      */
-    public function canNotCreateWhenInvalidDirectionIsPassed() {
+    public function canNotCreateWhenInvalidDirectionIsPassed()
+    {
         $this->setExpectedExceptionRegExp(\InvalidArgumentException::class);
         new Sorting($this->resultSetMock, 'Color', 'color_s', 'invalid direction', 'the color', false, false);
     }
@@ -71,35 +73,40 @@ class SortingTest extends UnitTest
     /**
      * @test
      */
-    public function canGetName() {
+    public function canGetName()
+    {
         $this->assertSame('Price', $this->sorting->getName(), 'Could not get name from sorting');
     }
 
     /**
      * @test
      */
-    public function canGetLabel() {
+    public function canGetLabel()
+    {
         $this->assertSame('the príce', $this->sorting->getLabel(), 'Could not get label from sorting');
     }
 
     /**
      * @test
      */
-    public function canGetField() {
+    public function canGetField()
+    {
         $this->assertSame('price_f', $this->sorting->getField(), 'Could not get field from sorting');
     }
 
     /**
      * @test
      */
-    public function canGetDirection() {
+    public function canGetDirection()
+    {
         $this->assertSame('asc', $this->sorting->getDirection(), 'Could not get direction');
     }
 
     /**
      * @test
      */
-    public function canGetOppositeDirection() {
+    public function canGetOppositeDirection()
+    {
         $this->assertSame('desc', $this->sorting->getOppositeDirection(), 'Could not get opposite direction');
 
         $descSorting = new Sorting($this->resultSetMock, 'Color', 'color_s', Sorting::DIRECTION_DESC, 'the color', false, false);
@@ -109,22 +116,24 @@ class SortingTest extends UnitTest
     /**
      * @test
      */
-    public function getGetIsAsDirection() {
+    public function getGetIsAsDirection()
+    {
         $this->assertTrue($this->sorting->getIsAscDirection(), 'Sorting direction was not handled as ascending');
     }
 
     /**
      * @test
      */
-    public function getGetIsDescDirection() {
+    public function getGetIsDescDirection()
+    {
         $this->assertFalse($this->sorting->getIsDescDirection(), 'Sorting should be indicated to not be descending');
     }
 
     /**
      * @test
      */
-    public function canGetIsResetOption() {
+    public function canGetIsResetOption()
+    {
         $this->assertFalse($this->sorting->getIsResetOption(), 'Sorting options should not be a reset option');
     }
-
 }

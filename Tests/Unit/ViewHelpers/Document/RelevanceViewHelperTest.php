@@ -61,7 +61,7 @@ class RelevanceViewHelperTest extends UnitTest
             'document' => $documentMock
         ];
         $renderingContextMock = $this->getDumbMock(RenderingContextInterface::class);
-        $score = RelevanceViewHelper::renderStatic($arguments, function() {}, $renderingContextMock);
+        $score = RelevanceViewHelper::renderStatic($arguments, function () {}, $renderingContextMock);
 
         $this->assertEquals(10.0, $score, 'Unexpected score');
     }

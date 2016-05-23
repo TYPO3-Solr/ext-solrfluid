@@ -75,7 +75,7 @@ class QueryGroupFacet extends AbstractFacet
      */
     public function addOption(Option $option)
     {
-        $this->options->addOption($option);
+        $this->options->add($option);
     }
 
     /**

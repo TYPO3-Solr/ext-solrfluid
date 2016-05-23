@@ -73,13 +73,13 @@ class SearchUriBuilder
     /**
      * @param SearchRequest $previousSearchRequest
      * @param $facetName
-     * @param $optionValue
+     * @param $facetValue
      * @return string
      */
-    public function getAddFacetOptionUri(SearchRequest $previousSearchRequest, $facetName, $optionValue)
+    public function getAddFacetValueUri(SearchRequest $previousSearchRequest, $facetName, $facetValue)
     {
         $persistentAndFacetArguments = $previousSearchRequest
-            ->getCopyForSubRequest()->addFacetValue($facetName, $optionValue)
+            ->getCopyForSubRequest()->addFacetValue($facetName, $facetValue)
             ->getAsArray();
 
         $additionalArguments = $this->getAdditionalArgumentsFromRequestConfiguration($previousSearchRequest);
@@ -92,13 +92,13 @@ class SearchUriBuilder
     /**
      * @param SearchRequest $previousSearchRequest
      * @param $facetName
-     * @param $optionValue
+     * @param $facetValue
      * @return string
      */
-    public function getRemoveFacetOptionUri(SearchRequest $previousSearchRequest, $facetName, $optionValue)
+    public function getRemoveFacetValueUri(SearchRequest $previousSearchRequest, $facetName, $facetValue)
     {
         $persistentAndFacetArguments = $previousSearchRequest
-            ->getCopyForSubRequest()->removeFacetValue($facetName, $optionValue)
+            ->getCopyForSubRequest()->removeFacetValue($facetName, $facetValue)
             ->getAsArray();
 
         $additionalArguments = [];

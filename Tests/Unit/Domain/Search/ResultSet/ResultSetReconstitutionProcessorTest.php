@@ -193,7 +193,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     {
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_used_facet.json');
         $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getActiveFacetValuesByName')->will(
-            $this->returnCallback(function($name) {
+            $this->returnCallback(function ($name) {
                 return $name == 'type' ? ['tx_solr_file'] : [];
 
             })
@@ -244,7 +244,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     {
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_used_facet.json');
         $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getActiveFacetValuesByName')->will(
-            $this->returnCallback(function($name) {
+            $this->returnCallback(function ($name) {
                 return $name == 'type' ? ['tx_solr_file'] : [];
 
             })
@@ -287,7 +287,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     {
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_used_facet.json');
         $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getActiveFacetValuesByName')->will(
-            $this->returnCallback(function($name) {
+            $this->returnCallback(function ($name) {
                 return $name == 'type' ? ['pages'] : [];
 
             })
@@ -331,9 +331,9 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     {
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_two_used_facets.json');
         $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getActiveFacetValuesByName')->will(
-            $this->returnCallback(function($name) {
-                if($name == 'mytitle') {
-                    return ['jpeg','kasper"s'];
+            $this->returnCallback(function ($name) {
+                if ($name == 'mytitle') {
+                    return ['jpeg', 'kasper"s'];
                 } else {
                     return [];
                 }

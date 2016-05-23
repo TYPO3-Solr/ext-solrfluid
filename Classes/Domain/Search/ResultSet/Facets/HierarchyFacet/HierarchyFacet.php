@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\HierarchyFacet;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -24,20 +24,20 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
-class OptionsFacet extends AbstractFacet
+class HierarchyFacet extends AbstractFacet
 {
-    const TYPE_OPTIONS = 'options';
+    const TYPE_HIERARCHY = 'hierarchy';
 
     /**
      * String
      * @var string
      */
-    protected static $type = self::TYPE_OPTIONS;
+    protected static $type = self::TYPE_HIERARCHY;
 
     /**
-     * @var OptionCollection
+     * @var NodeCollection
      */
-    protected $options;
+    protected $childNodes;
 
     /**
      * OptionsFacet constructor
@@ -51,31 +51,31 @@ class OptionsFacet extends AbstractFacet
     public function __construct(SearchResultSet $resultSet, $name, $field, $label = '', array $configuration = [])
     {
         parent::__construct($resultSet, $name, $field, $label, $configuration);
-        $this->options = new OptionCollection();
+        $this->childNodes = new NodeCollection();
     }
 
     /**
-     * @return OptionCollection
+     * @param Node $node
      */
-    public function getOptions()
+    public function addChildNode(Node $node)
     {
-        return $this->options;
+        $this->childNodes->add($node);
     }
 
     /**
-     * @param OptionCollection $options
+     * @param NodeCollection $nodes
      */
-    public function setOptions($options)
+    public function setChildNodes($nodes)
     {
-        $this->options = $options;
+        $this->childNodes = $nodes;
     }
 
     /**
-     * @param Option $option
+     * @return NodeCollection
      */
-    public function addOption(Option $option)
+    public function getChildNodes()
     {
-        $this->options->add($option);
+        return $this->childNodes;
     }
 
     /**
@@ -85,6 +85,6 @@ class OptionsFacet extends AbstractFacet
      */
     public function getPartialName()
     {
-        return !empty($this->configuration['partialName']) ? $this->configuration['partialName'] : 'Options';
+        return !empty($this->configuration['partialName']) ? $this->configuration['partialName'] : 'Hierarchy';
     }
 }

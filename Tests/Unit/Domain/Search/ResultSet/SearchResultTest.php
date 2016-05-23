@@ -27,7 +27,6 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet;
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResult;
 
-
 /**
  * Unit test case for the SearchResult.
  *
@@ -40,7 +39,8 @@ class SearchResultTest extends UnitTest
      */
     protected $searchResult;
 
-    public function setUp() {
+    public function setUp()
+    {
         $document = new \Apache_Solr_Document();
         $document->setField('id', 4711);
         $document->setField('score', 0.55);
@@ -55,49 +55,56 @@ class SearchResultTest extends UnitTest
     /**
      * @test
      */
-    public function canGetId() {
+    public function canGetId()
+    {
         $this->assertSame(4711, $this->searchResult->getId(), 'Could not get id from searchResult');
     }
 
     /**
      * @test
      */
-    public function canGetScore() {
+    public function canGetScore()
+    {
         $this->assertSame(0.55, $this->searchResult->getScore(), 'Could not get score from searchResult');
     }
 
     /**
      * @test
      */
-    public function canGetContent() {
+    public function canGetContent()
+    {
         $this->assertSame('foobar', $this->searchResult->getContent(), 'Could not get content from searchResult');
     }
 
     /**
      * @test
      */
-    public function canGetType() {
+    public function canGetType()
+    {
         $this->assertSame('pages', $this->searchResult->getType(), 'Could not get type from searchResult');
     }
 
     /**
      * @test
      */
-    public function canGetTitle() {
+    public function canGetTitle()
+    {
         $this->assertSame('The title', $this->searchResult->getTitle(), 'Could not get title from searchResult');
     }
 
     /**
      * @test
      */
-    public function canGetUrl() {
+    public function canGetUrl()
+    {
         $this->assertSame('://mytestdomain.com/test', $this->searchResult->getUrl(), 'Could not get url from searchResult');
     }
 
     /**
      * @test
      */
-    public function canGetIsElevated() {
+    public function canGetIsElevated()
+    {
         $this->assertSame(true, $this->searchResult->getIsElevated(), 'Could not get isElevated from searchResult');
     }
 }

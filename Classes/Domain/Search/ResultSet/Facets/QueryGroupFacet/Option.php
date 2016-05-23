@@ -13,6 +13,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroup
  *
  * The TYPO3 project - inspiring people to share!
 */
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItem;
 
 /**
  * Value object that represent an option of a queryGroup facet.
@@ -21,32 +22,8 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroup
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet
  */
-class Option
+class Option extends AbstractFacetItem
 {
-    /**
-     * @var QueryGroupFacet
-     */
-    protected $facet;
-
-    /**
-     * @var string
-     */
-    protected $label = '';
-
-    /**
-     * @var string
-     */
-    protected $value = '';
-
-    /**
-     * @var int
-     */
-    protected $count = 0;
-
-    /**
-     * @var bool
-     */
-    protected $selected = false;
 
     /**
      * @param QueryGroupFacet $facet
@@ -57,82 +34,6 @@ class Option
      */
     public function __construct(QueryGroupFacet $facet, $label = '', $value = '', $count = 0, $selected = false)
     {
-        $this->facet = $facet;
-        $this->label = $label;
-        $this->value = $value;
-        $this->count = $count;
-        $this->selected = $selected;
-    }
-
-    /**
-     * @param int $count
-     */
-    public function setCount($count)
-    {
-        $this->count = $count;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCount()
-    {
-        return $this->count;
-    }
-
-    /**
-     * @return QueryGroupFacet
-     */
-    public function getFacet()
-    {
-        return $this->facet;
-    }
-
-    /**
-     * @param string $label
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     * @param boolean $selected
-     */
-    public function setSelected($selected)
-    {
-        $this->selected = $selected;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getSelected()
-    {
-        return $this->selected;
-    }
-
-    /**
-     * @param string $value
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-    }
-
-    /**
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
+        parent::__construct($facet, $label, $value, $count, $selected);
     }
 }

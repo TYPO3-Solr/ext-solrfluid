@@ -33,6 +33,7 @@ class FacetParserRegistry implements SingletonInterface
      */
     protected $parsers = [
         'options' => OptionsFacet\OptionsFacetParser::class,
+        'hierarchy' => HierarchyFacet\HierarchyFacetParser::class,
         'queryGroup' => QueryGroupFacet\QueryGroupFacetParser::class,
     ];
 

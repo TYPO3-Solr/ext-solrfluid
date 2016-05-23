@@ -15,11 +15,14 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet;
  */
 
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\Option;
-use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\AbstractUriViewHelper;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\Uri\SearchUriBuilder;
+use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractTagBasedViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 
@@ -30,26 +33,23 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link
  */
-class AbstractOptionViewHelper extends AbstractUriViewHelper
+class RemoveFacetItemViewHelper extends AbstractValueViewHelper implements CompilableInterface
 {
 
     /**
-     * @param $arguments
+     * @param array $arguments
+     * @param callable $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
      * @return string
      * @throws \InvalidArgumentException
      */
-    protected static function getOptionValueFromArguments($arguments)
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
-        if (isset($arguments['option'])) {
-            /** @var  $option Option */
-            $option = $arguments['option'];
-            $optionValue = $option->getValue();
-        } elseif (isset($arguments['optionValue'])) {
-            $optionValue = $arguments['optionValue'];
-        } else {
-            throw new \InvalidArgumentException('No option was passed, please pass either option or optionValue');
-        }
-
-        return $optionValue;
+        /** @var  $facet OptionsFacet */
+        $facet = $arguments['facet'];
+        $itemValue = self::getValueFromArguments($arguments);
+        $previousRequest = $facet->getResultSet()->getUsedSearchRequest();
+        $uri = self::getSearchUriBuilder()->getRemoveFacetValueUri($previousRequest, $facet->getName(), $itemValue);
+        return $uri;
     }
 }

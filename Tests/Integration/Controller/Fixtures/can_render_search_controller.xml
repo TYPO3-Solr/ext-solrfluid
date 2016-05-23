@@ -392,6 +392,43 @@
                                         3 < .2
                                     }
                                 }
+
+
+                                pid {
+                                    label = Uid Range
+                                    field = uid
+
+                                    type = queryGroup
+                                    queryGroup {
+                                        small {
+                                            query = [* TO 2]
+                                        }
+                                        medium {
+                                            query = [2 TO 5]
+                                        }
+
+                                        large {
+                                            query = [5 TO *]
+                                        }
+                                    }
+
+                                    renderingInstruction = CASE
+                                    renderingInstruction {
+                                        key.field = optionValue
+
+                                        default = TEXT
+                                        default.field = optionValue
+
+                                        small = TEXT
+                                        small.value = Small (1 & 2)
+
+                                        medium = TEXT
+                                        medium.value = Medium (2 to 5)
+
+                                        large = TEXT
+                                        large.value = Large (5 to *)
+                                    }
+                                }
                             }
 
                             // available place holders: @facetValue, @facetName, @facetLabel, @facetText

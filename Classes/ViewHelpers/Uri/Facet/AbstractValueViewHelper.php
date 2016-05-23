@@ -16,13 +16,12 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet;
 
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItem;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\Option;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacet;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\Uri\SearchUriBuilder;
-use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
-use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractTagBasedViewHelper;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\AbstractUriViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 
@@ -33,22 +32,21 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link
  */
-class RemoveOptionViewHelper extends AbstractOptionViewHelper implements CompilableInterface
+class AbstractValueViewHelper extends AbstractUriViewHelper
 {
-
     /**
-     * @param OptionsFacet $facet
-     * @param Option $option
-     * @param string $optionValue
+     * @param AbstractFacet $facet
+     * @param AbstractFacetItem $facetItem
+     * @param string $facetItemValue
      * @return string
      */
-    public function render($facet, $option = null, $optionValue = null)
+    public function render($facet, $facetItem = null, $facetItemValue = null)
     {
-        return self::renderStatic(
+        return static::renderStatic(
             array(
                 'facet' => $facet,
-                'option' => $option,
-                'optionValue' => $optionValue
+                'facetItem' => $facetItem,
+                'facetItemValue' => $facetItemValue
             ),
             $this->buildRenderChildrenClosure(),
             $this->renderingContext
@@ -56,19 +54,22 @@ class RemoveOptionViewHelper extends AbstractOptionViewHelper implements Compila
     }
 
     /**
-     * @param array $arguments
-     * @param callable $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
+     * @param $arguments
      * @return string
      * @throws \InvalidArgumentException
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
+    protected static function getValueFromArguments($arguments)
     {
-        /** @var  $facet OptionsFacet */
-        $facet = $arguments['facet'];
-        $optionValue = self::getOptionValueFromArguments($arguments);
-        $previousRequest = $facet->getResultSet()->getUsedSearchRequest();
-        $uri = self::getSearchUriBuilder()->getRemoveFacetOptionUri($previousRequest, $facet->getName(), $optionValue);
-        return $uri;
+        if (isset($arguments['facetItem'])) {
+            /** @var  $facetItem AbstractFacetItem */
+            $facetItem = $arguments['facetItem'];
+            $facetValue = $facetItem->getValue();
+        } elseif (isset($arguments['facetItemValue'])) {
+            $facetValue = $arguments['facetItemValue'];
+        } else {
+            throw new \InvalidArgumentException('No facetItem was passed, please pass either facetItem or facetItemValue');
+        }
+
+        return $facetValue;
     }
 }

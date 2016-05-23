@@ -65,7 +65,7 @@ class RelevanceViewHelper extends AbstractViewHelper implements CompilableInterf
         $maximumScore = $document->__solr_grouping_groupMaximumScore ? : $resultSet->getUsedSearch()->getMaximumResultScore();
         $content = 0;
 
-        if($maximumScore <= 0) {
+        if ($maximumScore <= 0) {
             return $content;
         }
 

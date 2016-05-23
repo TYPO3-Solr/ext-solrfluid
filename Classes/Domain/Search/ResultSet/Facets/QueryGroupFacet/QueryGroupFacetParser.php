@@ -27,12 +27,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class QueryGroupFacetParser extends AbstractFacetParser
 {
-    /**
-     * Static array to cache the extracted options by fieldName
-     *
-     * @var array
-     */
-    protected static $usedOptionsByFieldName;
 
     /**
      * @param SearchResultSet $resultSet

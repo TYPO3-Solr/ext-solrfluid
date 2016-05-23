@@ -39,8 +39,9 @@ class SolrControllerContextTest extends UnitTest
      */
     protected $controllerContext = null;
 
-    public function setUp() {
-       $this->controllerContext = new SolrControllerContext();
+    public function setUp()
+    {
+        $this->controllerContext = new SolrControllerContext();
     }
 
     /**
@@ -48,7 +49,7 @@ class SolrControllerContextTest extends UnitTest
      */
     public function canSetTypoScriptConfiguration()
     {
-            /** @var TypoScriptConfiguration $typoScriptConfigurationMock */
+        /** @var TypoScriptConfiguration $typoScriptConfigurationMock */
         $typoScriptConfigurationMock = $this->getDumbMock(TypoScriptConfiguration::class);
         $this->controllerContext->setTypoScriptConfiguration($typoScriptConfigurationMock);
         $this->assertSame($this->controllerContext->getTypoScriptConfiguration(), $typoScriptConfigurationMock, 'Can not get and set TypoScriptConfiguration');

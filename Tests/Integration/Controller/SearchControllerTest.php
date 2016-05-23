@@ -366,6 +366,29 @@ class SearchControllerTest extends IntegrationTest
     /**
      * @test
      */
+    public function canRenderQueryGroupFacet()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = '*';
+
+        // since we overwrite the configuration in the testcase from outside we want to avoid that it will be resetted
+        $this->searchController->setResetConfigurationBeforeInitialize(false);
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $resultPage1 = $this->searchResponse->getContent();
+
+        $this->assertContains('Small (1 &amp; 2)', $resultPage1, 'Response did not contain expected small option of query facet');
+        $this->assertContains('Medium (2 to 5)', $resultPage1, 'Response did not contain expected medium option of query facet');
+        $this->assertContains('Large (5 to *)', $resultPage1, 'Response did not contain expected large option of query facet');
+    }
+
+    /**
+     * @test
+     */
     public function canDefineAManualSortOrder()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');

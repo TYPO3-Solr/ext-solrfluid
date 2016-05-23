@@ -13,6 +13,8 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -83,5 +85,20 @@ abstract class AbstractFacetParser implements FacetParserInterface
             $facetConfiguration['renderingInstruction'],
             $facetConfiguration['renderingInstruction.']
         );
+    }
+
+
+    /**
+     * Retrieves the active facetValue for a facet from the search request.
+     * @param SearchResultSet $resultSet
+     * @param string $facetName
+     * @return array
+     */
+    protected function getActiveFacetOptionValuesFromRequest(SearchResultSet $resultSet, $facetName)
+    {
+        $activeFacetValues = $resultSet->getUsedSearchRequest()->getActiveFacetValuesByName($facetName);
+        $activeFacetValues = is_array($activeFacetValues) ? $activeFacetValues : [];
+
+        return $activeFacetValues;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\HierarchyFacet;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -13,7 +13,6 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroup
  *
  * The TYPO3 project - inspiring people to share!
  */
-
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItemCollection;
 
 /**
@@ -23,6 +22,29 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetIte
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
-class OptionCollection extends AbstractFacetItemCollection
+class NodeCollection extends AbstractFacetItemCollection
 {
+    /**
+     * @var array
+     */
+    protected static $nodesByKey;
+
+    /**
+     * @param Node $node
+     * @return NodeCollection
+     */
+    public function add($node)
+    {
+        self::$nodesByKey[$node->getKey()] = $node;
+        return parent::add($node);
+    }
+
+    /**
+     * @param string $key
+     * @return Node|null
+     */
+    public function getByKey($key)
+    {
+        return isset(self::$nodesByKey[$key]) ? self::$nodesByKey[$key] : null;
+    }
 }

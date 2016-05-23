@@ -84,8 +84,9 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper implements Comp
     /**
      * @return ScoreCalculationService
      */
-    protected static function getScoreService() {
-        if(isset(self::$scoreService)) {
+    protected static function getScoreService()
+    {
+        if (isset(self::$scoreService)) {
             return self::$scoreService;
         }
 

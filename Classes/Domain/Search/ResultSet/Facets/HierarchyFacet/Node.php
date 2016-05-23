@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\HierarchyFacet;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -22,18 +22,59 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetIte
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
-class Option extends AbstractFacetItem
+class Node extends AbstractFacetItem
 {
 
     /**
-     * @param OptionsFacet $facet
+     * @var NodeCollection
+     */
+    protected $childNodes;
+
+    /**
+     * @var Node
+     */
+    protected $parentNode;
+
+    /**
+     * @var integer
+     */
+    protected $depth;
+
+    /**
+     * @var string
+     */
+    protected $key;
+
+    /**
+     * @param HierarchyFacet $facet
+     * @param Node $parentNode
+     * @param string $key
      * @param string $label
      * @param string $value
      * @param int $count
      * @param bool $selected
      */
-    public function __construct(OptionsFacet $facet, $label = '', $value = '', $count = 0, $selected = false)
+    public function __construct(HierarchyFacet $facet, $parentNode = null, $key = '', $label = '', $value = '', $count = 0, $selected = false)
     {
         parent::__construct($facet, $label, $value, $count, $selected);
+        $this->childNodes = new NodeCollection();
+        $this->parentNode = $parentNode;
+        $this->key = $key;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param Node $node
+     */
+    public function addChildNode(Node $node)
+    {
+        $this->childNodes->add($node);
     }
 }

@@ -33,6 +33,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\Opt
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\Uri\SearchUriBuilder;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Facet\Area\GroupViewHelper;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet\AddFacetItemViewHelper;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet\AddOptionViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
@@ -43,35 +44,33 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 /**
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  */
-class AddOptionViewHelperTest extends UnitTest
+class AddFacetItemViewHelperTest extends UnitTest
 {
 
 
     /**
      * @test
      */
-    public function addOptionWillUseUriBuilderAsExpected()
+    public function addFacetItemWillUseUriBuilderAsExpected()
     {
-
         $searchRequest = new SearchRequest();
         $searchResultSetMock = $this->getDumbMock(SearchResultSet::class);
         $searchResultSetMock->expects($this->once())->method('getUsedSearchRequest')->will($this->returnValue($searchRequest));
 
-        $facet = new OptionsFacet($searchResultSetMock,'Color','color');
+        $facet = new OptionsFacet($searchResultSetMock, 'Color', 'color');
         $option = new Option($facet, 'Red', 'red', 4);
         $facet->addOption($option);
 
         $renderContextMock = $this->getDumbMock(RenderingContextInterface::class);
-        $viewHelper = new AddOptionViewHelper();
+        $viewHelper = new AddFacetItemViewHelper();
         $viewHelper->setRenderingContext($renderContextMock);
 
         $searchUriBuilderMock = $this->getDumbMock(SearchUriBuilder::class);
 
             // we expected that the getAddFacetOptionUri will be called on the searchUriBuilder in the end.
-        $searchUriBuilderMock->expects($this->once())->method('getAddFacetOptionUri')->with($searchRequest, 'Color', 'red');
+        $searchUriBuilderMock->expects($this->once())->method('getAddFacetValueUri')->with($searchRequest, 'Color', 'red');
         $viewHelper->injectSearchUriBuilder($searchUriBuilderMock);
 
         $viewHelper->render($facet, $option);
-
     }
 }

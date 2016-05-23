@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\HierarchyFacet;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -24,7 +24,7 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 /**
  * Class OptionsFacetParser
  */
-class OptionsFacetParser extends AbstractFacetParser
+class HierarchyFacetParser extends AbstractFacetParser
 {
     /**
      * @param SearchResultSet $resultSet
@@ -49,9 +49,9 @@ class OptionsFacetParser extends AbstractFacetParser
             return null;
         }
 
-        /** @var $facet OptionsFacet */
+        /** @var $facet HierarchyFacet */
         $facet = GeneralUtility::makeInstance(
-            OptionsFacet::class,
+            HierarchyFacet::class,
             $resultSet,
             $facetName,
             $fieldName,
@@ -64,37 +64,32 @@ class OptionsFacetParser extends AbstractFacetParser
         $facet->setIsAvailable($hasOptionsInResponse);
 
         $optionsToCreate = $this->getMergedOptionsFromRequestAndResponse($optionsFromSolrResponse, $optionsFromRequest);
-        foreach ($optionsToCreate as $optionsValue => $count) {
-            $isOptionsActive = in_array($optionsValue, $optionsFromRequest);
-            $label = $this->getLabelFromRenderingInstructions($optionsValue, $count, $facetName, $facetConfiguration);
-            $facet->addOption(new Option($facet, $label, $optionsValue, $count, $isOptionsActive));
-        }
+        foreach ($optionsToCreate as $value => $count) {
+            $isOptionsActive = in_array($value, $optionsFromRequest);
 
-        // after all options have been created we apply a manualSortOrder if configured
-        // the sortBy (lex,..) is done by the solr server and triggered by the query, therefore it does not
-        // need to be handled in the frontend.
-        $facet = $this->applyManualSortOrder($facet, $facetConfiguration);
+            $delimiterPosition = strpos($value, '-');
+            $depth = intval(substr($value, 0, $delimiterPosition));
+
+            $path = substr($value, $delimiterPosition + 1);
+            $path = str_replace('\/', '@@@', $path);
+            $segments = explode('/', $path);
+            $segments = array_map(function ($item) { return str_replace('@@@', '/', $item);}, $segments);
+
+            $key = array_pop($segments);
+            $parentKey = array_pop($segments);
+            $label = $this->getLabelFromRenderingInstructions($value, $count, $facetName, $facetConfiguration);
+
+            $parentNode = $facet->getChildNodes()->getByKey($parentKey);
+
+            if ($parentNode === null) {
+                $facet->addChildNode(new Node($facet, $parentNode, $key, $label, $value, $count, $isOptionsActive));
+            } else {
+                $parentNode->addChildNode(new Node($facet, $parentNode, $key, $label, $value, $count, $isOptionsActive));
+            }
+        }
 
         return $facet;
     }
-
-    /**
-     * @param OptionsFacet $facet
-     * @param array $facetConfiguration
-     * @return OptionsFacet
-     */
-    protected function applyManualSortOrder($facet, array $facetConfiguration)
-    {
-        if (!isset($facetConfiguration['manualSortOrder'])) {
-            return $facet;
-        }
-        $fields = GeneralUtility::trimExplode(',', $facetConfiguration['manualSortOrder']);
-        $sortedOptions = $facet->getOptions()->getManualSortedCopy($fields);
-        $facet->setOptions($sortedOptions);
-
-        return $facet;
-    }
-
 
     /**
      * @param $optionsFromSolrResponse
