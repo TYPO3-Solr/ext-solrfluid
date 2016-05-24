@@ -161,12 +161,19 @@ abstract class AbstractBaseController extends ActionController
             $flexFormConfiguration = $flexFormService->convertFlexFormContentToArray($this->contentObjectRenderer->data['pi_flexform']);
             $flexFormConfiguration = $typoScriptService->convertPlainArrayToTypoScriptArray($flexFormConfiguration);
 
+            if(isset($flexFormConfiguration['search.']['query.']['filter'])) {
+                $stringValue = $flexFormConfiguration['search.']['query.']['filter'];
+                unset($flexFormConfiguration['search.']['query.']['filter']);
+                $flexFormConfiguration['search.']['query.']['filter.'] = GeneralUtility::trimExplode('|', $stringValue);
+            }
+
             $this->solrConfigurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($flexFormConfiguration, true, false);
         }
 
         parent::initializeAction();
         $this->typoScriptFrontendController = $GLOBALS['TSFE'];
         $this->typoScriptConfiguration = $this->solrConfigurationManager->getTypoScriptConfiguration();
+
 
         // Make sure plugin.tx_solr.settings are available in the view as {settings}
         $this->settings = $typoScriptService->convertTypoScriptArrayToPlainArray(
