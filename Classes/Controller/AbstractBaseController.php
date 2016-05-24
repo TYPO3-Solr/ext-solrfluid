@@ -20,10 +20,10 @@ use ApacheSolrForTypo3\Solr\Search;
 use ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
+use ApacheSolrForTypo3\Solrfluid\Service\ConfigurationService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Service\FlexFormService;
 use TYPO3\CMS\Extbase\Service\TypoScriptService;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -171,20 +171,11 @@ abstract class AbstractBaseController extends ActionController
             );
         }
 
-        // Override configuration with flexform settings
-        if (!empty($this->contentObjectRenderer->data['pi_flexform'])) {
-            $flexFormService = $this->objectManager->get(FlexFormService::class);
-            $flexFormConfiguration = $flexFormService->convertFlexFormContentToArray($this->contentObjectRenderer->data['pi_flexform']);
-            $flexFormConfiguration = $typoScriptService->convertPlainArrayToTypoScriptArray($flexFormConfiguration);
-
-            if (isset($flexFormConfiguration['search.']['query.']['filter'])) {
-                $stringValue = $flexFormConfiguration['search.']['query.']['filter'];
-                unset($flexFormConfiguration['search.']['query.']['filter']);
-                $flexFormConfiguration['search.']['query.']['filter.'] = GeneralUtility::trimExplode('|', $stringValue);
-            }
-
-            $this->solrConfigurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($flexFormConfiguration, true, false);
-        }
+        $flexFormConfiguration = $this->objectManager->get(ConfigurationService::class)
+            ->overrideConfigurationWithFlexFormSettings(
+                $this->contentObjectRenderer->data['pi_flexform'],
+                $this->solrConfigurationManager
+            );
 
         parent::initializeAction();
         $this->typoScriptFrontendController = $GLOBALS['TSFE'];
