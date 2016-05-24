@@ -15,6 +15,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFac
  */
 
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItemCollection;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 
 /**
@@ -86,5 +87,15 @@ class OptionsFacet extends AbstractFacet
     public function getPartialName()
     {
         return !empty($this->configuration['partialName']) ? $this->configuration['partialName'] : 'Options';
+    }
+
+    /**
+     * The implementation of this method should return a "flatten" collection of all items.
+     *
+     * @return AbstractFacetItemCollection
+     */
+    public function getAllFacetItems()
+    {
+        return $this->options;
     }
 }

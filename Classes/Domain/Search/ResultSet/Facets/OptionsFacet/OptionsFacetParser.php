@@ -38,7 +38,7 @@ class OptionsFacetParser extends AbstractFacetParser
         $fieldName = $facetConfiguration['field'];
         $label = $this->getPlainLabelOrApplyCObject($facetConfiguration);
         $optionsFromSolrResponse = isset($response->facet_counts->facet_fields->{$fieldName}) ? get_object_vars($response->facet_counts->facet_fields->{$fieldName}) : [];
-        $optionsFromRequest = $this->getActiveFacetOptionValuesFromRequest($resultSet, $facetName);
+        $optionsFromRequest = $this->getActiveFacetValuesFromRequest($resultSet, $facetName);
 
         $hasOptionsInResponse = !empty($optionsFromSolrResponse);
         $hasSelectedOptionsInRequest = count($optionsFromRequest) > 0;
@@ -63,7 +63,7 @@ class OptionsFacetParser extends AbstractFacetParser
         $facet->setIsUsed($hasActiveOptions);
         $facet->setIsAvailable($hasOptionsInResponse);
 
-        $optionsToCreate = $this->getMergedOptionsFromRequestAndResponse($optionsFromSolrResponse, $optionsFromRequest);
+        $optionsToCreate = $this->getMergedFacetValueFromSearchRequestAndSolrResponse($optionsFromSolrResponse, $optionsFromRequest);
         foreach ($optionsToCreate as $optionsValue => $count) {
             $isOptionsActive = in_array($optionsValue, $optionsFromRequest);
             $label = $this->getLabelFromRenderingInstructions($optionsValue, $count, $facetName, $facetConfiguration);
@@ -93,24 +93,5 @@ class OptionsFacetParser extends AbstractFacetParser
         $facet->setOptions($sortedOptions);
 
         return $facet;
-    }
-
-
-    /**
-     * @param $optionsFromSolrResponse
-     * @param $optionsFromRequest
-     * @return mixed
-     */
-    protected function getMergedOptionsFromRequestAndResponse($optionsFromSolrResponse, $optionsFromRequest)
-    {
-        $optionsToCreate = $optionsFromSolrResponse;
-
-        foreach ($optionsFromRequest as $optionFromRequest) {
-            // if we have options in the request that have not been in the response we add them with a count of 0
-            if (!isset($optionsToCreate[$optionFromRequest])) {
-                $optionsToCreate[$optionFromRequest] = 0;
-            }
-        }
-        return $optionsToCreate;
     }
 }

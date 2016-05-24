@@ -91,9 +91,9 @@ class QueryGroupFacetParser extends AbstractFacetParser
     }
 
     /**
-     * @param OptionsFacet $facet
+     * @param QueryGroupFacet $facet
      * @param array $facetConfiguration
-     * @return OptionsFacet
+     * @return QueryGroupFacet
      */
     protected function applyManualSortOrder($facet, array $facetConfiguration)
     {

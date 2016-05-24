@@ -198,4 +198,11 @@ abstract class AbstractFacet
     {
         return isset($this->configuration['groupName']) ? $this->configuration['groupName'] : 'main';
     }
+
+    /**
+     * The implementation of this method should return a "flatten" collection of all items.
+     *
+     * @return AbstractFacetItemCollection
+     */
+    abstract public function getAllFacetItems();
 }

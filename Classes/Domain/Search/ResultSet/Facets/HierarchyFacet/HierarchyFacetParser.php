@@ -30,7 +30,7 @@ class HierarchyFacetParser extends AbstractFacetParser
      * @param SearchResultSet $resultSet
      * @param string $facetName
      * @param array $facetConfiguration
-     * @return AbstractFacet|null
+     * @return HierarchyFacet|null
      */
     public function parse(SearchResultSet $resultSet, $facetName, array $facetConfiguration)
     {
@@ -38,7 +38,7 @@ class HierarchyFacetParser extends AbstractFacetParser
         $fieldName = $facetConfiguration['field'];
         $label = $this->getPlainLabelOrApplyCObject($facetConfiguration);
         $optionsFromSolrResponse = isset($response->facet_counts->facet_fields->{$fieldName}) ? get_object_vars($response->facet_counts->facet_fields->{$fieldName}) : [];
-        $optionsFromRequest = $this->getActiveFacetOptionValuesFromRequest($resultSet, $facetName);
+        $optionsFromRequest = $this->getActiveFacetValuesFromRequest($resultSet, $facetName);
 
         $hasOptionsInResponse = !empty($optionsFromSolrResponse);
         $hasSelectedOptionsInRequest = count($optionsFromRequest) > 0;
@@ -50,62 +50,44 @@ class HierarchyFacetParser extends AbstractFacetParser
         }
 
         /** @var $facet HierarchyFacet */
-        $facet = GeneralUtility::makeInstance(
-            HierarchyFacet::class,
-            $resultSet,
-            $facetName,
-            $fieldName,
-            $label,
-            $facetConfiguration
-        );
+        $facet = GeneralUtility::makeInstance(HierarchyFacet::class, $resultSet, $facetName, $fieldName, $label, $facetConfiguration);
 
         $hasActiveOptions = count($optionsFromRequest) > 0;
         $facet->setIsUsed($hasActiveOptions);
+
         $facet->setIsAvailable($hasOptionsInResponse);
 
-        $optionsToCreate = $this->getMergedOptionsFromRequestAndResponse($optionsFromSolrResponse, $optionsFromRequest);
-        foreach ($optionsToCreate as $value => $count) {
-            $isOptionsActive = in_array($value, $optionsFromRequest);
+        $nodesToCreate = $this->getMergedFacetValueFromSearchRequestAndSolrResponse($optionsFromSolrResponse, $optionsFromRequest);
 
+        foreach ($nodesToCreate as $value => $count) {
+            $isActive = in_array($value, $optionsFromRequest);
             $delimiterPosition = strpos($value, '-');
-            $depth = intval(substr($value, 0, $delimiterPosition));
-
             $path = substr($value, $delimiterPosition + 1);
-            $path = str_replace('\/', '@@@', $path);
-            $segments = explode('/', $path);
-            $segments = array_map(function ($item) { return str_replace('@@@', '/', $item);}, $segments);
+            $pathArray = $this->getPathAsArray($path);
+            $key = array_pop($pathArray);
+            $parentKey = array_pop($pathArray);
+            $value = '/' . $path;
+            $label = $this->getLabelFromRenderingInstructions($key, $count, $facetName, $facetConfiguration);
 
-            $key = array_pop($segments);
-            $parentKey = array_pop($segments);
-            $label = $this->getLabelFromRenderingInstructions($value, $count, $facetName, $facetConfiguration);
-
-            $parentNode = $facet->getChildNodes()->getByKey($parentKey);
-
-            if ($parentNode === null) {
-                $facet->addChildNode(new Node($facet, $parentNode, $key, $label, $value, $count, $isOptionsActive));
-            } else {
-                $parentNode->addChildNode(new Node($facet, $parentNode, $key, $label, $value, $count, $isOptionsActive));
-            }
+            $facet->createNode($parentKey, $key, $label, $value, $count, $isActive);
         }
 
         return $facet;
     }
 
     /**
-     * @param $optionsFromSolrResponse
-     * @param $optionsFromRequest
-     * @return mixed
+     * This method is used to get the path array from a hierarchical facet. It substitutes escaped slashes to keep them
+     * when they are used inside a facetValue.
+     *
+     * @param string $path
+     * @return array
      */
-    protected function getMergedOptionsFromRequestAndResponse($optionsFromSolrResponse, $optionsFromRequest)
+    protected function getPathAsArray($path)
     {
-        $optionsToCreate = $optionsFromSolrResponse;
-
-        foreach ($optionsFromRequest as $optionFromRequest) {
-            // if we have options in the request that have not been in the response we add them with a count of 0
-            if (!isset($optionsToCreate[$optionFromRequest])) {
-                $optionsToCreate[$optionFromRequest] = 0;
-            }
-        }
-        return $optionsToCreate;
+        $path = str_replace('\/', '@@@', $path);
+        $segments = explode('/', $path);
+        return array_map(function ($item) {
+            return str_replace('@@@', '/', $item);
+        }, $segments);
     }
 }

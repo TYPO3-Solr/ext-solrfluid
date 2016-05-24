@@ -77,4 +77,12 @@ class Node extends AbstractFacetItem
     {
         $this->childNodes->add($node);
     }
+
+    /**
+     * @return NodeCollection
+     */
+    public function getChildNodes()
+    {
+        return $this->childNodes;
+    }
 }

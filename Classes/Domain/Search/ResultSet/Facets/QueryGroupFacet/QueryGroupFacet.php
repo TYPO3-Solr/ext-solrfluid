@@ -87,4 +87,14 @@ class QueryGroupFacet extends AbstractFacet
     {
         return !empty($this->configuration['partialName']) ? $this->configuration['partialName'] : 'Options';
     }
+
+    /**
+     * The implementation of this method should return a "flatten" collection of all items.
+     *
+     * @return OptionCollection
+     */
+    public function getAllFacetItems()
+    {
+        return $this->options;
+    }
 }

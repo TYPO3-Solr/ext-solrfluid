@@ -4,20 +4,20 @@
       data-namespace-typo3-fluid="true"
 >
 
+	<f:section name="hierarchyTree">
+		<f:for each="{node.childNodes}" as="childNode" iteration="iteration">
+			<li class="facet-option{f:if(condition:'{iteration.index} > 9', then:' tx-solr-facet-hidden')}">
+				+ <a class="facet" href="{s:uri.facet.addFacetItem(facet: facet, facetItem: childNode)}">{childNode.label}</a> <span class="facet-result-count">({childNode.count})</span>
+			</li>
+			<f:if condition="{childNode.childNodes}">
+				<li><ul><f:render section="hierarchyTree" arguments="{node: childNode, facet: facet}" /></ul></li>
+			</f:if>
+		</f:for>
+	</f:section>
+
     <h5 class="facet-label">{facet.label}</h5>
     <ul class="facet-option-list fluidfacet">
-        <f:for each="{facet.childNodes}" as="node" iteration="iteration">
-            <li class="facet-option{f:if(condition:'{iteration.index} > 9', then:' tx-solr-facet-hidden')}">
-				+ <a class="facet" href="{s:uri.facet.addFacetItem(facet: facet, facetItem: node)}">{node.label}</a> <span class="facet-result-count">({node.count})</span>
-            </li>
-        </f:for>
-        <f:if condition="{facet.options -> f:count()} > 10">
-            <li>
-                <a href="#" class="tx-solr-facet-show-all" data-label-more="{s:translate(key:'faceting_showMore', extensionName:'solr')}" data-label-less="{s:translate(key:'faceting_showFewer', extensionName:'solr')}">
-                    <s:translate key="faceting_showMore" extensionName="solr">Show more</s:translate>
-                </a>
-            </li>
-        </f:if>
+		<f:render section="hierarchyTree" arguments="{node: facet, facet: facet}" />
     </ul>
 
 </html>

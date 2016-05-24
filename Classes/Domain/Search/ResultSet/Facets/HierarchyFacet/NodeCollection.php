@@ -24,10 +24,6 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetIte
  */
 class NodeCollection extends AbstractFacetItemCollection
 {
-    /**
-     * @var array
-     */
-    protected static $nodesByKey;
 
     /**
      * @param Node $node
@@ -35,16 +31,15 @@ class NodeCollection extends AbstractFacetItemCollection
      */
     public function add($node)
     {
-        self::$nodesByKey[$node->getKey()] = $node;
         return parent::add($node);
     }
 
     /**
-     * @param string $key
-     * @return Node|null
+     * @param int $position
+     * @return Node
      */
-    public function getByKey($key)
+    public function getByPosition($position)
     {
-        return isset(self::$nodesByKey[$key]) ? self::$nodesByKey[$key] : null;
+        return parent::getByPosition($position);
     }
 }

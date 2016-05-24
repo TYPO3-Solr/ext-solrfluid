@@ -94,11 +94,30 @@ abstract class AbstractFacetParser implements FacetParserInterface
      * @param string $facetName
      * @return array
      */
-    protected function getActiveFacetOptionValuesFromRequest(SearchResultSet $resultSet, $facetName)
+    protected function getActiveFacetValuesFromRequest(SearchResultSet $resultSet, $facetName)
     {
         $activeFacetValues = $resultSet->getUsedSearchRequest()->getActiveFacetValuesByName($facetName);
         $activeFacetValues = is_array($activeFacetValues) ? $activeFacetValues : [];
 
         return $activeFacetValues;
+    }
+
+
+    /**
+     * @param array $facetValuesFromSolrResponse
+     * @param array $facetValuesFromSearchRequest
+     * @return mixed
+     */
+    protected function getMergedFacetValueFromSearchRequestAndSolrResponse($facetValuesFromSolrResponse, $facetValuesFromSearchRequest)
+    {
+        $facetValueItemsToCreate = $facetValuesFromSolrResponse;
+
+        foreach ($facetValuesFromSearchRequest as $valueFromRequest) {
+            // if we have options in the request that have not been in the response we add them with a count of 0
+            if (!isset($facetValueItemsToCreate[$valueFromRequest])) {
+                $facetValueItemsToCreate[$valueFromRequest] = 0;
+            }
+        }
+        return $facetValueItemsToCreate;
     }
 }

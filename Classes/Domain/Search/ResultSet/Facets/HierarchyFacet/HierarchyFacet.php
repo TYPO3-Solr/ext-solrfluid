@@ -15,6 +15,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\HierarchyF
  */
 
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItemCollection;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 
 /**
@@ -40,6 +41,16 @@ class HierarchyFacet extends AbstractFacet
     protected $childNodes;
 
     /**
+     * @var NodeCollection
+     */
+    protected $allNodes;
+
+    /**
+     * @var array
+     */
+    protected $nodesByKey = [];
+
+    /**
      * OptionsFacet constructor
      *
      * @param SearchResultSet $resultSet
@@ -52,6 +63,7 @@ class HierarchyFacet extends AbstractFacet
     {
         parent::__construct($resultSet, $name, $field, $label, $configuration);
         $this->childNodes = new NodeCollection();
+        $this->allNodes = new NodeCollection();
     }
 
     /**
@@ -63,19 +75,37 @@ class HierarchyFacet extends AbstractFacet
     }
 
     /**
-     * @param NodeCollection $nodes
-     */
-    public function setChildNodes($nodes)
-    {
-        $this->childNodes = $nodes;
-    }
-
-    /**
      * @return NodeCollection
      */
     public function getChildNodes()
     {
         return $this->childNodes;
+    }
+
+    /**
+     * Creates a new node on the right position with the right parent node.
+     *
+     * @param string  $parentKey
+     * @param string $key
+     * @param string $label
+     * @param string $value
+     * @param integer $count
+     * @param boolean $selected
+     */
+    public function createNode($parentKey, $key, $label, $value, $count, $selected)
+    {
+        /** @var $parentNode Node|null */
+        $parentNode = isset($this->nodesByKey[$parentKey]) ? $this->nodesByKey[$parentKey] : null;
+        $node = new Node($this, $parentNode, $key, $label, $value, $count, $selected);
+        $this->nodesByKey[$key] = $node;
+
+        if ($parentNode === null) {
+            $this->addChildNode($node);
+        } else {
+            $parentNode->addChildNode($node);
+        }
+
+        $this->allNodes->add($node);
     }
 
     /**
@@ -86,5 +116,15 @@ class HierarchyFacet extends AbstractFacet
     public function getPartialName()
     {
         return !empty($this->configuration['partialName']) ? $this->configuration['partialName'] : 'Hierarchy';
+    }
+
+    /**
+     * The implementation of this method should return a "flatten" collection of all items.
+     *
+     * @return AbstractFacetItemCollection
+     */
+    public function getAllFacetItems()
+    {
+        return $this->allNodes;
     }
 }
