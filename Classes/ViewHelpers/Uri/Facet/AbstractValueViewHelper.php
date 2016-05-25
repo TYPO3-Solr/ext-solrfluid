@@ -35,8 +35,8 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 class AbstractValueViewHelper extends AbstractUriViewHelper
 {
     /**
-     * @param AbstractFacet $facet
-     * @param AbstractFacetItem $facetItem
+     * @param \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet $facet
+     * @param \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItem $facetItem
      * @param string $facetItemValue
      * @return string
      */

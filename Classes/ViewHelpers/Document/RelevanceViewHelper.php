@@ -30,6 +30,11 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 class RelevanceViewHelper extends AbstractViewHelper implements CompilableInterface
 {
     /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
+
+    /**
      * Get document relevance percentage
      *
      * @param SearchResultSet $resultSet

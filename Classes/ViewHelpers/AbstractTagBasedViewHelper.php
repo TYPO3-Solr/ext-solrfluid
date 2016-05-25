@@ -30,6 +30,16 @@ class AbstractTagBasedViewHelper extends AbstractTagBasedCoreViewHelper
 {
 
     /**
+     * @var bool
+     */
+    protected $escapeChildren = true;
+
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = true;
+
+    /**
      * @var SolrControllerContext
      */
     protected $controllerContext;

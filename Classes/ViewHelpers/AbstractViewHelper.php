@@ -34,6 +34,16 @@ class AbstractViewHelper extends AbtractCoreViewHelper
     protected $controllerContext;
 
     /**
+     * @var bool
+     */
+    protected $escapeChildren = true;
+
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = true;
+
+    /**
      * @return TypoScriptConfiguration
      */
     protected function getTypoScriptConfiguration()

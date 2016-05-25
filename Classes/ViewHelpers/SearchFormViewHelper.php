@@ -39,10 +39,21 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
     protected $frontendController;
 
     /**
+     * @var bool
+     */
+    protected $escapeChildren = true;
+
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
+        parent::__construct();
         $this->frontendController = $GLOBALS['TSFE'];
     }
 

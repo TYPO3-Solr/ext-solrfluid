@@ -30,6 +30,10 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
  */
 class HighlightResultViewHelper extends AbstractViewHelper implements CompilableInterface
 {
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
 
     /**
      * @param SearchResultSet $resultSet

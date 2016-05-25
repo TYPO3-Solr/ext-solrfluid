@@ -15,6 +15,8 @@ namespace ApacheSolrForTypo3\Solrfluid\Widget;
  */
 
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+use TYPO3\CMS\Fluid\Core\Compiler\TemplateCompiler;
+use TYPO3\CMS\Fluid\Core\Parser\SyntaxTree\ViewHelperNode;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\ChildNodeAccessInterface;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController;
@@ -74,6 +76,16 @@ abstract class AbstractWidgetViewHelper extends AbstractViewHelper implements Ch
      * @var \TYPO3\CMS\Fluid\Core\Widget\WidgetContext
      */
     private $widgetContext;
+
+    /**
+     * @var bool
+     */
+    protected $escapeChildren = false;
+
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
 
     /**
      * @param AjaxWidgetContextHolder $ajaxWidgetContextHolder
@@ -142,6 +154,7 @@ abstract class AbstractWidgetViewHelper extends AbstractViewHelper implements Ch
         foreach ($childNodes as $childNode) {
             $rootNode->addChildNode($childNode);
         }
+
         $this->widgetContext->setViewHelperChildNodes($rootNode, $this->renderingContext);
     }
 
@@ -171,7 +184,8 @@ abstract class AbstractWidgetViewHelper extends AbstractViewHelper implements Ch
             }
             throw new MissingControllerException('initiateSubRequest() can not be called if there is no controller inside $this->controller. Make sure to add a corresponding injectController method to your WidgetViewHelper class "' . get_class($this) . '".', 1284401632);
         }
-        $subRequest = $this->objectManager->get('ApacheSolrForTypo3\\Solrfluid\\Widget\\WidgetRequest');
+            /** @var $subRequest \ApacheSolrForTypo3\Solrfluid\Widget\WidgetRequest */
+        $subRequest = $this->objectManager->get(\ApacheSolrForTypo3\Solrfluid\Widget\WidgetRequest::class);
         $subRequest->setWidgetContext($this->widgetContext);
         $this->passArgumentsToSubRequest($subRequest);
         $subResponse = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Response');
@@ -208,5 +222,19 @@ abstract class AbstractWidgetViewHelper extends AbstractViewHelper implements Ch
     private function initializeWidgetIdentifier()
     {
         $this->widgetContext->setWidgetIdentifier('');
+    }
+
+    /**
+     * @param string $argumentsName
+     * @param string $closureName
+     * @param string $initializationPhpCode
+     * @param ViewHelperNode $node
+     * @param TemplateCompiler $compiler
+     * @return string
+     */
+    public function compile($argumentsName, $closureName, &$initializationPhpCode, ViewHelperNode $node, TemplateCompiler $compiler)
+    {
+        $compiler->disable();
+        return '\'\'';
     }
 }
