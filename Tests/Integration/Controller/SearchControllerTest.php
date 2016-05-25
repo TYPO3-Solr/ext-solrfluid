@@ -573,6 +573,45 @@ class SearchControllerTest extends IntegrationTest
     }
 
     /**
+     * @test
+     */
+    public function canOverwriteAFilterWithTheFlexformSettings()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+
+        $contentObjectRendererMock = $this->getMock(ContentObjectRenderer::class, array(), array(), '', false);
+        $flexFormData = $this->getFixtureContent('fakedFlexFormData.xml');
+        $contentObjectRendererMock->data = ['pi_flexform' => $flexFormData];
+        $this->searchController->setContentObjectRenderer($contentObjectRendererMock);
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = '*';
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+
+        $this->assertContains('Results 1 until 4 of 4', $this->searchResponse->getContent());
+    }
+
+
+    /**
+     * @test
+     */
+    public function formActionIsRenderingTheForm()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $formRequest = $this->getPreparedRequest('form');
+        $formResponse = $this->getPreparedResponse();
+        $this->searchController->processRequest($formRequest, $formResponse);
+
+        $formContent = $formResponse->getContent();
+        $this->assertContains('<div class="tx-solr-search-form">', $formContent);
+    }
+
+    /**
      * @param string $content
      * @param string $id
      * @return string
@@ -648,12 +687,12 @@ class SearchControllerTest extends IntegrationTest
     /**
      * @return Request
      */
-    protected function getPreparedRequest()
+    protected function getPreparedRequest($actionName = 'results')
     {
         /** @var Request $request */
         $request = $this->objectManager->get(Request::class);
         $request->setControllerName('Search');
-        $request->setControllerActionName('results');
+        $request->setControllerActionName($actionName);
         $request->setControllerVendorName('ApacheSolrForTypo3');
         $request->setPluginName('pi_result');
         $request->setFormat('html');

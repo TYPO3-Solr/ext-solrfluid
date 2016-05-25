@@ -90,6 +90,22 @@ abstract class AbstractBaseController extends ActionController
     }
 
     /**
+     * @param \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $contentObjectRenderer
+     */
+    public function setContentObjectRenderer($contentObjectRenderer)
+    {
+        $this->contentObjectRenderer = $contentObjectRenderer;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
+     */
+    public function getContentObjectRenderer()
+    {
+        return $this->contentObjectRenderer;
+    }
+
+    /**
      * @param \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager
      */
     public function injectSolrConfigurationManager(ConfigurationManager $configurationManager)
@@ -161,7 +177,7 @@ abstract class AbstractBaseController extends ActionController
             $flexFormConfiguration = $flexFormService->convertFlexFormContentToArray($this->contentObjectRenderer->data['pi_flexform']);
             $flexFormConfiguration = $typoScriptService->convertPlainArrayToTypoScriptArray($flexFormConfiguration);
 
-            if(isset($flexFormConfiguration['search.']['query.']['filter'])) {
+            if (isset($flexFormConfiguration['search.']['query.']['filter'])) {
                 $stringValue = $flexFormConfiguration['search.']['query.']['filter'];
                 unset($flexFormConfiguration['search.']['query.']['filter']);
                 $flexFormConfiguration['search.']['query.']['filter.'] = GeneralUtility::trimExplode('|', $stringValue);
