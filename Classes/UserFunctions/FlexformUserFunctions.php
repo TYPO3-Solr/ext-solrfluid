@@ -20,9 +20,13 @@ namespace ApacheSolrForTypo3\Solrfluid\UserFunctions;
  * 02110-1301, USA.
  */
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Backend\Form\FormDataProvider\TcaSelectItems;
 use ApacheSolrForTypo3\Solr\ConnectionManager;
+use TYPO3\CMS\Backend\Form\FormDataProvider\TcaSelectItems;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Extbase\Service\TypoScriptService;
 
 /**
  * This class contains all user functions for flexforms.
@@ -31,6 +35,8 @@ use ApacheSolrForTypo3\Solr\ConnectionManager;
  */
 class FlexformUserFunctions
 {
+    const TYPOSCRIPT_PATH = 'plugin.tx_solr';
+
     /**
      * Provides all facet fields for a flexform select, enabling the editor to select one of them.
      *
@@ -40,14 +46,26 @@ class FlexformUserFunctions
      */
     public function getFacetFieldsFromSchema(array &$parentInformation)
     {
+        $configuredFacets = $this->getTypoScriptSetup(static::TYPOSCRIPT_PATH . '.search.faceting.facets');
+        $newItems = [];
         array_map(
-            function ($fieldName) use ($parentInformation) {
-                $parentInformation['items'][] = [
-                    // TODO: Fetch TypoScript and provide readable names from TS Setup?!
-                    // TODO: Provide black list?
-                    // TODO: Check overwrite of items via TSConfig
-                    $fieldName,
-                    $fieldName,
+            function ($fieldName) use (&$newItems, $parentInformation, $configuredFacets) {
+                $value = $fieldName;
+                $label = $fieldName;
+                $configuredFacet = array_filter(
+                    $configuredFacets,
+                    function ($facet) use ($fieldName) {
+                        return ($facet['field'] === $fieldName);
+                    }
+                );
+                if (!empty($configuredFacet)) {
+                    $configuredFacet = array_values($configuredFacet);
+                    $label = $configuredFacet[0]['label'];
+                }
+
+                $newItems[$label] = [
+                    $label,
+                    $value,
                 ];
             },
             array_keys(
@@ -56,6 +74,9 @@ class FlexformUserFunctions
                 )->getFieldsMetaData()
             )
         );
+
+        ksort($newItems, SORT_NATURAL);
+        $parentInformation['items'] = $newItems;
     }
 
     /**
@@ -71,5 +92,27 @@ class FlexformUserFunctions
             $pageRecord['pid'],
             $pageRecord['sys_language_uid']
         );
+    }
+
+    /**
+     * Get TypoScript setup on current page for the given path.
+     *
+     * @TODO: Move to different class, as this is usefull in multiple places
+     *        Also check whether the code already exists somewhere..
+     *
+     * @param string $path Dotted path like in TypoScript or Fluid.
+     *
+     * @return array
+     */
+    protected function getTypoScriptSetup($path = self::TYPOSCRIPT_PATH)
+    {
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $setup = $objectManager->get(BackendConfigurationManager::class)
+            ->getTypoScriptSetup();
+
+        $setup = $objectManager->get(TypoScriptService::class)
+            ->convertTypoScriptArrayToPlainArray($setup);
+
+        return ObjectAccess::getPropertyPath($setup, $path);
     }
 }
