@@ -20,21 +20,45 @@ namespace ApacheSolrForTypo3\Solrfluid\Service;
  * 02110-1301, USA.
  */
 
+use ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager as ExtbaseConfigurationManager;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Service\FlexFormService;
 use TYPO3\CMS\Extbase\Service\TypoScriptService;
-use ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager;
 
 /**
  * Service to ease work with configurations.
  */
 class ConfigurationService
 {
+    const TYPOSCRIPT_PATH = 'plugin.tx_solr';
+
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
      * @inject
      */
     protected $objectManager;
+
+    /**
+     * Get TypoScript setup on current page for the given path.
+     *
+     * @param string $path Dotted path like in TypoScript or Fluid.
+     *
+     * @return array
+     */
+    public static function getTypoScriptSetup($path = self::TYPOSCRIPT_PATH)
+    {
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $setup = $objectManager->get(ExtbaseConfigurationManager::class)
+            ->getConfiguration(ExtbaseConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+
+        $setup = $objectManager->get(TypoScriptService::class)
+            ->convertTypoScriptArrayToPlainArray($setup);
+
+        return ObjectAccess::getPropertyPath($setup, $path);
+    }
 
     /**
      * Override the given solrConfiguration with flex form configuration.
