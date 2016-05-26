@@ -87,7 +87,8 @@
                                             <label>Field</label>
                                             <config>
                                                 <section>1</section>
-                                                <type>input</type>
+                                                <type>select</type>
+                                                <itemsProcFunc>ApacheSolrForTypo3\Solrfluid\UserFunctions\FlexformUserFunctions->getFacetFieldsFromSchema</itemsProcFunc>
                                             </config>
                                         </TCEforms>
                                     </field>
