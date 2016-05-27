@@ -123,7 +123,7 @@ class ConfigurationService
     {
         $filterConfiguration = [];
         $filters = ObjectAccess::getPropertyPath($flexFormConfiguration, 'search.query.filter');
-        if ($filters === null) {
+        if (empty($filters)) {
             return $filterConfiguration;
         }
 
