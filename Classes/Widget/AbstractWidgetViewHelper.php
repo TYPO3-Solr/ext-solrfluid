@@ -23,6 +23,7 @@ use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController;
 use TYPO3\CMS\Fluid\Core\Widget\AjaxWidgetContextHolder;
 use TYPO3\CMS\Fluid\Core\Widget\Exception\MissingControllerException;
 use TYPO3\CMS\Fluid\Core\Widget\WidgetRequest;
+use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper as AbstractCoreWidgetViewHelper;
 
 /**
  * Class AbstractWidgetViewHelper
@@ -35,7 +36,7 @@ use TYPO3\CMS\Fluid\Core\Widget\WidgetRequest;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Widget
  */
-abstract class AbstractWidgetViewHelper extends AbstractViewHelper implements ChildNodeAccessInterface
+abstract class AbstractWidgetViewHelper extends AbstractCoreWidgetViewHelper implements ChildNodeAccessInterface
 {
 
     /**
@@ -222,19 +223,5 @@ abstract class AbstractWidgetViewHelper extends AbstractViewHelper implements Ch
     private function initializeWidgetIdentifier()
     {
         $this->widgetContext->setWidgetIdentifier('');
-    }
-
-    /**
-     * @param string $argumentsName
-     * @param string $closureName
-     * @param string $initializationPhpCode
-     * @param ViewHelperNode $node
-     * @param TemplateCompiler $compiler
-     * @return string
-     */
-    public function compile($argumentsName, $closureName, &$initializationPhpCode, ViewHelperNode $node, TemplateCompiler $compiler)
-    {
-        $compiler->disable();
-        return '\'\'';
     }
 }
