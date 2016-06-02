@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\UserFunctions;
+namespace ApacheSolrForTypo3\Solrfluid\System\UserFunctions;
 
 /*
  * Copyright (C) 2016  Daniel Siepmann <coding@daniel-siepmann.de>
@@ -21,7 +21,8 @@ namespace ApacheSolrForTypo3\Solrfluid\UserFunctions;
  */
 
 use ApacheSolrForTypo3\Solr\ConnectionManager;
-use ApacheSolrForTypo3\Solrfluid\Service\ConfigurationService;
+use ApacheSolrForTypo3\Solr\Util;
+use ApacheSolrForTypo3\Solrfluid\System\Service\ConfigurationService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -29,7 +30,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @author Daniel Siepmann <coding@daniel-siepmann.de>
  */
-class FlexformUserFunctions
+class FlexFormUserFunctions
 {
     /**
      * Provides all facet fields for a flexform select, enabling the editor to select one of them.
@@ -41,33 +42,37 @@ class FlexformUserFunctions
     public function getFacetFieldsFromSchema(array &$parentInformation)
     {
         $pageRecord = $parentInformation['flexParentDatabaseRow'];
-        $configuredFacets = ConfigurationService::getTypoScriptSetup(
-            ConfigurationService::TYPOSCRIPT_PATH . '.search.faceting.facets'
-        );
+        $configuredFacets = $this->getConfiguredFacetsForPage($pageRecord['pid']);
         $newItems = [];
 
-        array_map(
-            function ($fieldName) use (&$newItems, $configuredFacets) {
+        array_map(function ($fieldName) use (&$newItems, $configuredFacets) {
                 $value = $fieldName;
                 $label = $fieldName;
-                $configuredFacets = array_filter(
-                    $configuredFacets,
-                    function ($facet) use ($fieldName) {
+                $configuredFacets = array_filter($configuredFacets, function ($facet) use ($fieldName) {
                         return ($facet['field'] === $fieldName);
-                    }
-                );
+                    });
                 if (!empty($configuredFacets)) {
                     $configuredFacet = array_values($configuredFacets);
                     $label = $configuredFacet[0]['label'];
                 }
 
                 $newItems[$label] = [$label, $value];
-            },
-            array_keys((array) $this->getConnection($pageRecord)->getFieldsMetaData())
-        );
+            }, $this->getFieldNamesFromSolrMetaDataForPage($pageRecord));
 
         ksort($newItems, SORT_NATURAL);
         $parentInformation['items'] = $newItems;
+    }
+
+    /**
+     * Retrieves the configured facets for a page.
+     *
+     * @param integer $pid
+     * @return array
+     */
+    protected function getConfiguredFacetsForPage($pid)
+    {
+        $typoScriptConfiguration = Util::getSolrConfigurationFromPageId($pid);
+        return $typoScriptConfiguration->getSearchFacetingFacets();
     }
 
     /**
@@ -75,13 +80,21 @@ class FlexformUserFunctions
      *
      * @param array $pageRecord
      *
-     * @return ApacheSolrForTypo3\Solr\SolrService
+     * @return \ApacheSolrForTypo3\Solr\SolrService
      */
     protected function getConnection(array $pageRecord)
     {
-        return GeneralUtility::makeInstance(ConnectionManager::class)->getConnectionByPageId(
-            $pageRecord['pid'],
-            $pageRecord['sys_language_uid']
-        );
+        return GeneralUtility::makeInstance(ConnectionManager::class)->getConnectionByPageId($pageRecord['pid'], $pageRecord['sys_language_uid']);
+    }
+
+    /**
+     * Retrieves all fieldnames that occure in the solr schema for one page.
+     *
+     * @param $pageRecord
+     * @return array
+     */
+    protected function getFieldNamesFromSolrMetaDataForPage($pageRecord)
+    {
+        return array_keys((array)$this->getConnection($pageRecord)->getFieldsMetaData());
     }
 }
