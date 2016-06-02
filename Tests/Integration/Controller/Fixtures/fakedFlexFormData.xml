@@ -23,7 +23,21 @@
                     <value index="vDEF">0</value>
                 </field>
                 <field index="search.query.filter">
-                    <value index="vDEF">subTitle:men</value>
+                    <el index="el">
+                        <section index="1">
+                            <itemType index="field">
+                                <el>
+                                    <field index="field">
+                                        <value index="vDEF">subTitle</value>
+                                    </field>
+                                    <field index="value">
+                                        <value index="vDEF">men</value>
+                                    </field>
+                                </el>
+                            </itemType>
+                            <itemType index="_TOGGLE">0</itemType>
+                        </section>
+                    </el>
                 </field>
                 <field index="search.query.sortBy">
                     <value index="vDEF">title asc</value>

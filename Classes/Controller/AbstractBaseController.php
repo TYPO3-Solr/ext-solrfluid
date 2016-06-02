@@ -20,10 +20,10 @@ use ApacheSolrForTypo3\Solr\Search;
 use ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
+use ApacheSolrForTypo3\Solrfluid\System\Service\ConfigurationService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Service\FlexFormService;
 use TYPO3\CMS\Extbase\Service\TypoScriptService;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -163,32 +163,24 @@ abstract class AbstractBaseController extends ActionController
                 $pluginSettings[$key] = $frameWorkConfiguration[$key];
             }
         }
+
+        $this->typoScriptConfiguration = $this->solrConfigurationManager->getTypoScriptConfiguration();
         if ($pluginSettings !== []) {
-            $this->solrConfigurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration(
+            $this->typoScriptConfiguration->mergeSolrConfiguration(
                 $typoScriptService->convertPlainArrayToTypoScriptArray($pluginSettings),
                 true,
                 false
             );
         }
 
-        // Override configuration with flexform settings
-        if (!empty($this->contentObjectRenderer->data['pi_flexform'])) {
-            $flexFormService = $this->objectManager->get(FlexFormService::class);
-            $flexFormConfiguration = $flexFormService->convertFlexFormContentToArray($this->contentObjectRenderer->data['pi_flexform']);
-            $flexFormConfiguration = $typoScriptService->convertPlainArrayToTypoScriptArray($flexFormConfiguration);
-
-            if (isset($flexFormConfiguration['search.']['query.']['filter'])) {
-                $stringValue = $flexFormConfiguration['search.']['query.']['filter'];
-                unset($flexFormConfiguration['search.']['query.']['filter']);
-                $flexFormConfiguration['search.']['query.']['filter.'] = GeneralUtility::trimExplode('|', $stringValue);
-            }
-
-            $this->solrConfigurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($flexFormConfiguration, true, false);
-        }
+        $this->objectManager->get(ConfigurationService::class)
+            ->overrideConfigurationWithFlexFormSettings(
+                $this->contentObjectRenderer->data['pi_flexform'],
+                $this->typoScriptConfiguration
+            );
 
         parent::initializeAction();
         $this->typoScriptFrontendController = $GLOBALS['TSFE'];
-        $this->typoScriptConfiguration = $this->solrConfigurationManager->getTypoScriptConfiguration();
 
 
         // Make sure plugin.tx_solr.settings are available in the view as {settings}
