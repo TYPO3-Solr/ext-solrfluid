@@ -22,7 +22,6 @@ namespace ApacheSolrForTypo3\Solrfluid\System\UserFunctions;
 
 use ApacheSolrForTypo3\Solr\ConnectionManager;
 use ApacheSolrForTypo3\Solr\Util;
-use ApacheSolrForTypo3\Solrfluid\System\Service\ConfigurationService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -48,7 +47,10 @@ class FlexFormUserFunctions
         array_map(function ($fieldName) use (&$newItems, $configuredFacets) {
                 $value = $fieldName;
                 $label = $fieldName;
-                $facetNameFilter    = function ($facet) use ($fieldName) { return ($facet['field'] === $fieldName); };
+
+                $facetNameFilter    = function ($facet) use ($fieldName) {
+                    return ($facet['field'] === $fieldName);
+                };
                 $configuredFacets   = array_filter($configuredFacets, $facetNameFilter);
                 if (!empty($configuredFacets)) {
                     $configuredFacet = array_values($configuredFacets);

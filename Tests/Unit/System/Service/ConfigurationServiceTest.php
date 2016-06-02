@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Test\Mvc\ControllerContext;
+namespace ApacheSolrForTypo3\Solrfluid\Test\System\Service;
 
 /***************************************************************
  *  Copyright notice
