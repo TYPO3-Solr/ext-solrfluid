@@ -31,11 +31,32 @@ use TYPO3\CMS\Extbase\Service\TypoScriptService;
 class ConfigurationService
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
+     * @var \TYPO3\CMS\Extbase\Service\FlexFormService
      * @inject
      */
-    protected $objectManager;
+    protected $flexFormService;
 
+    /**
+     * @var \TYPO3\CMS\Extbase\Service\TypoScriptService
+     * @inject
+     */
+    protected $typoScriptService;
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Service\FlexFormService $flexFormService
+     */
+    public function setFlexFormService($flexFormService)
+    {
+        $this->flexFormService = $flexFormService;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Service\TypoScriptService $typoScriptService
+     */
+    public function setTypoScriptService($typoScriptService)
+    {
+        $this->typoScriptService = $typoScriptService;
+    }
 
     /**
      * Override the given solrConfiguration with flex form configuration.
@@ -51,12 +72,10 @@ class ConfigurationService
             return;
         }
 
-        $flexFormConfiguration = $this->objectManager->get(FlexFormService::class)
-            ->convertflexFormContentToArray($flexFormData);
+        $flexFormConfiguration = $this->flexFormService->convertflexFormContentToArray($flexFormData);
         $flexFormConfiguration = $this->overrideFilter($flexFormConfiguration);
+        $flexFormConfiguration = $this->typoScriptService->convertPlainArrayToTypoScriptArray($flexFormConfiguration);
 
-        $flexFormConfiguration = $this->objectManager->get(TypoScriptService::class)
-            ->convertPlainArrayToTypoScriptArray($flexFormConfiguration);
         $solrTypoScriptConfiguration->mergeSolrConfiguration($flexFormConfiguration, true, false);
     }
 
@@ -100,6 +119,7 @@ class ConfigurationService
     {
         $filterConfiguration = [];
         $filters = ObjectAccess::getPropertyPath($flexFormConfiguration, 'search.query.filter');
+
         if (empty($filters)) {
             return $filterConfiguration;
         }
@@ -108,7 +128,6 @@ class ConfigurationService
             $filter = $filter['field'];
             $filterConfiguration[] = $filter['field'] . ':' . $filter['value'];
         }
-
         return $filterConfiguration;
     }
 }

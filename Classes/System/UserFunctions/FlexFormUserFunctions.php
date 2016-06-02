@@ -48,9 +48,8 @@ class FlexFormUserFunctions
         array_map(function ($fieldName) use (&$newItems, $configuredFacets) {
                 $value = $fieldName;
                 $label = $fieldName;
-                $configuredFacets = array_filter($configuredFacets, function ($facet) use ($fieldName) {
-                        return ($facet['field'] === $fieldName);
-                    });
+                $facetNameFilter    = function ($facet) use ($fieldName) { return ($facet['field'] === $fieldName); };
+                $configuredFacets   = array_filter($configuredFacets, $facetNameFilter);
                 if (!empty($configuredFacets)) {
                     $configuredFacet = array_values($configuredFacets);
                     $label = $configuredFacet[0]['label'];
