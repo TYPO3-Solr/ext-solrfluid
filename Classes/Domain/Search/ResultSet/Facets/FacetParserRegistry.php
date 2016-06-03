@@ -32,10 +32,10 @@ class FacetParserRegistry implements SingletonInterface
      * @var array
      */
     protected $parsers = [
-        'options' => OptionsFacet\OptionsFacetParser::class,
-        'hierarchy' => HierarchyFacet\HierarchyFacetParser::class,
-        'queryGroup' => QueryGroupFacet\QueryGroupFacetParser::class,
-        'dateRange' => DateRangeFacet\DateRangeFacetParser::class,
+        'options' => OptionBased\Options\OptionsFacetParser::class,
+        'hierarchy' => OptionBased\Hierarchy\HierarchyFacetParser::class,
+        'queryGroup' => OptionBased\QueryGroup\QueryGroupFacetParser::class,
+        'dateRange' => RangeBased\DateRange\DateRangeFacetParser::class,
     ];
 
     /**
@@ -43,7 +43,7 @@ class FacetParserRegistry implements SingletonInterface
      *
      * @var string
      */
-    protected $defaultParser = OptionsFacet\OptionsFacetParser::class;
+    protected $defaultParser = OptionBased\Options\OptionsFacetParser::class;
 
     /**
      * Get defaultParser
@@ -76,8 +76,9 @@ class FacetParserRegistry implements SingletonInterface
     }
 
     /**
-     * @param $className
-     * @param $type
+     * @param string $className
+     * @param string $type
+     * @throws \InvalidArgumentException
      */
     public function registerParser($className, $type)
     {
