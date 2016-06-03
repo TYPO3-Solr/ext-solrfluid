@@ -35,6 +35,7 @@ class FacetParserRegistry implements SingletonInterface
         'options' => OptionsFacet\OptionsFacetParser::class,
         'hierarchy' => HierarchyFacet\HierarchyFacetParser::class,
         'queryGroup' => QueryGroupFacet\QueryGroupFacetParser::class,
+        'dateRange' => DateRangeFacet\DateRangeFacetParser::class,
     ];
 
     /**

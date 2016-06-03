@@ -63,7 +63,7 @@ class AbstractValueViewHelper extends AbstractUriViewHelper
         if (isset($arguments['facetItem'])) {
             /** @var  $facetItem AbstractFacetItem */
             $facetItem = $arguments['facetItem'];
-            $facetValue = $facetItem->getValue();
+            $facetValue = $facetItem->getUriValue();
         } elseif (isset($arguments['facetItemValue'])) {
             $facetValue = $arguments['facetItemValue'];
         } else {

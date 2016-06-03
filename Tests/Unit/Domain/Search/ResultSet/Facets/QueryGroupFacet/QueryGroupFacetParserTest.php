@@ -21,6 +21,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet\
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet\QueryGroupFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet\QueryGroupFacetParser;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets\AbstractFacetParserTest;
 
 /**
  * Class QueryGroupFacetParserTest
@@ -28,7 +29,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @author Frans Saris <frans@beech.it>
  */
-class QueryGroupFacetParserTest extends UnitTest
+class QueryGroupFacetParserTest extends AbstractFacetParserTest
 {
     /**
      * @param string $fixtureFile

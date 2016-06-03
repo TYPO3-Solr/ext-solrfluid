@@ -14,6 +14,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\HierarchyF
  * The TYPO3 project - inspiring people to share!
 */
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItem;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractOptionFacetItem;
 
 /**
  * Value object that represent an option of a options facet.
@@ -22,7 +23,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetIte
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
-class Node extends AbstractFacetItem
+class Node extends AbstractOptionFacetItem
 {
 
     /**
@@ -51,12 +52,13 @@ class Node extends AbstractFacetItem
      * @param string $key
      * @param string $label
      * @param string $value
-     * @param int $count
+     * @param int $documentCount
      * @param bool $selected
      */
-    public function __construct(HierarchyFacet $facet, $parentNode = null, $key = '', $label = '', $value = '', $count = 0, $selected = false)
+    public function __construct(HierarchyFacet $facet, $parentNode = null, $key = '', $label = '', $value = '', $documentCount = 0, $selected = false)
     {
-        parent::__construct($facet, $label, $value, $count, $selected);
+        parent::__construct($facet, $label, $value, $documentCount, $selected);
+        $this->value = $value;
         $this->childNodes = new NodeCollection();
         $this->parentNode = $parentNode;
         $this->key = $key;

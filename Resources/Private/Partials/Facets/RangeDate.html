@@ -1,0 +1,15 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+	  xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+	  xmlns:s="http://typo3.org/ns/ApacheSolrForTypo3/Solrfluid/ViewHelpers"
+	  data-namespace-typo3-fluid="true"
+		>
+
+	<h5 class="facet-label">{facet.label}</h5>
+	<ul class="facet-option-list fluidfacet daterange">
+		<li>
+			<input type="hidden" value="{s:uri.facet.addFacetItem(facet: facet, facetItemValue: '___FROM___-___TO___')}" id="created_url">
+			<input type="text" class="dateselector" id="start_date_created">
+			<input type="text" class="dateselector" id="end_date_created">
+		</li>
+	</ul>
+</html>

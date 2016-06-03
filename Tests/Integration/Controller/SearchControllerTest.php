@@ -594,6 +594,33 @@ class SearchControllerTest extends IntegrationTest
         $this->assertContains('Results 1 until 4 of 4', $this->searchResponse->getContent());
     }
 
+    /**
+     * @test
+     */
+    public function canRenderDateRangeFacet()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+
+        $overwriteConfiguration = array();
+        $overwriteConfiguration['search.']['faceting.']['facets.']['myCreatedFacet.'] = [
+            'label' => 'Created Between',
+            'field' => 'created',
+            'type' => 'dateRange'
+        ];
+
+        /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
+        $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
+        $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
+        $this->searchController->setResetConfigurationBeforeInitialize(false);
+
+        //not in the content but we expect to get shoes suggested
+        $_GET['q'] = '*';
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $this->assertContains('daterange', $this->searchResponse->getContent());
+    }
 
     /**
      * @test

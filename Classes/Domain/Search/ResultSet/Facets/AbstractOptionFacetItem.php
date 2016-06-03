@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -14,26 +14,47 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFac
  * The TYPO3 project - inspiring people to share!
 */
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItem;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractOptionFacetItem;
 
 /**
- * Value object that represent an option of a options facet.
+ * Base class for all facet items that are represented as option
  *
  * @author Frans Saris <frans@beech.it>
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
-class Option extends AbstractOptionFacetItem
+class AbstractOptionFacetItem extends AbstractFacetItem
 {
     /**
-     * @param OptionsFacet $facet
+     * @var string
+     */
+    protected $value = '';
+
+    /**
+     * @param AbstractFacet $facet
      * @param string $label
      * @param string $value
      * @param int $documentCount
      * @param bool $selected
      */
-    public function __construct(OptionsFacet $facet, $label = '', $value = '', $documentCount = 0, $selected = false)
+    public function __construct(AbstractFacet $facet, $label = '', $value = '', $documentCount = 0, $selected = false)
     {
-        parent::__construct($facet, $label, $value, $documentCount, $selected);
+        $this->value = $value;
+        parent::__construct($facet, $label, $documentCount, $selected);
+    }
+
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUriValue()
+    {
+        return $this->getValue();
     }
 }

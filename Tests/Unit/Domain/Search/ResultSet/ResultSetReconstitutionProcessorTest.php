@@ -320,7 +320,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         /** @var $firstOption Option */
         $firstOption = $facet1->getOptions()->getByPosition(0);
         $this->assertEquals('pages', $firstOption->getValue());
-        $this->assertEquals(5, $firstOption->getCount());
+        $this->assertEquals(5, $firstOption->getDocumentCount());
         $this->asserttrue($firstOption->getSelected());
     }
 
@@ -368,7 +368,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         /** @var $firstOption Option */
         $firstOption = $facet1->getOptions()->getByPosition(0);
         $this->assertEquals('jpeg', $firstOption->getValue());
-        $this->assertEquals(1, $firstOption->getCount());
+        $this->assertEquals(1, $firstOption->getDocumentCount());
         $this->assertTrue($firstOption->getSelected());
     }
 

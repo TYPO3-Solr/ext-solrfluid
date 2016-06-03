@@ -22,6 +22,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\HierarchyFacet\H
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet\QueryGroupFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet\QueryGroupFacetParser;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets\AbstractFacetParserTest;
 
 /**
  * Class HierarchyFacetParserTest
@@ -29,46 +30,8 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @author Frans Saris <frans@beech.it>
  */
-class HierarchyFacetParserTest extends UnitTest
+class HierarchyFacetParserTest extends AbstractFacetParserTest
 {
-    /**
-     * @param string $fixtureFile
-     * @param array $facetConfiguration
-     * @param array $activeFilters
-     * @return SearchResultSet
-     */
-    protected function initializeSearchResultSetFromFakeResponse($fixtureFile, $facetConfiguration, array $activeFilters = [])
-    {
-        $fakeResponseJson = $this->getFixtureContent($fixtureFile);
-        $httpResponseMock = $this->getDumbMock('\Apache_Solr_HttpTransport_Response');
-        $httpResponseMock->expects($this->any())->method('getBody')->will($this->returnValue($fakeResponseJson));
-
-        $searchRequestMock = $this->getDumbMock(SearchRequest::class);
-
-        $fakeResponse = new \Apache_Solr_Response($httpResponseMock);
-
-        $searchResultSet = new SearchResultSet();
-        $searchResultSet->setUsedSearchRequest($searchRequestMock);
-        $searchResultSet->setResponse($fakeResponse);
-
-        $configuration = array();
-        $configuration['plugin.']['tx_solr.']['search.']['faceting.']['facets.'] = $facetConfiguration;
-        $typoScriptConfiguration = new TypoScriptConfiguration($configuration);
-        $searchRequestMock->expects($this->any())->method('getContextTypoScriptConfiguration')->will($this->returnValue($typoScriptConfiguration));
-
-        $activeFacetNames = [];
-        $activeFacetValueMap = [];
-        foreach ($activeFilters as $filter) {
-            list($facetName, $value) = explode(':', $filter, 2);
-            $activeFacetNames[] = $facetName;
-            $activeFacetValueMap[] = [$facetName, $value, true];
-        }
-
-        $searchRequestMock->expects($this->any())->method('getActiveFacetNames')->will($this->returnValue($activeFacetNames));
-        $searchRequestMock->expects($this->any())->method('getHasFacetValue')->will($this->returnValueMap($activeFacetValueMap));
-
-        return $searchResultSet;
-    }
 
     /**
      * @test

@@ -32,7 +32,7 @@ class QueryGroupFacetParser extends AbstractFacetParser
      * @param SearchResultSet $resultSet
      * @param string $facetName
      * @param array $facetConfiguration
-     * @return AbstractFacet|null
+     * @return QueryGroupFacet|null
      */
     public function parse(SearchResultSet $resultSet, $facetName, array $facetConfiguration)
     {

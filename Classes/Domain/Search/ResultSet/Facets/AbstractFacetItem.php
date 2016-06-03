@@ -30,14 +30,9 @@ abstract class AbstractFacetItem
     protected $label = '';
 
     /**
-     * @var string
-     */
-    protected $value = '';
-
-    /**
      * @var int
      */
-    protected $count = 0;
+    protected $documentCount = 0;
 
     /**
      * @var bool
@@ -52,25 +47,23 @@ abstract class AbstractFacetItem
     /**
      * @param AbstractFacet $facet
      * @param string $label
-     * @param string $value
-     * @param int $count
+     * @param int $documentCount
      * @param bool $selected
      */
-    public function __construct(AbstractFacet $facet, $label = '', $value = '', $count = 0, $selected = false)
+    public function __construct(AbstractFacet $facet, $label = '', $documentCount = 0, $selected = false)
     {
         $this->facet = $facet;
         $this->label = $label;
-        $this->value = $value;
-        $this->count = $count;
+        $this->documentCount = $documentCount;
         $this->selected = $selected;
     }
 
     /**
      * @return int
      */
-    public function getCount()
+    public function getDocumentCount()
     {
-        return $this->count;
+        return $this->documentCount;
     }
 
     /**
@@ -100,8 +93,5 @@ abstract class AbstractFacetItem
     /**
      * @return string
      */
-    public function getValue()
-    {
-        return $this->value;
-    }
+    abstract public function getUriValue();
 }

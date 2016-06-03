@@ -35,6 +35,14 @@ abstract class AbstractCollection implements \IteratorAggregate, \Countable
     }
 
     /**
+     * @return void
+     */
+    public function clean()
+    {
+        $this->data = [];
+    }
+
+    /**
      * This method can be used to pass a closure to created a filtered copy.
      * The closure get an collection item passed and needs to return true when the item should
      * be kept or false when it can be skipped.

@@ -14,6 +14,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroup
  * The TYPO3 project - inspiring people to share!
 */
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItem;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractOptionFacetItem;
 
 /**
  * Value object that represent an option of a queryGroup facet.
@@ -22,18 +23,17 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetIte
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet
  */
-class Option extends AbstractFacetItem
+class Option extends AbstractOptionFacetItem
 {
-
     /**
      * @param QueryGroupFacet $facet
      * @param string $label
      * @param string $value
-     * @param int $count
+     * @param int $documentCount
      * @param bool $selected
      */
-    public function __construct(QueryGroupFacet $facet, $label = '', $value = '', $count = 0, $selected = false)
+    public function __construct(QueryGroupFacet $facet, $label = '', $value = '', $documentCount = 0, $selected = false)
     {
-        parent::__construct($facet, $label, $value, $count, $selected);
+        parent::__construct($facet, $label, $value, $documentCount, $selected);
     }
 }

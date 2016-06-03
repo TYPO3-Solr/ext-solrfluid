@@ -11,7 +11,7 @@
 					<f:for each="{resultSet.facets.used}" as="facet">
 						<f:for each="{facet.allFacetItems.selected}" as="item">
 							<li>-
-								<a href="{s:uri.facet.removeFacetItem(facet: facet, facetItem: item)}" class="facet remove-facet-option">{facet.label}: {item.label}</a> <span class="facet-result-count">({item.count})</span>
+								<a href="{s:uri.facet.removeFacetItem(facet: facet, facetItem: item)}" class="facet remove-facet-option">{facet.label}: {item.label}</a> <span class="facet-result-count">({item.documentCount})</span>
 							</li>
 						</f:for>
 					</f:for>
