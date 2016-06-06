@@ -246,7 +246,7 @@ class SearchControllerTest extends IntegrationTest
     {
         // we expected that an exception will be thrown when a facet is rendered
         // where an unknown partialName is referenced
-        $this->setExpectedExceptionRegExp(InvalidTemplateResourceException::class, '#.*The partial files.*NotFound.*#');
+        $this->setExpectedExceptionRegExp(InvalidTemplateResourceException::class, '#(.*The partial files.*NotFound.*|.*The Fluid template files .*NotFound.*)#');
 
         $this->importDataSetFromFixture('can_render_search_controller.xml');
         $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
@@ -320,8 +320,9 @@ class SearchControllerTest extends IntegrationTest
         $this->searchController->setResetConfigurationBeforeInitialize(false);
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
         $resultPage1 = $this->searchResponse->getContent();
-        $subtitleMenPosition = strpos($resultPage1, 'subtitle%3Amen&foo=bar">men</a> <span class="facet-result-count">(1)</span>');
-        $subtitleWomanPosition =  strpos($resultPage1, 'subtitle%3Awoman&foo=bar">woman</a> <span class="facet-result-count">(3)</span>');
+
+        $subtitleMenPosition = strpos($resultPage1, '>men</a> <span class="facet-result-count">(1)</span>');
+        $subtitleWomanPosition =  strpos($resultPage1, '>woman</a> <span class="facet-result-count">(3)</span>');
 
         $this->assertGreaterThan(0, $subtitleMenPosition);
         $this->assertGreaterThan(0, $subtitleWomanPosition);
@@ -352,8 +353,8 @@ class SearchControllerTest extends IntegrationTest
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
         $resultPage1 = $this->searchResponse->getContent();
 
-        $subtitleMenPosition = strpos($resultPage1, 'subtitle%3Amen&foo=bar">men</a> <span class="facet-result-count">(1)</span>');
-        $subtitleWomanPosition =  strpos($resultPage1, 'subtitle%3Awoman&foo=bar">woman</a> <span class="facet-result-count">(3)</span>');
+        $subtitleMenPosition = strpos($resultPage1, '>men</a> <span class="facet-result-count">(1)</span>');
+        $subtitleWomanPosition =  strpos($resultPage1, '>woman</a> <span class="facet-result-count">(3)</span>');
 
         $this->assertGreaterThan(0, $subtitleMenPosition);
         $this->assertGreaterThan(0, $subtitleWomanPosition);
@@ -416,8 +417,8 @@ class SearchControllerTest extends IntegrationTest
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
         $resultPage1 = $this->searchResponse->getContent();
 
-        $subtitleMenPosition = strpos($resultPage1, 'subtitle%3Amen&foo=bar">men</a> <span class="facet-result-count">(1)</span>');
-        $subtitleWomanPosition =  strpos($resultPage1, 'subtitle%3Awoman&foo=bar">woman</a> <span class="facet-result-count">(3)</span>');
+        $subtitleMenPosition = strpos($resultPage1, '>men</a> <span class="facet-result-count">(1)</span>');
+        $subtitleWomanPosition =  strpos($resultPage1, '>woman</a> <span class="facet-result-count">(3)</span>');
 
         $this->assertGreaterThan(0, $subtitleMenPosition);
         $this->assertGreaterThan(0, $subtitleWomanPosition);
@@ -619,7 +620,7 @@ class SearchControllerTest extends IntegrationTest
         //not in the content but we expect to get shoes suggested
         $_GET['q'] = '*';
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
-        $this->assertContains('daterange', $this->searchResponse->getContent());
+        $this->assertContains('facet-type-dateRange', $this->searchResponse->getContent());
     }
 
     /**
