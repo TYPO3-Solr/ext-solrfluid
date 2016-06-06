@@ -131,6 +131,27 @@ class SearchUriBuilder
 
     /**
      * @param SearchRequest $previousSearchRequest
+     * @return string
+     */
+    public function getRemoveAllFacetsUri(SearchRequest $previousSearchRequest)
+    {
+        $persistentAndFacetArguments = $previousSearchRequest
+            ->getCopyForSubRequest()->removeAllFacets()
+            ->getAsArray();
+
+        $additionalArguments = [];
+        if ($previousSearchRequest->getContextTypoScriptConfiguration()->getSearchFacetingFacetLinkUrlParametersUseForFacetResetLinkUrl()) {
+            $additionalArguments = $this->getAdditionalArgumentsFromRequestConfiguration($previousSearchRequest);
+        }
+
+        $arguments = $persistentAndFacetArguments + $additionalArguments;
+
+        $pageUid = $this->getTargetPageUidFromRequestConfiguration($previousSearchRequest);
+        return $this->buildLinkWithInMemoryCache($pageUid, $arguments);
+    }
+
+    /**
+     * @param SearchRequest $previousSearchRequest
      * @param $page
      * @return string
      */

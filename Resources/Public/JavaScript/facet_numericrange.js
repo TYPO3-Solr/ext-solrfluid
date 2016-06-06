@@ -7,11 +7,7 @@ function NumericRangeFacetController() {
     var _this = this;
 
     this.init = function() {
-
         jQuery(document).ready(function(){
-
-
-
             jQuery(".facet-type-numericRange").each(function() {
                 var facetName = jQuery(this).data("facet-name");
                 var rangeMin = jQuery(this).data("range-min");
@@ -44,8 +40,6 @@ function NumericRangeFacetController() {
                         url = url.replace('___TO___', max.toString());
                         _this.load(url);
                         jQuery( "#facet-"+ facetName + "-value" ).html(min.toString() + "-" + max.toString());
-
-
                     }
                 });
             });
@@ -64,10 +58,7 @@ function NumericRangeFacetController() {
     }
 }
 
-
 jQuery(document).ready(function() {
     controller = new NumericRangeFacetController();
     controller.init();
 });
-
-

@@ -15,6 +15,13 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet;
  */
 
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\Option;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\Uri\SearchUriBuilder;
+use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractTagBasedViewHelper;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\AbstractUriViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
@@ -27,9 +34,19 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link
  */
-class SetFacetItemViewHelper extends AbstractValueViewHelper implements CompilableInterface
+class RemoveAllFacetsViewHelper extends AbstractUriViewHelper implements CompilableInterface
 {
-
+    /**
+     * @return string
+     */
+    public function render()
+    {
+        return static::renderStatic(
+            [],
+            $this->buildRenderChildrenClosure(),
+            $this->renderingContext
+        );
+    }
     /**
      * @param array $arguments
      * @param callable $renderChildrenClosure
@@ -39,11 +56,8 @@ class SetFacetItemViewHelper extends AbstractValueViewHelper implements Compilab
      */
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
-        /** @var  $facet AbstractFacet */
-        $facet = $arguments['facet'];
-        $itemValue = self::getValueFromArguments($arguments);
-        $previousRequest = $facet->getResultSet()->getUsedSearchRequest();
-        $uri = self::getSearchUriBuilder()->getSetFacetValueUri($previousRequest, $facet->getName(), $itemValue);
+        $previousRequest = $renderingContext->getControllerContext()->getSearchResultSet()->getUsedSearchRequest();
+        $uri = self::getSearchUriBuilder()->getRemoveAllFacetsUri($previousRequest);
         return $uri;
     }
 }
