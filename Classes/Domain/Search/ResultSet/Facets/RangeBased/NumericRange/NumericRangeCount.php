@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\DateRange;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\NumericRange;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -13,7 +13,6 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased
  *
  * The TYPO3 project - inspiring people to share!
 */
-
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItem;
 use DateTime;
 
@@ -24,13 +23,13 @@ use DateTime;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
-class DateRangeCount
+class NumericRangeCount
 {
 
     /**
-     * @var DateTime
+     * @var float
      */
-    protected $date;
+    protected $rangeItem;
 
     /**
      * @var int
@@ -38,21 +37,21 @@ class DateRangeCount
     protected $documentCount = 0;
 
     /**
-     * @param $date
-     * @param $documentCount
+     * @param float $rangeItem
+     * @param integer $documentCount
      */
-    public function __construct($date, $documentCount)
+    public function __construct($rangeItem, $documentCount)
     {
-        $this->date = $date;
+        $this->rangeItem = $rangeItem;
         $this->documentCount = $documentCount;
     }
 
     /**
-     * @return \DateTime
+     * @return float
      */
-    public function getDate()
+    public function getRangeItem()
     {
-        return $this->date;
+        return $this->rangeItem;
     }
 
     /**

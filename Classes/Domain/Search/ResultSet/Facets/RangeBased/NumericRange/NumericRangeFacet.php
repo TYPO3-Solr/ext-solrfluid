@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\DateRange;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\NumericRange;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -25,20 +25,20 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
-class DateRangeFacet extends AbstractFacet
+class NumericRangeFacet extends AbstractFacet
 {
-    const TYPE_DATE_RANGE = 'dateRange';
+    const TYPE_NUMERIC_RANGE = 'numericRange';
 
     /**
      * String
      * @var string
      */
-    protected static $type = self::TYPE_DATE_RANGE;
+    protected static $type = self::TYPE_NUMERIC_RANGE;
 
     /**
-     * @var DateRange
+     * @var NumericRange
      */
-    protected $range;
+    protected $numericRange;
 
     /**
      * OptionsFacet constructor
@@ -55,19 +55,19 @@ class DateRangeFacet extends AbstractFacet
     }
 
     /**
-     * @param DateRange $range
+     * @param NumericRange $range
      */
-    public function setRange(DateRange $range)
+    public function setRange(NumericRange $range)
     {
-        $this->range = $range;
+        $this->numericRange = $range;
     }
 
     /**
-     * @return DateRange
+     * @return NumericRange
      */
     public function getRange()
     {
-        return $this->range;
+        return $this->numericRange;
     }
 
 
@@ -78,7 +78,7 @@ class DateRangeFacet extends AbstractFacet
      */
     public function getPartialName()
     {
-        return !empty($this->configuration['partialName']) ? $this->configuration['partialName'] : 'RangeDate.html';
+        return !empty($this->configuration['partialName']) ? $this->configuration['partialName'] : 'RangeNumeric.html';
     }
 
     /**
@@ -89,6 +89,6 @@ class DateRangeFacet extends AbstractFacet
      */
     public function getAllFacetItems()
     {
-        return new DateRangeCollection([$this->range]);
+        return new NumericRangeCollection([$this->numericRange]);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\DateRange;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\NumericRange;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -14,38 +14,42 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased
  * The TYPO3 project - inspiring people to share!
  */
 
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetParser;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserInterface;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\AbstractRangeFacetParser;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Class DateRangeFacetParser
+ * Class NumericRangeFacetParser
  *
  * @author Frans Saris <frans@beech.it>
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets
  */
-class DateRangeFacetParser extends AbstractRangeFacetParser
+class NumericRangeFacetParser extends AbstractRangeFacetParser
 {
     /**
      * @var string
      */
-    protected $facetClass = DateRangeFacet::class;
+    protected $facetClass = NumericRangeFacet::class;
 
     /**
      * @var
      */
-    protected $facetItemClass = DateRange::class;
+    protected $facetItemClass = NumericRange::class;
 
     /**
      * @var string
      */
-    protected $facetRangeCountClass = DateRangeCount::class;
+    protected $facetRangeCountClass = NumericRangeCount::class;
 
     /**
      * @param SearchResultSet $resultSet
      * @param string $facetName
      * @param array $facetConfiguration
-     * @return DateRangeFacet|null
+     * @return NumericRangeFacet|null
      */
     public function parse(SearchResultSet $resultSet, $facetName, array $facetConfiguration)
     {
@@ -58,28 +62,21 @@ class DateRangeFacetParser extends AbstractRangeFacetParser
             $this->facetRangeCountClass
         );
     }
-
     /**
-     * @param string $rawDate
-     * @return \DateTime|null
+     * @param mixed $rawValue
+     * @return mixed (numeric value)
      */
-    protected function parseRequestValue($rawDate)
+    protected function parseRequestValue($rawValue)
     {
-        $date = \DateTime::createFromFormat('Ymd', substr($rawDate, 0, 8));
-
-        if ($date === false) {
-            return null;
-        }
-        $date->setTime(0, 0, 0);
-        return $date;
+        return is_numeric($rawValue) ? $rawValue : 0;
     }
 
     /**
-     * @param $isoDateString
-     * @return \DateTime
+     * @param $rawValue
+     * @return mixed (numeric value)
      */
-    protected function parseResponseValue($isoDateString)
+    protected function parseResponseValue($rawValue)
     {
-        return \DateTime::createFromFormat(\DateTime::ISO8601, $isoDateString);
+        return is_numeric($rawValue) ? $rawValue : 0;
     }
 }

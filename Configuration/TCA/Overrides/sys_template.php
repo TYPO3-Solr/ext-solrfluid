@@ -17,5 +17,11 @@ if (!defined('TYPO3_MODE')) {
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
     'solrfluid',
     'Configuration/TypoScript/Examples/DateRange/',
-    'Search - (Example) Fluid dateRange facet with jquery ui'
+    'Search - (Example) Fluid dateRange facet with jquery ui datepicker on created field'
+);
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+    'solrfluid',
+    'Configuration/TypoScript/Examples/NumericRange/',
+    'Search - (Example) Fluid numericRange facet with jquery ui slider on pid field'
 );

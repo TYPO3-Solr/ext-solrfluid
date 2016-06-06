@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\DateRange;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\NumericRange;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -13,7 +13,6 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased
  *
  * The TYPO3 project - inspiring people to share!
  */
-
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItemCollection;
 
 /**
@@ -23,21 +22,21 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetIte
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
-class DateRangeCollection extends AbstractFacetItemCollection
+class NumericRangeCollection extends AbstractFacetItemCollection
 {
 
     /**
-     * @param DateRange $dateRange
-     * @return DateRangeCollection
+     * @param NumericRange $numericRange
+     * @return NumericRangeCollection
      */
-    public function add($dateRange)
+    public function add($numericRange)
     {
-        return parent::add($dateRange);
+        return parent::add($numericRange);
     }
 
     /**
      * @param int $position
-     * @return DateRange
+     * @return NumericRange
      */
     public function getByPosition($position)
     {

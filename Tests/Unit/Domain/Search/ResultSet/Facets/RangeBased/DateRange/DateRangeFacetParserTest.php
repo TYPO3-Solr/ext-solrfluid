@@ -56,11 +56,11 @@ class DateRangeFacetParserTest extends AbstractFacetParserTest
         $this->assertSame($facet->getConfiguration(), $facetConfiguration['myCreated.'], 'Configuration was not passed to new facets');
         $this->assertTrue($facet->getIsUsed());
 
-        $this->assertEquals('201506020000-201706020000', $facet->getDateRange()->getLabel());
-        $this->assertEquals(32, $facet->getDateRange()->getDocumentCount());
-        $this->assertCount(3, $facet->getDateRange()->getDateRangeCounts(), 'We expected that there are three count items attached');
+        $this->assertEquals('201506020000-201706020000', $facet->getRange()->getLabel());
+        $this->assertEquals(32, $facet->getRange()->getDocumentCount());
+        $this->assertCount(3, $facet->getRange()->getRangeCounts(), 'We expected that there are three count items attached');
 
-        $this->assertSame($facet->getDateRange()->getEndInResponse()->format('Ymd'), '20170602');
-        $this->assertSame($facet->getDateRange()->getStartInResponse()->format('Ymd'), '20150602');
+        $this->assertSame($facet->getRange()->getEndInResponse()->format('Ymd'), '20170602');
+        $this->assertSame($facet->getRange()->getStartInResponse()->format('Ymd'), '20150602');
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\DateRange;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -15,51 +15,40 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased
 */
 
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItem;
-use DateTime;
 
 /**
- * Value object that represent an date range count. The count has a date and the count of documents
+ * Abstract class that is used as base class for range facet items
  *
  * @author Frans Saris <frans@beech.it>
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
-class DateRangeCount
+abstract class AbstractRangeFacetItem extends AbstractFacetItem
 {
 
     /**
-     * @var DateTime
+     * @var array
      */
-    protected $date;
+    protected $rangeCounts;
 
     /**
-     * @var int
+     * @return string
      */
-    protected $documentCount = 0;
-
-    /**
-     * @param $date
-     * @param $documentCount
-     */
-    public function __construct($date, $documentCount)
+    public function getUriValue()
     {
-        $this->date = $date;
-        $this->documentCount = $documentCount;
+        return $this->getRangeString();
     }
 
     /**
-     * @return \DateTime
+     * @return array
      */
-    public function getDate()
+    public function getRangeCounts()
     {
-        return $this->date;
+        return $this->rangeCounts;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getDocumentCount()
-    {
-        return $this->documentCount;
-    }
+    abstract protected function getRangeString();
 }

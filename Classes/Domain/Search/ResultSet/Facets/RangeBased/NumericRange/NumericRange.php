@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\DateRange;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\NumericRange;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -14,50 +14,50 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased
  * The TYPO3 project - inspiring people to share!
 */
 
+use ApacheSolrForTypo3\Solr\ViewHelper\Date;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\AbstractRangeFacetItem;
-use DateTime;
 
 /**
- * Value object that represent an option of a options facet.
+ * Value object that represent an option of a numric range facet.
  *
  * @author Frans Saris <frans@beech.it>
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
-class DateRange extends AbstractRangeFacetItem
+class NumericRange extends AbstractRangeFacetItem
 {
     /**
-     * @var DateTime
+     * @var float
      */
     protected $startRequested;
 
     /**
-     * @var DateTime
+     * @var float
      */
     protected $endRequested;
 
     /**
-     * @var DateTime
+     * @var float
      */
     protected $startInResponse;
 
     /**
-     * @var DateTime
+     * @var float
      */
     protected $endInResponse;
 
     /**
-     * @param DateRangeFacet $facet
-     * @param DateTime|null $startRequested
-     * @param DateTime|null $endRequested
-     * @param DateTime|null $startInResponse
-     * @param DateTime|null $endInResponse
+     * @param NumericRangeFacet $facet
+     * @param float|null $startRequested
+     * @param float|null $endRequested
+     * @param float|null $startInResponse
+     * @param float|null $endInResponse
      * @param string $gap
      * @param int $documentCount
      * @param array $rangeCounts
      * @param bool $selected
      */
-    public function __construct(DateRangeFacet $facet, DateTime $startRequested = null, DateTime $endRequested = null, DateTime $startInResponse = null, DateTime $endInResponse = null, $gap = '', $documentCount = 0, $rangeCounts, $selected = false)
+    public function __construct(NumericRangeFacet $facet, $startRequested = null, $endRequested = null, $startInResponse = null, $endInResponse = null, $gap = '', $documentCount = 0, $rangeCounts, $selected = false)
     {
         $this->startInResponse = $startInResponse;
         $this->endInResponse = $endInResponse;
@@ -66,7 +66,7 @@ class DateRange extends AbstractRangeFacetItem
         $this->rangeCounts = $rangeCounts;
 
         $label = '';
-        if ($startRequested instanceof DateTime && $endRequested instanceof DateTime) {
+        if ($startRequested !== null && $endRequested !== null) {
             $label = $this->getRangeString();
         }
 
@@ -79,13 +79,13 @@ class DateRange extends AbstractRangeFacetItem
      */
     protected function getRangeString()
     {
-        return $this->startRequested->format('Ymd') .'0000-'.$this->endRequested->format('Ymd') . '0000';
+        return $this->startRequested . '-' . $this->endRequested;
     }
 
     /**
      * Retrieves the end date that was requested by the user for this facet.
      *
-     * @return \DateTime
+     * @return float
      */
     public function getEndRequested()
     {
@@ -95,7 +95,7 @@ class DateRange extends AbstractRangeFacetItem
     /**
      * Retrieves the start date that was requested by the used for the facet.
      *
-     * @return \DateTime
+     * @return float
      */
     public function getStartRequested()
     {
@@ -105,7 +105,7 @@ class DateRange extends AbstractRangeFacetItem
     /**
      * Retrieves the end date that was received from solr for this facet.
      *
-     * @return \DateTime
+     * @return float
      */
     public function getEndInResponse()
     {
@@ -115,7 +115,7 @@ class DateRange extends AbstractRangeFacetItem
     /**
      * Retrieves the start date that was received from solr for this facet.
      *
-     * @return \DateTime
+     * @return float
      */
     public function getStartInResponse()
     {

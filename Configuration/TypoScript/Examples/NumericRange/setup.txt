@@ -1,0 +1,27 @@
+# Enable a date range facet on created field
+
+# Enable suggest
+plugin.tx_solr.search.faceting.facets {
+    pidRangeRange {
+        field = pid
+        label = Pid Range
+        type = numericRange
+        numericRange {
+            start = 0
+            end = 100
+            gap = 1
+        }
+    }
+}
+# Load js files
+page.includeJSFooterlibs {
+    solr-jquery = EXT:solr/Resources/JavaScript/JQuery/jquery.min.js
+    solr-ui = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.core.min.js
+    solr-slider = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.slider.min.js
+
+    solr-numericrange = EXT:solrfluid/Resources/Public/JavaScript/facet_numericrange.js
+}
+
+page.includeCSS {
+    solr-ui = EXT:solr/Resources/Css/JQueryUi/jquery-ui.custom.css
+}
