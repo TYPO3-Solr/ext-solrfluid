@@ -90,6 +90,23 @@ class SearchUriBuilder
     }
 
     /**
+     * Removes all other facet values for this name and only set's the passed value for the facet.
+     *
+     * @param SearchRequest $previousSearchRequest
+     * @param $facetName
+     * @param $facetValue
+     * @return string
+     */
+    public function getSetFacetValueUri(SearchRequest $previousSearchRequest, $facetName, $facetValue)
+    {
+        $previousSearchRequest = $previousSearchRequest
+            ->getCopyForSubRequest()->removeAllFacetValuesByName($facetName);
+
+        return $this->getAddFacetValueUri($previousSearchRequest, $facetName, $facetValue);
+    }
+
+
+    /**
      * @param SearchRequest $previousSearchRequest
      * @param $facetName
      * @param $facetValue

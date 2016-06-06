@@ -31,6 +31,12 @@ abstract class AbstractRangeFacetItem extends AbstractFacetItem
      */
     protected $rangeCounts;
 
+
+    /**
+     * @var string
+     */
+    protected $gap;
+
     /**
      * @return string
      */
@@ -45,6 +51,14 @@ abstract class AbstractRangeFacetItem extends AbstractFacetItem
     public function getRangeCounts()
     {
         return $this->rangeCounts;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGap()
+    {
+        return $this->gap;
     }
 
     /**

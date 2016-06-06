@@ -64,6 +64,7 @@ class NumericRange extends AbstractRangeFacetItem
         $this->startRequested = $startRequested;
         $this->endRequested = $endRequested;
         $this->rangeCounts = $rangeCounts;
+        $this->gap = $gap;
 
         $label = '';
         if ($startRequested !== null && $endRequested !== null) {
