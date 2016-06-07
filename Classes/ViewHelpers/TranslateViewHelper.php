@@ -26,6 +26,15 @@ use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
  */
 class TranslateViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelper
 {
+    /**
+     * @var bool
+     */
+    protected $escapeChildren = true;
+
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
 
     /**
      * Render translation

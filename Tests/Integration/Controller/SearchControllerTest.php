@@ -128,7 +128,7 @@ class SearchControllerTest extends IntegrationTest
         $resultPage1 = $this->searchResponse->getContent();
 
         $this->assertPaginationVisible($resultPage1);
-        $this->assertContains('Results 1 until 5 of 8', $resultPage1, 'Wrong result count indicated in template');
+        $this->assertContains('Displaying results 1 to 5 of 8', $resultPage1, 'Wrong result count indicated in template');
     }
 
     /**
@@ -148,7 +148,7 @@ class SearchControllerTest extends IntegrationTest
         $resultPage2 = $this->searchResponse->getContent();
 
         $this->assertContains('pages/8/0/0/0', $resultPage2, 'Could not find page 8 in result set');
-        $this->assertContains('Results 6 until 8 of 8', $resultPage2, 'Wrong result count indicated in template');
+        $this->assertContains('Displaying results 6 to 8 of 8', $resultPage2, 'Wrong result count indicated in template');
     }
 
     /**
@@ -508,7 +508,7 @@ class SearchControllerTest extends IntegrationTest
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
 
         $resultPage = $this->searchResponse->getContent();
-        $this->assertContains("Results 1 until 8 of 8", $resultPage, '');
+        $this->assertContains("Displaying results 1 to 8 of 8", $resultPage, '');
         $this->assertContainerByIdContains('<option selected="selected" value="10">10</option>', $resultPage, 'results-per-page');
     }
 
@@ -592,7 +592,7 @@ class SearchControllerTest extends IntegrationTest
         $_GET['q'] = '*';
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
 
-        $this->assertContains('Results 1 until 4 of 4', $this->searchResponse->getContent());
+        $this->assertContains('Displaying results 1 to 4 of 4', $this->searchResponse->getContent());
     }
 
     /**
