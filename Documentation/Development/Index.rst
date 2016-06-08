@@ -10,3 +10,4 @@ Development
 
     CI.rst
     DomainModel.rst
+    ViewHelpers.rst
