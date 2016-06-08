@@ -12,7 +12,7 @@ if (!defined('TYPO3_MODE')) {
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
     'solrfluid',
     'Configuration/TypoScript/Examples/Suggest/',
-    'Search - (Example) Fluid suggest/autocomplete'
+    'Search - (Example) Fluid suggest/autocomplete with jquery ui'
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(

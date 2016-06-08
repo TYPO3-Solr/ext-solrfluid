@@ -1,9 +1,16 @@
 # Enable a hierarchy facet on the field "rootline"
 
-lib.tx_solr.pagetitle = TEXT
-lib.tx_solr.pagetitle.value.data = DB:tt_content:{current:1}:header
-lib.tx_solr.pagetitle.value.insertData = 1
-lib.tx_solr.pagetitle.typolink.parameter.data = current
+lib.tx_solr.pagetitle = HMENU
+lib.tx_solr.pagetitle {
+    special = list
+    special.value.current = 1
+    1 = TMENU
+    1 {
+        NO {
+            doNotLinkIt = 1
+        }
+    }
+}
 
 plugin.tx_solr.search.faceting = 1
 plugin.tx_solr.search.faceting.facets {
