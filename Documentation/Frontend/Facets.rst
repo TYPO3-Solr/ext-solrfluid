@@ -353,7 +353,7 @@ This template is used to render only the area for a few facets. The following pa
 
 Looking at the code above we see to important details that are important for solrfluid.
 
-Facet grouping
+Facet Grouping
 ----
 
 The first important part if the **facet.area.group** ViewHelper. By default all facets in the group **main** will be rendered.
@@ -380,7 +380,7 @@ When you now want to render the facet at another place you can change the group 
 
 Now the facet belongs to another group and will not be rendered in the "main" area anymore.
 
-Default partials
+Default Partials
 ----
 
 Another important fact is that *Facet->getPartianName()* is used to render the detail partial.
