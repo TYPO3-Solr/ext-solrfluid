@@ -14,6 +14,13 @@ if (!defined('TYPO3_MODE')) {
     'Configuration/TypoScript/Examples/Suggest/',
     'Search - (Example) Fluid suggest/autocomplete'
 );
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+    'solrfluid',
+    'Configuration/TypoScript/Examples/QueryGroup/',
+    'Search - (Example) Fluid queryGroup facet on the field created'
+);
+
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
     'solrfluid',
     'Configuration/TypoScript/Examples/DateRange/',

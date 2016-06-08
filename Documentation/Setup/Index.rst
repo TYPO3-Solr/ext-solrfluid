@@ -32,7 +32,7 @@ Include TypoScript Setup
 Now you need to include the TypoScript template "Search - Fluid rendering (include after Default Configuration) (solrfluid)", right
 after the normal EXT:solr TypoScript setup:
 
-.. image:: /Images/solrfluid_include_typoscript.png
+.. image:: /Images/Setup/solrfluid_include_typoscript.png
     :width: 1200 px
 
 Use plugin instances from EXT:solrfluid
@@ -45,21 +45,21 @@ Example:
 Instead using "Search: Form, Result, Additional Components" use "Search: Form, Result, Additional Components (SolrFluid)".
 After these steps solrfluid is usable and using the default templates. If you want to use your own once, you can change the template location.
 
-.. image:: /Images/solrfluid_plugin_instance.png
+.. image:: /Images/Setup/solrfluid_plugin_instance.png
     :width: 1200 px
 
-Check the frontend
+Check the Frontend
 =======
 
 When everything is configured correctly you can open the page in the frontend a do a search.
 
 The example below shows a search for "cms" with an indexed TYPO3 introduction package:
 
-.. image:: /Images/solrfluid_frontend_output.png
+.. image:: /Images/Setup/solrfluid_frontend_output.png
     :width: 1200 px
 
 
-Use custom fluid templates
+Use custom Fluid Templates
 ======
 
 After these steps solrfluid is usable and using the default Templates, Layouts and Partials. If you want to overwrite them,

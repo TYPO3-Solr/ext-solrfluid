@@ -1,6 +1,6 @@
-# Enable a date range facet on created field
+# Enable a numericRange facet on the pidField
 
-# Enable suggest
+plugin.tx_solr.search.faceting = 1
 plugin.tx_solr.search.faceting.facets {
     pidRangeRange {
         field = pid
