@@ -22,10 +22,14 @@ could be a "range facet" on a price field. A facet like this needs to allow to f
 The "type" of a facet can be controlled with the "type" property. When nothing is configured there, the facet will be threated
 as option facet.
 
+|
+
 .. code-block:: typoscript
 
     plugin.tx_solr.search.faceting.facets.[faceName].type = [typeName]
 
+
+|
 
 Valid types could be: options | queryGroup | hierarchy | dateRange | numericRange
 
@@ -37,6 +41,8 @@ Option
 The simplest and most often used facet type is the options facet. It renders the items that could be filtered as a simple list.
 
 To setup an simple options facet you can use the following TypoScript snipped:
+
+|
 
 .. code-block:: typoscript
 
@@ -52,13 +58,15 @@ To setup an simple options facet you can use the following TypoScript snipped:
         }
     }
 
+|
+
 By using this configuration you create an options facet on the solr field "type" with the name "contentType". This field represents the record type, that was
 indexed into solr. Shown in the frontend it will look like this:
 
 .. image:: /Images/Frontend/Facets/options_facet.png
     :width: 800 px
 
-Summary:
+**Summary:**
 
 +-----------------+------------------------------------------------------------+
 | Type            | options                                                    |
@@ -79,6 +87,8 @@ A typical usecase could be, when you want to offer the possiblity to filter on t
 
 With the following example you can configure a query facet:
 
+|
+
 .. code-block:: typoscript
 
     plugin.tx_solr.search {
@@ -98,6 +108,8 @@ With the following example you can configure a query facet:
         }
     }
 
+|
+
 The example above will generate an options facet with the output "week" (for items from the last week) and "old" (for items older then one week).
 
 The output in the frontend will look like this:
@@ -106,10 +118,10 @@ The output in the frontend will look like this:
     :width: 800 px
 
 
-An more complex example is shipped with this extension and can be enabled by including the template "Search - (Example) Fluid queryGroup facet on the field created",
+An more complex example is shipped with this extension and can be enabled by including the template **"Search - (Example) Fluid queryGroup facet on the field created"**,
 this example makes also use of renderingInstructions to render nice labels for the facet.
 
-Summary:
+**Summary:**
 
 +-----------------+---------------------------------------------------------------+
 | Type            | queryGroup                                                    |
@@ -126,8 +138,77 @@ With the hierarchical facets you can render a tree view in the frontend. A commo
 
 With the following example you render a very simple rootline tree in TYPO3:
 
+|
+
+.. code-block:: typoscript
+
+    plugin.tx_solr.search {
+        faceting = 1
+        faceting {
+            facets {
+                pageHierarchy {
+                    field = rootline
+                    label = Rootline
+                    type = hierarchy
+                }
+             }
+        }
+    }
+
+|
+
+The example above just shows a simple example tree that is just rendering the uid's of the rootline as a tree:
 
 
+.. image:: /Images/Frontend/Facets/hierarchy_facet.png
+    :width: 800 px
+
+A more complex example, that is rendering the pagetree with titles is shipped in the extension. You can use it by
+including the example TypoScript **"Search - (Example) Fluid hierarchy facet on the rootline field"**:
+
+.. image:: /Images/Frontend/Facets/hierarchy_rootline_facet.png
+    :width: 800 px
+
+**Summary:**
+
++-----------------+---------------------------------------------------------------+
+| Type            | hierarchy                                                     |
++-----------------+---------------------------------------------------------------+
+| DefaultPartial  | Partials\\Facets\\Hierarchy.html                              |
++-----------------+---------------------------------------------------------------+
+| Domain Classes  | Domain\\Search\\ResultSet\\Facets\\OptionBased\\Hierarchy\\*  |
++-----------------+---------------+-----------------------------------------------+
+
+**Technical solr background:**
+
+Technically the hierarchical facet for solr is the same as a flat options facet. The support of hierarchies is implemented,
+by writing and reading the facet options by a convention:
+
+|
+
+.. code-block:: typoscript
+
+    [depth]-/Level1Label/Level2Label
+
+|
+
+When you follow this convention by writing date into a solr field you can render it as hierarchical facet. As example you can check indexing configuration in EXT:solr (EXT:solr/Configuration/ TypoScript/Solr/setup.txt)
+
+|
+
+.. code-block:: typoscript
+
+    plugin.tx_solr {
+        index {
+            fieldProcessingInstructions {
+                rootline = pageUidToHierarchy
+            }
+        }
+    }
+
+|
+
+In this case the "fieldProcessingInstruction" "pageUidToHierarchy" is used to create the rootline for solr in the conventional way.
 
 
 Date Range

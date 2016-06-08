@@ -18,7 +18,13 @@ if (!defined('TYPO3_MODE')) {
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
     'solrfluid',
     'Configuration/TypoScript/Examples/QueryGroup/',
-    'Search - (Example) Fluid queryGroup facet on the field created'
+    'Search - (Example) Fluid queryGroup facet on the created field'
+);
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+    'solrfluid',
+    'Configuration/TypoScript/Examples/Hierarchy/',
+    'Search - (Example) Fluid hierarchy facet on the rootline field'
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
@@ -32,3 +38,4 @@ if (!defined('TYPO3_MODE')) {
     'Configuration/TypoScript/Examples/NumericRange/',
     'Search - (Example) Fluid numericRange facet with jquery ui slider on pid field'
 );
+
