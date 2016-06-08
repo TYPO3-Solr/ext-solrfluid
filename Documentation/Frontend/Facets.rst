@@ -214,15 +214,196 @@ In this case the "fieldProcessingInstruction" "pageUidToHierarchy" is used to cr
 Date Range
 ----
 
+When you want to provide a range filter on a date field in EXT:solr, you can use the type **"dateRange"**.
+
+The default partial generates a markup with all needed values in data attributes. Together with the provided jQuery ui implementation you can
+create an out-of-the-box date range facet.
+
+With the following typoscript you create a date range facet:
+
+|
+
+.. code-block:: typoscript
+
+    plugin.tx_solr.search {
+        faceting = 1
+        faceting {
+            creationDateRange {
+                label = Created Between
+                field = created
+                type = dateRange
+            }
+        }
+    }
+
+|
+
+In the extension we ship the TypoScript example **"Search - (Example) Fluid dateRange facet with jquery ui datepicker on created field"** that shows how to
+configure a dateRange facet and load all required javascript files.
+
+When you include this template a date range facet will be shown in the frontend that we look like this:
+
+.. image:: /Images/Frontend/Facets/dateRange_facet.png
+    :width: 800 px
+
+As described before for the date range facet markup and javascript code is required, looking at the example template **"Search - (Example) Fluid dateRange facet with jquery ui datepicker on created field"**
+in "Configuration/TypoScript/Examples/DateRange" you see that for the jQueryUi implementation the following files are included:
+
+|
+
+.. code-block:: typoscript
+
+    page.includeJSFooterlibs {
+        solr-jquery = EXT:solr/Resources/JavaScript/JQuery/jquery.min.js
+        solr-ui = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.core.min.js
+        solr-datepicker = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.datepicker.min.js
+        solr-daterange = EXT:solrfluid/Resources/Public/JavaScript/facet_daterange.js
+    }
+
+    page.includeCSS {
+        solr-ui = EXT:solr/Resources/Css/JQueryUi/jquery-ui.custom.css
+    }
+
+|
+
 Numeric Range
 ----
 
+Beside dates ranges are also usefull for numeric values. A typical usecase could be a price slider for a products page.
+With the user interface you should be able to filter the documents for a certain price range.
+
+In the default partial, we also ship a partial with data attributes here to support any custom implementation.
+By default we will use the current implementation from EXT:solr based on jQueryUi.
+
+The following example configures a **numericRange** facet for the field **"pid"**:
+
+|
+
+.. code-block:: typoscript
+
+    plugin.tx_solr.search {
+        faceting = 1
+        faceting {
+            pidRangeRange {
+                field = pid
+                label = Pid Range
+                type = numericRange
+                numericRange {
+                    start = 0
+                    end = 100
+                    gap = 1
+                }
+            }
+        }
+    }
+
+|
+
+The numeric range facet requires beside the template also a javascript library to render the slider. The example typoscript template **"Search - (Example) Fluid numericRange facet with jquery ui slider on pid field"**
+can be used to see the range slider with jQuery ui for the solr field pid by example.
+
+When you configure a facet on the pid field like this, the frontend will output the following facet:
+
+.. image:: /Images/Frontend/Facets/numericRange_facet.png
+    :width: 800 px
+
+Beside the implementation with jQueryUi you are free to implement a range slider with any other javascript framework.
 
 Rendering with fluid
 =====
 
-Default partials
-----
+Rendering facets with fluid is very flexible, because you can use existing ViewHelpers and implement your own logic in ViewHelpers
+to support your custom rendering logic.
+
+In the default template the main faceting area on the left side, is done in the following file:
+
+|
+
+.. code-block:: bash
+
+    Resources/Private/Partials/Result/Facets.html
+
+|
+
+This template is used to render only the area for a few facets. The following part is the relevant part where we itterate over the facets:
+
+|
+
+.. code-block:: xml
+
+    <s:facet.area.group groupName="main" facets="{resultSet.facets.available}">
+        <div class="facet-area-main">
+            <div class="solr-facets-available secondaryContentSection">
+                <div class="csc-header">
+                    <h3 class="csc-firstHeader">Narrow Search</h3>
+                </div>
+                <ul class="facets">
+                    <f:for each="{areaFacets}" as="facet">
+                        <li class="facet facet-type facet-type-{facet.type}">
+                            <f:render partial="Facets/{facet.partialName}"
+                            arguments="{resultSet:resultSet, facet:facet}"/>
+                        </li>
+                    </f:for>
+                </ul>
+            </div>
+        </div>
+    </s:facet.area.group>
+
+|
+
+Looking at the code above we see to important details that are important for solrfluid.
 
 Facet grouping
 ----
+
+The first important part if the **facet.area.group** ViewHelper. By default all facets in the group **main** will be rendered.
+This value is the default value.
+
+When you now want to render the facet at another place you can change the group with the following TypoScript configuration:
+
+|
+
+.. code-block:: typoscript
+
+    plugin.tx_solr.search {
+        faceting = 1
+        faceting {
+            contentType {
+                field = type
+                label = Content Type
+                groupName = bottom
+            }
+        }
+    }
+
+|
+
+Now the facet belongs to another group and will not be rendered in the "main" area anymore.
+
+Default partials
+----
+
+Another important fact is that *Facet->getPartianName()* is used to render the detail partial.
+The default implementation of a facet will return the default partial, that is able to render this facet.
+
+If you need another rendering for one facet you can overwrite the used partial within the configuration:
+
+|
+
+.. code-block:: typoscript
+
+    plugin.tx_solr.search {
+        faceting = 1
+        faceting {
+            contentType {
+                field = type
+                label = Content Type
+                partialName = mySpecialFacet
+            }
+        }
+    }
+
+|
+
+Combining all of these concepts together with the flexibility of fluid you are able to render facets in a very
+flexible way.
