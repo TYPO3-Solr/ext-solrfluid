@@ -88,7 +88,7 @@ class ResultPaginateController extends AbstractWidgetController
         if ($this->currentPage < 1) {
             $this->currentPage = 1;
         }
-        $this->view->assign('contentArguments', array($this->widgetConfiguration['as'] => $this->resultSet->getUsedSearch()->getResultDocumentsRaw(), 'pagination' => $this->buildPagination()));
+        $this->view->assign('contentArguments', array($this->widgetConfiguration['as'] => $this->resultSet->getUsedSearch()->getResultDocumentsEscaped(), 'pagination' => $this->buildPagination()));
         $this->view->assign('configuration', $this->configuration);
     }
 

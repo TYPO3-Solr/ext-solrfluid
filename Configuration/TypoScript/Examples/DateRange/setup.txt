@@ -1,6 +1,6 @@
 # Enable a date range facet on created field
 
-# Enable suggest
+plugin.tx_solr.search.faceting = 1
 plugin.tx_solr.search.faceting.facets {
     creationDateRange {
         label = Created Between
