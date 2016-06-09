@@ -32,6 +32,9 @@ that can be rendered with fluid or any other template engine.
 The following UML diagram shows the implemented facets in EXT:solrfluid. Every facet has one or more facet items attached.
 For the **OptionsFacet** the FacetItem is an **Option**, for the **NumericRangeFacet** a **NumericRange**.
 
+|
+
+
 Rendering of a facet:
 
 Based on the **"type"** TypoScript configuration the **"FacetParserRegistry"** chooses the responsible facet parser class that
@@ -48,3 +51,4 @@ For advanced use cases you can use the **"FacetParserRegistry"** to register you
 
 |
 
+As you see in the diagram above solrfluid ships a clean object structure of the facets, that you can render in your custom templates as you need them.
