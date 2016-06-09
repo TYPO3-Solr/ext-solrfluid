@@ -1,11 +1,23 @@
 .. _backend:
 
+.. raw:: latex
+
+    \newpage
+
+.. raw:: pdf
+
+   PageBreak
+
 ***************
 Backend
 ***************
+
+
+|
 
 .. toctree::
 	:titlesonly:
 	:glob:
 
-        ResultsPlugin.rst
+    Plugins.rst
+    ResultsPlugin.rst
