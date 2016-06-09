@@ -20,5 +20,5 @@ In this section we want to describe what you need to develop for or based on EXT
 
     Environment.rst
     CI.rst
-    DomainModel.rst
+    CodeStructure.rst
     ViewHelpers.rst

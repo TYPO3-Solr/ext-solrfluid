@@ -29,7 +29,7 @@ You can import our shipped version of EXT:solrfluid and install it with the TYPO
 Include TypoScript Setup
 ======
 
-Now you need to include the TypoScript template "Search - Fluid rendering (include after Default Configuration) (solrfluid)", right
+Now you need to include the TypoScript template **"Search - Fluid rendering (include after Default Configuration) (solrfluid)"**, right
 after the normal EXT:solr TypoScript setup:
 
 .. image:: /Images/Setup/solrfluid_include_typoscript.png
@@ -42,7 +42,7 @@ You can used the fluid rendering instead the normal rendering by using the plugi
 
 Example:
 
-Instead using "Search: Form, Result, Additional Components" use "Search: Form, Result, Additional Components (SolrFluid)".
+Instead using **"Search: Form, Result, Additional Components"** use **"Search: Form, Result, Additional Components (SolrFluid)"**.
 After these steps solrfluid is usable and using the default templates. If you want to use your own once, you can change the template location.
 
 .. image:: /Images/Setup/solrfluid_plugin_instance.png
@@ -62,8 +62,7 @@ The example below shows a search for "cms" with an indexed TYPO3 introduction pa
 Use custom Fluid Templates
 ======
 
-After these steps solrfluid is usable and using the default Templates, Layouts and Partials. If you want to overwrite them,
-you can change the TypoScript configuration:
+After these steps solrfluid is usable and using the default Templates, Layouts and Partials. If you want to overwrite them, you can change the TypoScript configuration:
 
 .. code-block:: typoscript
 
