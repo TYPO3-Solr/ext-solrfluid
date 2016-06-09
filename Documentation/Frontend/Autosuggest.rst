@@ -26,5 +26,5 @@ If you want to configure an the autosuggest by example, you can include the typo
 
 When everything is configured the frontend will show you a drop down of suggestions when you are typing in the search field:
 
-.. image:: /Images/Frontend/Autosuggest/autosuggest.png
-    :width: 1600 px
+.. image:: ../Images/Frontend/Autosuggest/autosuggest.png
+    :width: 70 %

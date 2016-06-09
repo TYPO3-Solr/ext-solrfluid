@@ -25,8 +25,8 @@ The following configuration can be used to configured the results per page:
 When you apply the configuration above, the frontend will show 6 search results by default and show the options 12, 18 and 24
 to the user to change the amount of visible results
 
-.. image:: /Images/Frontend/PerPage/results_per_page.png
-    :width: 1200 px
+.. image:: ../Images/Frontend/PerPage/results_per_page.png
+    :width: 70 %
 
 **Templating**
 

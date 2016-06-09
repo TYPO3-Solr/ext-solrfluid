@@ -19,8 +19,8 @@ The "SearchResultSet" is the main entity that you get passed to the view. It can
 
 |
 
-.. image:: /Images/Development/uml_resultset.png
-    :width: 1200 px
+.. image:: ../Images/Development/uml_resultset.png
+    :width: 70 %
 
 |
 
@@ -46,8 +46,8 @@ For advanced use cases you can use the **"FacetParserRegistry"** to register you
 
 |
 
-.. image:: /Images/Development/uml_facets.png
-    :width: 2200 px
+.. image:: ../Images/Development/uml_facets.png
+    :width: 70 %
 
 |
 

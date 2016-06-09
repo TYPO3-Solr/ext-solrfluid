@@ -31,8 +31,8 @@ When you want to start the testrunner in your shell you need to bootstrap it onc
 
 The bootstrapper will prompt for some values:
 
-.. image:: /Images/Development/ci_bootstrap.png
-    :width: 1600 px
+.. image:: ../Images/Development/ci_bootstrap.png
+    :width: 70 %
 
 
 When the boostrapper was finished successful the following was done:
@@ -63,8 +63,8 @@ When everything is configured correctly all tests should run through and you sho
 
 |
 
-.. image:: /Images/Development/ci_build.png
-    :width: 1600 px
+.. image:: ../Images/Development/ci_build.png
+    :width: 70 %
 
 |
 
