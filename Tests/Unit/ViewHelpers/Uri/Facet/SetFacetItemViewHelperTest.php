@@ -32,6 +32,8 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\Opti
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\Uri\SearchUriBuilder;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet\AddFacetItemViewHelper;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet\RemoveFacetItemViewHelper;
+use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri\Facet\SetFacetItemViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
@@ -41,27 +43,26 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 /**
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  */
-class AddFacetItemViewHelperTest extends AbstractFacetItemViewHelperTest
+class SetFacetItemViewHelperTest extends AbstractFacetItemViewHelperTest
 {
-
 
     /**
      * @test
      */
-    public function addFacetItemWillUseUriBuilderAsExpected()
+    public function setFacetItemWillUseUriBuilderAsExpected()
     {
         $facet = $this->getTestColorFacet();
 
         $renderContextMock = $this->getDumbMock(RenderingContextInterface::class);
-        $viewHelper = new AddFacetItemViewHelper();
+        $viewHelper = new SetFacetItemViewHelper();
         $viewHelper->setRenderingContext($renderContextMock);
 
         $searchUriBuilderMock = $this->getDumbMock(SearchUriBuilder::class);
 
-            // we expected that the getAddFacetOptionUri will be called on the searchUriBuilder in the end.
-        $searchUriBuilderMock->expects($this->once())->method('getAddFacetValueUri')->with($facet->getResultSet()->getUsedSearchRequest(), 'Color', 'red');
+            // we expected that the getSetFacetValueUri will be called on the searchUriBuilder in the end.
+        $searchUriBuilderMock->expects($this->once())->method('getSetFacetValueUri')->with($facet->getResultSet()->getUsedSearchRequest(), 'Color', 'red');
         $viewHelper->injectSearchUriBuilder($searchUriBuilderMock);
 
-        $viewHelper->render($facet,  $facet->getOptions()->getByPosition(0));
+        $viewHelper->render($facet, $facet->getOptions()->getByPosition(0));
     }
 }
