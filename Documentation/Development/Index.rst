@@ -20,5 +20,6 @@ In this section we want to describe what you need to develop for or based on EXT
 
     Environment.rst
     CI.rst
+    DevelopmentWorkflow.rst
     CodeStructure.rst
     ViewHelpers.rst
