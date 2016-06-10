@@ -6,7 +6,7 @@
 
 	<f:section name="hierarchyTree">
 		<f:for each="{node.childNodes}" as="childNode" iteration="iteration">
-			<li class="facet-option{f:if(condition:'{iteration.index} > 9', then:' tx-solr-facet-hidden')}">
+			<li class="facet-option{f:if(condition:'{iteration.index} > 9', then:' tx-solr-facet-hidden')}" data-facet-item-value="{childNode.value}">
 				+ <a class="facet" href="{s:uri.facet.addFacetItem(facet: facet, facetItem: childNode)}">{childNode.label}</a> <span class="facet-result-count">({childNode.documentCount})</span>
 			</li>
 			<f:if condition="{childNode.childNodes}">
@@ -16,7 +16,7 @@
 	</f:section>
 
     <h5 class="facet-label">{facet.label}</h5>
-    <ul class="facet-option-list fluidfacet">
+    <ul class="facet-option-list facet-type-hierarchy fluidfacet" data-facet-name="{facet.name}" data-facet-label="{facet.label}">
 		<f:render section="hierarchyTree" arguments="{node: facet, facet: facet}" />
     </ul>
 
