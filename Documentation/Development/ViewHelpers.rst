@@ -13,38 +13,38 @@ With the current release we ship the following concrete ViewHelpers:
 +---------------------------------+----------------------------------------------------------------+
 | **Path**                        | **Description**                                                |
 +---------------------------------+----------------------------------------------------------------+
-| f:debug.documentScoreAnalyzer   | Used to render the score analysis.                             |
+| s:debug.documentScoreAnalyzer   | Used to render the score analysis.                             |
 +---------------------------------+----------------------------------------------------------------+
-| f:debug.query                   | Shows the solr query debug information.                        |
+| s:debug.query                   | Shows the solr query debug information.                        |
 +---------------------------------+----------------------------------------------------------------+
-| f:document.highlightResult      | Performs the highlighting on a document.                       |
+| s:document.highlightResult      | Performs the highlighting on a document.                       |
 +---------------------------------+----------------------------------------------------------------+
-| f:document.relevance            | Shows the relevance information for a document.                |
+| s:document.relevance            | Shows the relevance information for a document.                |
 +---------------------------------+----------------------------------------------------------------+
-| f:facet.area.group              | Filters the facets in the rendering scope to one group.        |
+| s:facet.area.group              | Filters the facets in the rendering scope to one group.        |
 +---------------------------------+----------------------------------------------------------------+
-| f:uri.facet.addFacetItem        | Add's a facet item to the current url.                         |
+| s:uri.facet.addFacetItem        | Add's a facet item to the current url.                         |
 +---------------------------------+----------------------------------------------------------------+
-| f:uri.facet.removeAllFacets     | Removes all facet items from the current url.                  |
+| s:uri.facet.removeAllFacets     | Removes all facet items from the current url.                  |
 +---------------------------------+----------------------------------------------------------------+
-| f:uri.facet.removeFacetItem     | Removes a single facet item from the url.                      |
+| s:uri.facet.removeFacetItem     | Removes a single facet item from the url.                      |
 +---------------------------------+----------------------------------------------------------------+
-| f:uri.facet.setFacetItem        | Sets one single item for a facet (and removes other setted)    |
+| s:uri.facet.setFacetItem        | Sets one single item for a facet (and removes other setted)    |
 +---------------------------------+----------------------------------------------------------------+
-| f:uri.paginate.resultPage       | Creates a link to a result page of the current search.         |
+| s:uri.paginate.resultPage       | Creates a link to a result page of the current search.         |
 +---------------------------------+----------------------------------------------------------------+
-| f:uri.search.currentSearch      | Creates a link to the current search (with facets, sorting...) |
+| s:uri.search.currentSearch      | Creates a link to the current search (with facets, sorting...) |
 +---------------------------------+----------------------------------------------------------------+
-| f:uri.search.startNewSearch     | Creates a link for a new search by a term.                     |
+| s:uri.search.startNewSearch     | Creates a link for a new search by a term.                     |
 +---------------------------------+----------------------------------------------------------------+
-| f:uri.sorting.removeSorting     | Creates a link to the current search and removes the sorting.  |
+| s:uri.sorting.removeSorting     | Creates a link to the current search and removes the sorting.  |
 +---------------------------------+----------------------------------------------------------------+
-| f:uri.sorting.setSorting        | Creates a link to the current search and sets a new sorting.   |
+| s:uri.sorting.setSorting        | Creates a link to the current search and sets a new sorting.   |
 +---------------------------------+----------------------------------------------------------------+
-| f:pageBrowserRange              | Provides the range data for the pagination.                    |
+| s:pageBrowserRange              | Provides the range data for the pagination.                    |
 +---------------------------------+----------------------------------------------------------------+
-| f:searchForm                    | Renders the searchForm.                                        |
+| s:searchForm                    | Renders the searchForm.                                        |
 +---------------------------------+----------------------------------------------------------------+
-| f:translate                     | Custom translate ViewHelper (uses translations from ext:solr)  |
+| s:translate                     | Custom translate ViewHelper (uses translations from ext:solr)  |
 +---------------------------------+----------------------------------------------------------------+
 
