@@ -189,7 +189,7 @@ class SearchControllerTest extends IntegrationTest
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
         $resultPage1 = $this->searchResponse->getContent();
 
-        $this->assertContains('class="facet-option-list fluidfacet"', $resultPage1, 'Could not find fluidfacet class that indicates the facet was rendered with fluid');
+        $this->assertContains('fluidfacet', $resultPage1, 'Could not find fluidfacet class that indicates the facet was rendered with fluid');
         $this->assertContains('pages</a> <span class="facet-result-count">', $resultPage1, 'Could not find facet option for pages');
     }
 
@@ -328,7 +328,7 @@ class SearchControllerTest extends IntegrationTest
         $this->assertGreaterThan(0, $subtitleWomanPosition);
         $this->assertGreaterThan($subtitleMenPosition, $subtitleWomanPosition);
 
-        $this->assertContains('class="facet-option-list fluidfacet"', $resultPage1, 'Could not find fluidfacet class that indicates the facet was rendered with fluid');
+        $this->assertContains('fluidfacet', $resultPage1, 'Could not find fluidfacet class that indicates the facet was rendered with fluid');
         $this->assertContains('pages</a> <span class="facet-result-count">', $resultPage1, 'Could not find facet option for pages');
     }
 
@@ -360,7 +360,7 @@ class SearchControllerTest extends IntegrationTest
         $this->assertGreaterThan(0, $subtitleWomanPosition);
         $this->assertGreaterThan($subtitleWomanPosition, $subtitleMenPosition);
 
-        $this->assertContains('class="facet-option-list fluidfacet"', $resultPage1, 'Could not find fluidfacet class that indicates the facet was rendered with fluid');
+        $this->assertContains('fluidfacet', $resultPage1, 'Could not find fluidfacet class that indicates the facet was rendered with fluid');
         $this->assertContains('pages</a> <span class="facet-result-count">', $resultPage1, 'Could not find facet option for pages');
     }
 
@@ -424,7 +424,7 @@ class SearchControllerTest extends IntegrationTest
         $this->assertGreaterThan(0, $subtitleWomanPosition);
         $this->assertGreaterThan($subtitleMenPosition, $subtitleWomanPosition);
 
-        $this->assertContains('class="facet-option-list fluidfacet"', $resultPage1, 'Could not find fluidfacet class that indicates the facet was rendered with fluid');
+        $this->assertContains('fluidfacet', $resultPage1, 'Could not find fluidfacet class that indicates the facet was rendered with fluid');
         $this->assertContains('pages</a> <span class="facet-result-count">', $resultPage1, 'Could not find facet option for pages');
     }
 

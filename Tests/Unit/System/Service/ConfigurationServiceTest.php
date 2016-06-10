@@ -26,8 +26,6 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\System\Service;
 
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
-use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
 use ApacheSolrForTypo3\Solrfluid\System\Service\ConfigurationService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\FlexFormService;

@@ -5,9 +5,9 @@
 >
 
     <h5 class="facet-label">{facet.label}</h5>
-    <ul class="facet-option-list fluidfacet">
+    <ul class="facet-option-list facet-type-options fluidfacet" data-facet-name="{facet.name}" data-facet-label="{facet.label}">
         <f:for each="{facet.options}" as="option" iteration="iteration">
-            <li class="facet-option{f:if(condition:'{iteration.index} > 9', then:' tx-solr-facet-hidden')}">
+            <li class="facet-option{f:if(condition:'{iteration.index} > 9', then:' tx-solr-facet-hidden')}" data-facet-item-value="{option.value}">
 				+ <a class="facet" href="{s:uri.facet.addFacetItem(facet: facet, facetItem: option)}">{option.label}</a> <span class="facet-result-count">({option.documentCount})</span>
             </li>
         </f:for>

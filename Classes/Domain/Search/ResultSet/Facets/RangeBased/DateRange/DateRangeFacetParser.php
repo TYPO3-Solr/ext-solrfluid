@@ -16,6 +16,8 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased
 
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\AbstractRangeFacetParser;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use ApacheSolrForTypo3\Solrfluid\System\Data\DateTime;
+use ApacheSolrForTypo3\Solrfluid\System\Data\DateTimeProxy;
 
 /**
  * Class DateRangeFacetParser
@@ -61,25 +63,25 @@ class DateRangeFacetParser extends AbstractRangeFacetParser
 
     /**
      * @param string $rawDate
-     * @return \DateTime|null
+     * @return DateTime|null
      */
     protected function parseRequestValue($rawDate)
     {
-        $date = \DateTime::createFromFormat('Ymd', substr($rawDate, 0, 8));
-
-        if ($date === false) {
+        $rawDate = \DateTime::createFromFormat('Ymd', substr($rawDate, 0, 8));
+        if ($rawDate === false) {
             return null;
         }
-        $date->setTime(0, 0, 0);
+        $date = new DateTime($rawDate->format(DateTime::ISO8601));
         return $date;
     }
 
     /**
      * @param $isoDateString
-     * @return \DateTime
+     * @return DateTime
      */
     protected function parseResponseValue($isoDateString)
     {
-        return \DateTime::createFromFormat(\DateTime::ISO8601, $isoDateString);
+        $rawDate = \DateTime::createFromFormat(\DateTime::ISO8601, $isoDateString);
+        return new DateTime($rawDate->format(DateTime::ISO8601));
     }
 }

@@ -4,11 +4,11 @@
 
 <f:section name="Document">
 
-	<li class="results-entry{f:if(condition:document.isElevated, then: ' results-elevated')}">
-		<!--
-		Score: {document.score}
-		Document ID:  {document.id}
-		-->
+	<li class="results-entry{f:if(condition:document.isElevated, then: ' results-elevated')}"
+			data-document-score="{document.score}"
+			data-document-id="{document.id}"
+			data-document-url="{document.url}"
+		>
 		<f:if condition="{document.isElevated}">
 			<div class="results-elevated-label"><s:translate key="sponsored"/></div>
 		</f:if>
