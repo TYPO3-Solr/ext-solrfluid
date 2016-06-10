@@ -27,11 +27,10 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\System\Data;
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
 use ApacheSolrForTypo3\Solrfluid\System\Data\DateTime;
 
-
 /**
  * @author Timo Schmidt <timo.schmidt@dkd.de>
  */
-class DateTimeProxyTest extends UnitTest
+class DateTimeTest extends UnitTest
 {
     /**
      * @test
@@ -50,5 +49,4 @@ class DateTimeProxyTest extends UnitTest
         $proxy = new DateTime('2003-12-13T18:30:02Z', new \DateTimeZone("UTC"));
         $this->assertSame('2003-12-13T18:30:02+0000', $proxy->format(\DateTime::ISO8601));
     }
-
 }
