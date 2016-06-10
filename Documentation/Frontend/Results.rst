@@ -1,6 +1,6 @@
-=====
+===========
 Result List
-=====
+===========
 
 The most important part of a search are the results. The rendering of the results is done in the "Results.html" template
 (Located in Templates/Search/Results.html)

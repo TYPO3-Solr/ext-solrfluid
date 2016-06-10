@@ -1,6 +1,6 @@
-=====
+===========
 ViewHelpers
-=====
+===========
 
 Beside the controllers, the domain objects and the templates we ship a few useful view helpers. To avoid a strong coupling between the extension and fluid as template engine we tried to keep all ViewHelpers as "slim" as possible. Whenever it was possible we moved the logic into custom service classes and just use them in the ViewHelper.
 

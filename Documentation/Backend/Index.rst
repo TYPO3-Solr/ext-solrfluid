@@ -8,16 +8,16 @@
 
    PageBreak
 
-***************
+*******
 Backend
-***************
+*******
 
 
 |
 
 .. toctree::
-	:titlesonly:
-	:glob:
+   :titlesonly:
+   :glob:
 
-    Plugins.rst
-    ResultsPlugin.rst
+   Plugins.rst
+   ResultsPlugin.rst

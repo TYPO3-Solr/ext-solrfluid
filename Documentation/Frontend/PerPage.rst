@@ -1,6 +1,6 @@
-=====
+================
 Results per Page
-=====
+================
 
 EXT:solr allows you to configure how many result per page will be shown and at the same time the user can also change
 this value to an allowed value.

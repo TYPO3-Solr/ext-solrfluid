@@ -1,9 +1,9 @@
 .. _reference:
 
-***************
+***********************
 Configuration Reference
-***************
+***********************
 
 .. toctree::
-	:titlesonly:
-	:glob:
+   :titlesonly:
+   :glob:

@@ -49,15 +49,15 @@
 	**Table of Contents**
 
 .. toctree::
-	:maxdepth: 3
-	:titlesonly:
-	:glob:
+   :maxdepth: 3
+   :titlesonly:
+   :glob:
 
-    Introduction/Index
-    Setup/Index
-    Frontend/Index
-    Backend/Index
-    Development/Index
+   Introduction/Index
+   Setup/Index
+   Frontend/Index
+   Backend/Index
+   Development/Index
 
 
 

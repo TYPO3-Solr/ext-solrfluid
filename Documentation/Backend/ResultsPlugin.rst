@@ -1,12 +1,12 @@
 
 Results Plugin
-=====
+==============
 
 The results plugin is the most important plugin of the extension. It is responsible to render a search form
 and the results.
 
 Flexform Configuration
-----
+----------------------
 
 All configuration can be done with TypoScript and the settings from EXT:solr are used. For some settings it makes sence to overwrite them with the flexform in the plugin settings.
 

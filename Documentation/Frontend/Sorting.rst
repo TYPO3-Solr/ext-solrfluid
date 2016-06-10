@@ -1,6 +1,6 @@
-=====
+=======
 Sorting
-=====
+=======
 
 When no sorting is selected the search will order the results by **"relevance"**. This relevance is calculated by many factors and has the goal to deliver
 the best result for the query on the first position. That's what you expect from a search :)

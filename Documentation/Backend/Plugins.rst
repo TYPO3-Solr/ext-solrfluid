@@ -1,6 +1,6 @@
-=====
+=======
 Plugins
-=====
+=======
 
 Solrfluid provides the following plugin instances that can be configured in the backend:
 

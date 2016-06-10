@@ -1,6 +1,6 @@
-=====
+==============
 Code Structure
-=====
+==============
 
 The components of EXT:solrfluid have been developed with the domain driven design (DDD) approach (https://de.wikipedia.org/wiki/Domain-driven_Design) for our extension we tried to separate the code by the following layers:
 
@@ -8,12 +8,12 @@ The components of EXT:solrfluid have been developed with the domain driven desig
 * **System**: Everything that is related to the "system" (e.g. TYPO3 specific) should be implemented here.
 
 Domain Layer & Domain Model
-=====
+===========================
 
 The classes of the domain layer are located in "Classes/Domain" and should contain everything that is related to the "search domain".
 
 ResultSet
-----
+---------
 
 The "SearchResultSet" is the main entity that you get passed to the view. It can be used to access all search related objects on your result page.
 

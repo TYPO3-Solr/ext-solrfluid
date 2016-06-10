@@ -1,6 +1,6 @@
-=====
+===========
 Autosuggest
-=====
+===========
 
 A user of the search typically want to find the results a fast as possible. To support the user and avoid to much typing
 solr can create a drop down list of common suggested search terms right after the search input box.

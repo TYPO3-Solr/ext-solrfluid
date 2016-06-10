@@ -1,6 +1,6 @@
-=====
+========================
 Fluid Template Structure
-=====
+========================
 
 First we start with a short overview of the template structure. This is just to get an rought overview. The templates will be explained in
 detail in the template where they belong to:

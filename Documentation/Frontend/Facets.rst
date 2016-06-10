@@ -1,6 +1,6 @@
-=====
+======
 Facets
-=====
+======
 
 The goal of a good search is, that the user will find what he is looking for as fast as possible.
 To support this goal you can give information from the results to the user to "drill down" or "filter" the results
@@ -13,7 +13,7 @@ In the following paragraphs we will get an overview about the different facet ty
 just by adding a few lines of configuration.
 
 Facet Types
-=====
+===========
 
 A solr field can contain different type of data, where different facets make sence. The simplest facet is an option "facet".
 The "options facet" just contains a list of values and the user can choose one or many of them. A more complex type
@@ -36,7 +36,7 @@ Valid types could be: options | queryGroup | hierarchy | dateRange | numericRang
 In the following paragraphs we will introduce the available facet types in EXT:solrfluid and show how to configure them.
 
 Option
-----
+------
 
 The simplest and most often used facet type is the options facet. It renders the items that could be filtered as a simple list.
 
@@ -78,7 +78,7 @@ indexed into solr. Shown in the frontend it will look like this:
 
 
 Query Group
-----
+-----------
 
 The query group facet renders an option list, compareable to the options facet, but the single options are not created from
 plain solr field values. They are created from dynamic queries.
@@ -132,7 +132,7 @@ this example makes also use of renderingInstructions to render nice labels for t
 +-----------------+---------------+-----------------------------------------------+
 
 Hierarchical
-----
+------------
 
 With the hierarchical facets you can render a tree view in the frontend. A common usecase is to render a category tree where a document belongs to.
 
@@ -212,7 +212,7 @@ In this case the "fieldProcessingInstruction" "pageUidToHierarchy" is used to cr
 
 
 Date Range
-----
+----------
 
 When you want to provide a range filter on a date field in EXT:solr, you can use the type **"dateRange"**.
 
@@ -267,7 +267,7 @@ in "Configuration/TypoScript/Examples/DateRange" you see that for the jQueryUi i
 |
 
 Numeric Range
-----
+-------------
 
 Beside dates ranges are also usefull for numeric values. A typical usecase could be a price slider for a products page.
 With the user interface you should be able to filter the documents for a certain price range.
@@ -310,7 +310,7 @@ When you configure a facet on the pid field like this, the frontend will output 
 Beside the implementation with jQueryUi you are free to implement a range slider with any other javascript framework.
 
 Rendering with fluid
-=====
+====================
 
 Rendering facets with fluid is very flexible, because you can use existing ViewHelpers and implement your own logic in ViewHelpers
 to support your custom rendering logic.
@@ -354,7 +354,7 @@ This template is used to render only the area for a few facets. The following pa
 Looking at the code above we see to important details that are important for solrfluid.
 
 Facet Grouping
-----
+--------------
 
 The first important part if the **facet.area.group** ViewHelper. By default all facets in the group **main** will be rendered.
 This value is the default value.
@@ -381,7 +381,7 @@ When you now want to render the facet at another place you can change the group 
 Now the facet belongs to another group and will not be rendered in the "main" area anymore.
 
 Default Partials
-----
+----------------
 
 Another important fact is that *Facet->getPartianName()* is used to render the detail partial.
 The default implementation of a facet will return the default partial, that is able to render this facet.

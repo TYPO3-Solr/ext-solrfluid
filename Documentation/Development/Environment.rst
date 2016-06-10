@@ -1,6 +1,6 @@
-=====
+=======================
 Development Environment
-=====
+=======================
 
 To simplify the development for TYPO3 and solr related components we provide a development environment based on vagrant and the Homestead box of the TYPO3 core.
 

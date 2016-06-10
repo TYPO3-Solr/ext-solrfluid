@@ -8,18 +8,17 @@
 
    PageBreak
 
-***************
+***********
 Development
-***************
+***********
 
 In this section we want to describe what you need to develop for or based on EXT:solrfluid.
 
 .. toctree::
-	:titlesonly:
-	:glob:
+   :titlesonly:
 
-    Environment.rst
-    CI.rst
-    DevelopmentWorkflow.rst
-    CodeStructure.rst
-    ViewHelpers.rst
+   Environment
+   CI
+   DevelopmentWorkflow
+   CodeStructure
+   ViewHelpers
