@@ -15,6 +15,11 @@
 		data-facet-url="{s:uri.facet.setFacetItem(facet: facet, facetItemValue: '___FROM___-___TO___')}"
 	>
 	</div>
-	<div id="facet-{facet.name}-value">{facet.range.startRequested} - {facet.range.endRequested}</div>
+	<div id="facet-{facet.name}-value">
+		<f:if condition="{facet.isUsed}">
+			<f:then>{facet.range.startRequested} - {facet.range.endRequested}</f:then>
+			<f:else>{facet.range.startInResponse} - {facet.range.endInResponse}</f:else>
+		</f:if>
+	</div>
 
 </html>
