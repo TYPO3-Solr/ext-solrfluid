@@ -10,7 +10,7 @@
 				<li>
 					<f:if condition="{sorting.isResetOption}">
 						<f:then>
-							<a href="{s:uri.sorting.removeSorting()}">{sorting.label}</a>
+							<a href="{s:uri.sorting.removeSorting()}" class="solr-ajaxified">{sorting.label}</a>
 						</f:then>
 
 						<f:else>
@@ -21,10 +21,10 @@
 										<f:else><img width="8" height="8" alt="sort ascending" src="{f:uri.resource(extensionName: 'solr', path: 'Images/IndicatorDown.png')}"></f:else>
 									</f:if>
 
-									<a href="{s:uri.sorting.setSorting(sortingName: sorting.name, sortingDirection: sorting.oppositeDirection)}">[{sorting.label}]</a>
+									<a href="{s:uri.sorting.setSorting(sortingName: sorting.name, sortingDirection: sorting.oppositeDirection)}" class="solr-ajaxified">[{sorting.label}]</a>
 								</f:then>
 								<f:else>
-									<a href="{s:uri.sorting.setSorting(sortingName: sorting.name, sortingDirection: sorting.direction)}">{sorting.label}</a>
+									<a href="{s:uri.sorting.setSorting(sortingName: sorting.name, sortingDirection: sorting.direction)}" class="solr-ajaxified">{sorting.label}</a>
 								</f:else>
 							</f:if>
 						</f:else>

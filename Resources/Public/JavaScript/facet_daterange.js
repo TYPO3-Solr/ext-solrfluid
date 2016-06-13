@@ -32,6 +32,10 @@ function DateRangeFacetController() {
 
 
 jQuery(document).ready(function() {
-    controller = new DateRangeFacetController();
-    controller.init();
+    dateRangeFacetController = new DateRangeFacetController();
+    dateRangeFacetController.init();
+
+    jQuery("body").on("tx_solr_updated", function() {
+        dateRangeFacetController.init();
+    });
 });

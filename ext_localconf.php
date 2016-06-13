@@ -36,3 +36,5 @@
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['searchResultClassName '] = 'ApacheSolrForTypo3\\Solrfluid\\Domain\\Search\\ResultSet\\SearchResult';
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['searchResultSetClassName '] = 'ApacheSolrForTypo3\\Solrfluid\\Domain\\Search\\ResultSet\\SearchResultSet';
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['afterSearch'][] = 'ApacheSolrForTypo3\\Solrfluid\\Domain\\Search\\ResultSet\\ResultSetReconstitutionProcessor';
+
+$GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include']['tx_solrfluid_search'] = 'EXT:solrfluid/Resources/Private/Php/Eid/search.php';

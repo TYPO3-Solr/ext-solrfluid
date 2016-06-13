@@ -11,12 +11,12 @@
 					<f:for each="{resultSet.facets.used}" as="facet">
 						<f:for each="{facet.allFacetItems.selected}" as="item">
 							<li>-
-								<a href="{s:uri.facet.removeFacetItem(facet: facet, facetItem: item)}" class="facet remove-facet-option">{facet.label}: {item.label}</a> <span class="facet-result-count">({item.documentCount})</span>
+								<a href="{s:uri.facet.removeFacetItem(facet: facet, facetItem: item)}" class="facet remove-facet-option solr-ajaxified">{facet.label}: {item.label}</a> <span class="facet-result-count">({item.documentCount})</span>
 							</li>
 						</f:for>
 					</f:for>
 					<li class="facets-remove-all">
-						<a href="{s:uri.facet.removeAllFacets()}">Remove all filters</a>
+						<a href="{s:uri.facet.removeAllFacets()}" class="solr-ajaxified">Remove all filters</a>
 					</li>
 				</ul>
 			</div>

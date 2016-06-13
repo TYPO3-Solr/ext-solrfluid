@@ -1,0 +1,10 @@
+# Ajaxify the results
+
+page.includeJSFooterlibs {
+    solr-jquery = EXT:solr/Resources/JavaScript/JQuery/jquery.min.js
+
+    solrfluid-uri = EXT:solrfluid/Resources/Public/JavaScript/JQuery/URI.min.js
+    solrfluid-uri-jquery = EXT:solrfluid/Resources/Public/JavaScript/JQuery/jquery.URI.min.js
+    solrfluid-ajaxify = EXT:solrfluid/Resources/Public/JavaScript/search_controller.js
+}
+
