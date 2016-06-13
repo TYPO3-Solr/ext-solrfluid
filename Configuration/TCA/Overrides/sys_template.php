@@ -39,3 +39,8 @@ if (!defined('TYPO3_MODE')) {
     'Search - (Example) Fluid numericRange facet with jquery ui slider on pid field'
 );
 
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+    'solrfluid',
+    'Configuration/TypoScript/Ajaxify/',
+    'Search - Fluid: ajaxify the search results with jQuery'
+);

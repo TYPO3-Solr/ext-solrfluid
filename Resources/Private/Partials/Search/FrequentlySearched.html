@@ -14,7 +14,7 @@
 			<ul>
 				<f:for each="{frequentSearches}" as="searchedForInfo">
 					<li class="{searchedForInfo.class}">
-						<a href="{s:uri.search.startNewSearch(queryString: searchedForInfo.q)}">{searchedForInfo.q}</a>
+						<a href="{s:uri.search.startNewSearch(queryString: searchedForInfo.q)}" class="solr-ajaxified">{searchedForInfo.q}</a>
 					</li>
 				</f:for>
 			</ul>

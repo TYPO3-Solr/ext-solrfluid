@@ -27,3 +27,4 @@ discover the possbilities that solrfluid offers to render your search results, f
    Autosuggest.rst
    Sorting.rst
    PerPage.rst
+   Ajax.rst
