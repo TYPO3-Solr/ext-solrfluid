@@ -26,7 +26,6 @@ When you apply the configuration above, the frontend will show 6 search results 
 to the user to change the amount of visible results
 
 .. image:: ../Images/Frontend/PerPage/results_per_page.png
-    :width: 70 %
 
 **Templating**
 

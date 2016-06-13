@@ -9,4 +9,3 @@ Solrfluid provides the following plugin instances that can be configured in the 
 * Frequent Searches plugin: **"Search: Frequent Searches (SolrFluid)"**
 
 .. image:: ../Images/Backend/plugin_instances.png
-   :width: 70 %

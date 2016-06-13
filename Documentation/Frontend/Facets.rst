@@ -64,7 +64,6 @@ By using this configuration you create an options facet on the solr field "type"
 indexed into solr. Shown in the frontend it will look like this:
 
 .. image:: ../Images/Frontend/Facets/options_facet.png
-    :width: 40 %
 
 **Summary:**
 
@@ -115,7 +114,6 @@ The example above will generate an options facet with the output "week" (for ite
 The output in the frontend will look like this:
 
 .. image:: ../Images/Frontend/Facets/queryGroup_facet.png
-    :width: 40 %
 
 
 An more complex example is shipped with this extension and can be enabled by including the template **"Search - (Example) Fluid queryGroup facet on the field created"**,
@@ -161,13 +159,12 @@ The example above just shows a simple example tree that is just rendering the ui
 
 
 .. image:: ../Images/Frontend/Facets/hierarchy_facet.png
-    :width: 40 %
+
 
 A more complex example, that is rendering the pagetree with titles is shipped in the extension. You can use it by
 including the example TypoScript **"Search - (Example) Fluid hierarchy facet on the rootline field"**:
 
 .. image:: ../Images/Frontend/Facets/hierarchy_rootline_facet.png
-    :width: 40 %
 
 **Summary:**
 
@@ -244,7 +241,6 @@ configure a dateRange facet and load all required javascript files.
 When you include this template a date range facet will be shown in the frontend that we look like this:
 
 .. image:: ../Images/Frontend/Facets/dateRange_facet.png
-    :width: 40 %
 
 As described before for the date range facet markup and javascript code is required, looking at the example template **"Search - (Example) Fluid dateRange facet with jquery ui datepicker on created field"**
 in "Configuration/TypoScript/Examples/DateRange" you see that for the jQueryUi implementation the following files are included:
@@ -305,7 +301,6 @@ can be used to see the range slider with jQuery ui for the solr field pid by exa
 When you configure a facet on the pid field like this, the frontend will output the following facet:
 
 .. image:: ../Images/Frontend/Facets/numericRange_facet.png
-    :width: 40 %
 
 Beside the implementation with jQueryUi you are free to implement a range slider with any other javascript framework.
 

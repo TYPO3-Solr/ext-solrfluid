@@ -6,7 +6,6 @@ First we start with a short overview of the template structure. This is just to 
 detail in the template where they belong to:
 
 .. image:: ../Images/Frontend/Structure/template_structure.png
-    :width: 30 %
 
 * Layouts: Layouts that are used in the search and the faceting.
 * Partials:
