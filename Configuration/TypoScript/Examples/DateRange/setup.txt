@@ -22,7 +22,7 @@ page.includeJSFooterlibs {
     solr-ui = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.core.min.js
     solr-datepicker = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.datepicker.min.js
 
-    solr-daterange = EXT:solrfluid/Resources/Public/JavaScript/facet_daterange.js
+    solr-daterange = EXT:solrfluid/Resources/Public/JavaScript/facet_daterange_controller.js
 }
 
 page.includeCSS {
