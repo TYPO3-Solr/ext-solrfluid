@@ -10,18 +10,25 @@ function SearchController() {
 
     this.handleClickOnAjaxifiedUri = function() {
         var clickedLink = jQuery(this);
+
+        var solrContainer = clickedLink.closest(".tx_solr");
+        var solrParent = solrContainer.parent();
+        var loader = jQuery("<div class='tx-solr-loader'></div>");
         var uri = clickedLink.uri();
+
+        solrParent.append(loader);
+
         uri.addQuery("type", _this.ajaxType);
         jQuery.get(
             uri.href(),
             function(data) {
-                var solrContainer = clickedLink.closest(".tx_solr");
-                var solrParent = solrContainer.parent();
                 solrContainer = solrContainer.replaceWith(data);
 
                 _this.scrollToTopOfElement(solrParent, 50);
 
                 jQuery("body").trigger("tx_solr_updated");
+
+                loader.remove();
             }
         );
         return false;
