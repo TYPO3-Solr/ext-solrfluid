@@ -6,40 +6,46 @@ function SearchController() {
 
     this.init = function() {
         jQuery("body").delegate("a.solr-ajaxified", "click", _this.handleClickOnAjaxifiedUri);
-    },
+    };
 
     this.handleClickOnAjaxifiedUri = function() {
         var clickedLink = jQuery(this);
+
+        var solrContainer = clickedLink.closest(".tx_solr");
+        var solrParent = solrContainer.parent();
+
+        var loader = jQuery("<div class='tx-solr-loader'></div>");
+        solrParent.append(loader);
+
         var uri = clickedLink.uri();
         uri.addQuery("type", _this.ajaxType);
+
         jQuery.get(
             uri.href(),
             function(data) {
-                var solrContainer = clickedLink.closest(".tx_solr");
-                var solrParent = solrContainer.parent();
                 solrContainer = solrContainer.replaceWith(data);
-
                 _this.scrollToTopOfElement(solrParent, 50);
 
                 jQuery("body").trigger("tx_solr_updated");
+                loader.fadeOut();
             }
         );
         return false;
-    },
+    };
 
     this.scrollToTopOfElement = function(element, deltaTop) {
         jQuery('html, body').animate({
             scrollTop: (element.offset().top - deltaTop) + 'px'
         }, 'slow');
-    },
+    };
 
     this.setAjaxType = function(ajaxType) {
         _this.ajaxType = ajaxType;
-    }
+    };
 }
 
 jQuery(document).ready(function() {
-    solrSearchController = new SearchController();
+    var solrSearchController = new SearchController();
     solrSearchController.init();
 
     if(typeof solrSearchAjaxType !== "undefined") {

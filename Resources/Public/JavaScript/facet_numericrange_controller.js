@@ -14,7 +14,7 @@ function NumericRangeFacetController() {
             var rangeMaxSelected = jQuery(this).data("range-max-selected");
             var urlTemplate = jQuery(this).data("facet-url");
 
-            if (rangeMinSelected == 0 && rangeMaxSelected == 0) {
+            if (rangeMinSelected === 0 && rangeMaxSelected === 0) {
                 rangeMinSelected = rangeMin;
                 rangeMaxSelected = rangeMax;
             }
@@ -30,8 +30,8 @@ function NumericRangeFacetController() {
                 slide: function (event, ui) {
                     min = ui.values[0];
                     max = ui.values[1];
-                    if (isNaN(min)) min = 0;
-                    if (isNaN(max)) max = 0;
+                    if (isNaN(min)) { min = 0; }
+                    if (isNaN(max)) { max = 0; }
 
                     url = urlTemplate.replace('___FROM___', min.toString());
                     url = url.replace('___TO___', max.toString());
@@ -40,7 +40,7 @@ function NumericRangeFacetController() {
                 }
             });
         });
-    }
+    };
 
     var timers = {};
 
@@ -50,11 +50,11 @@ function NumericRangeFacetController() {
             window.location.href = url;
         };
         timers[url] = setTimeout(loadResult(url), 1500);
-    }
+    };
 }
 
 jQuery(document).ready(function () {
-    numericRangeFacetController = new NumericRangeFacetController();
+    var numericRangeFacetController = new NumericRangeFacetController();
     numericRangeFacetController.init();
 
     jQuery("body").on("tx_solr_updated", function() {

@@ -19,7 +19,7 @@ page.includeJSFooterlibs {
     solr-ui = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.core.min.js
     solr-slider = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.slider.min.js
 
-    solr-numericrange = EXT:solrfluid/Resources/Public/JavaScript/facet_numericrange.js
+    solr-numericrange = EXT:solrfluid/Resources/Public/JavaScript/facet_numericrange_controller.js
 }
 
 page.includeCSS {
