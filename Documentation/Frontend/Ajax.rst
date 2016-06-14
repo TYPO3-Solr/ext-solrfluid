@@ -17,5 +17,5 @@ To activate the **"ajaxification"** you need to include the typoscript template 
 How it works?
 =============
 
-For all links with the css class **"solr-ajaxified"** the javascript search controller triggerst the request against the same search page but with the eID *"tx_solrfluid_search"* which is just rendering the search request.
+For all links with the css class **"solr-ajaxified"** the javascript search controller triggers the request against the same search page but with the type *"7383"* which is just rendering the search request.
 The response is replacing everything in the container "div.tx_solr" with the content of the response.
