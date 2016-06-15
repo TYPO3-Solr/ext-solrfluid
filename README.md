@@ -15,7 +15,6 @@ chmod u+x ./Build/Test/*.sh
 source ./Build/Test/bootstrap.sh --local
 ```
 
-
 Now you can run the complete test suite:
 
 ```bash
