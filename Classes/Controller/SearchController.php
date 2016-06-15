@@ -100,6 +100,21 @@ class SearchController extends AbstractBaseController
     }
 
     /**
+     * This action allows to render a detailView with data from solr.
+     *
+     * @param string $documentId
+     */
+    public function detailAction($documentId = '')
+    {
+        if (!$this->searchService->getIsSolrAvailable()) {
+            $this->forward('solrNotAvailable');
+        }
+
+        $document = $this->searchService->getDocumentById($documentId);
+        $this->view->assign('document', $document);
+    }
+
+    /**
      * Rendered when no search is available.
      * @return string
      */

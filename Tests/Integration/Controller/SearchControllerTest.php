@@ -640,6 +640,22 @@ class SearchControllerTest extends IntegrationTest
     }
 
     /**
+     * @test
+     */
+    public function canRenderDetailAction()
+    {
+        $request = $this->getPreparedRequest('detail');
+        $request->setArgument('documentId', 'b8c8d04e66c58f01283ef81a4ded197f26ab402a/pages/1/0/0/0');
+
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1, 2));
+        $this->searchController->processRequest($request, $this->searchResponse);
+        $this->assertContains("Products", $this->searchResponse->getContent());
+    }
+
+    /**
      * @param string $content
      * @param string $id
      * @return string
