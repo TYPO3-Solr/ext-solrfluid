@@ -1,7 +1,8 @@
 Apache Solr for TYPO3 - Fluid template rendering
 ============================================================
 
-[![Build Status](https://travis-ci.org/TYPO3-Solr/ext-solrfluid.svg?branch=master)](https://travis-ci.org/TYPO3-Solr/ext-solrfluid)
+
+[![Build Status](https://travis-ci.com/TYPO3-Solr/ext-solrfluid.svg?branch=master)](https://travis-ci.com/TYPO3-Solr/ext-solrfluid)
 
 This extension is an addon for the TYPO3 "solr" extension
 
