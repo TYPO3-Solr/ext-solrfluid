@@ -4,7 +4,7 @@
     'ApacheSolrForTypo3.solrfluid',
     'pi_result',
     array(
-        'Search' => 'results,form'
+        'Search' => 'results,form,detail'
     ),
     array(
         'Search' => 'results'
