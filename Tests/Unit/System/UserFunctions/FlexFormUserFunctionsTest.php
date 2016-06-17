@@ -45,7 +45,8 @@ class FlexFormUserFunctionsTest extends UnitTest
     public function whenNoFacetsAreConfiguredAllSolrFieldsShouldBeAvailableAsFilter()
     {
         /** @var FlexFormUserFunctions $userFunc */
-        $userFunc = $this->getMock(FlexFormUserFunctions::class, array('getFieldNamesFromSolrMetaDataForPage', 'getConfiguredFacetsForPage'));
+        $userFunc = $this->getMockBuilder(FlexFormUserFunctions::class)
+            ->setMethods(['getFieldNamesFromSolrMetaDataForPage', 'getConfiguredFacetsForPage'])->getMock();
 
         $userFunc->expects($this->once())->method('getFieldNamesFromSolrMetaDataForPage')->will($this->returnValue(['type', 'pid', 'uid']));
         $userFunc->expects($this->once())->method('getConfiguredFacetsForPage')->will($this->returnValue([]));
@@ -67,7 +68,8 @@ class FlexFormUserFunctionsTest extends UnitTest
     public function labelIsUsedFromFacetWhenTheFacetIsConfiguredInTypoScript()
     {
         /** @var FlexFormUserFunctions $userFunc */
-        $userFunc = $this->getMock(FlexFormUserFunctions::class, array('getFieldNamesFromSolrMetaDataForPage', 'getConfiguredFacetsForPage'));
+        $userFunc = $this->getMockBuilder(FlexFormUserFunctions::class)
+            ->setMethods(['getFieldNamesFromSolrMetaDataForPage', 'getConfiguredFacetsForPage'])->getMock();
 
         $userFunc->expects($this->once())->method('getFieldNamesFromSolrMetaDataForPage')->will($this->returnValue(['type', 'pid', 'uid']));
         $userFunc->expects($this->once())->method('getConfiguredFacetsForPage')->will($this->returnValue([

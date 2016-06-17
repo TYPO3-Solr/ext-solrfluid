@@ -49,8 +49,7 @@ class GroupViewHelperTest extends UnitTest
     {
         $facetCollection = $this->getTestFacetCollection();
 
-
-        $variableContainer = $this->getMock(TemplateVariableContainer::class, array('remove'));
+        $variableContainer = $this->getMockBuilder(TemplateVariableContainer::class)->setMethods(['remove'])->getMock();
         $renderingContextMock = $this->getDumbMock(RenderingContextInterface::class);
         $renderingContextMock->expects($this->any())->method('getTemplateVariableContainer')->will($this->returnValue($variableContainer));
 
@@ -73,11 +72,11 @@ class GroupViewHelperTest extends UnitTest
     {
         $facetCollection = $this->getTestFacetCollection();
 
-        $variableContainer = $this->getMock(TemplateVariableContainer::class, array('remove'));
+        $variableContainer = $this->getMockBuilder(TemplateVariableContainer::class)->setMethods(['remove'])->getMock();
         $renderingContextMock = $this->getDumbMock(RenderingContextInterface::class);
         $renderingContextMock->expects($this->any())->method('getTemplateVariableContainer')->will($this->returnValue($variableContainer));
 
-        $viewHelper = $this->getMock(GroupViewHelper::class, array('renderChildren'));
+        $viewHelper = $this->getMockBuilder(GroupViewHelper::class)->setMethods(['renderChildren'])->getMock();
         $viewHelper->setRenderingContext($renderingContextMock);
         $viewHelper->render($facetCollection, 'left');
 

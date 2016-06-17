@@ -27,6 +27,7 @@ namespace ApacheSolrForTypo3\Solr\Tests\Integration\Plugin\Results;
 use ApacheSolrForTypo3\Solr\Site;
 use ApacheSolrForTypo3\Solr\Tests\Integration\IntegrationTest;
 use ApacheSolrForTypo3\Solrfluid\Controller\SearchController;
+use TYPO3\CMS\Core\TimeTracker\TimeTracker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
@@ -65,7 +66,7 @@ class SearchControllerTest extends IntegrationTest
     public function setUp()
     {
         parent::setUp();
-        $GLOBALS['TT'] = $this->getMock('\\TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker', array(), array(), '', false);
+        $GLOBALS['TT'] = $this->getMockBuilder(TimeTracker::class)->disableOriginalConstructor()->getMock();
 
         /** @var  $searchController SearchController */
         $this->searchController = $this->objectManager->get(SearchController::class);

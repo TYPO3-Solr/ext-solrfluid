@@ -32,6 +32,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\Opti
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\QueryGroup\QueryGroupFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\ResultSetReconstitutionProcessor;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use TYPO3\CMS\Core\TimeTracker\TimeTracker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
@@ -700,6 +701,6 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $TSFE = GeneralUtility::makeInstance(TypoScriptFrontendController::class, array(), 1, 0);
         $TSFE->cObjectDepthCounter = 5;
         $GLOBALS['TSFE'] = $TSFE;
-        $GLOBALS['TT'] = $this->getMock('\\TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker', array(), array(), '', false);
+        $GLOBALS['TT'] = $this->getMockBuilder(TimeTracker::class)->disableOriginalConstructor()->getMock();
     }
 }
