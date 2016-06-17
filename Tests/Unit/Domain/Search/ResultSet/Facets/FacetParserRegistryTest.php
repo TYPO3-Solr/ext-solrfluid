@@ -52,7 +52,7 @@ class FacetParserRegistryTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     {
         $facetType = 'myType';
         $parserClass = $this->getUniqueId('myParser');
-        $parserObject = $this->getMock(FacetParserInterface::class, [], [], $parserClass);
+        $parserObject = $this->getMockBuilder(FacetParserInterface::class)->setMockClassName($parserClass)->getMock();
 
         $facetParserRegistry = $this->getTestFacetParserRegistry([[$parserClass, $parserObject]]);
 
@@ -100,7 +100,8 @@ class FacetParserRegistryTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     public function canRegisterDifferentDefaultParser()
     {
         $parserClass = $this->getUniqueId('myParser');
-        $parserObject = $this->getMock(FacetParserInterface::class, [], [], $parserClass);
+        $parserObject = $this->getMockBuilder(FacetParserInterface::class)->setMockClassName($parserClass)->getMock();
+
 
         $facetParserRegistry = $this->getTestFacetParserRegistry([[$parserClass, $parserObject]]);
         $facetParserRegistry->setDefaultParser($parserClass);
