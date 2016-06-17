@@ -15,9 +15,9 @@ function SearchController() {
         var solrParent = solrContainer.parent();
 
         var loader = jQuery("<div class='tx-solr-loader'></div>");
-        solrParent.append(loader);
-
         var uri = clickedLink.uri();
+
+        solrParent.append(loader);
         uri.addQuery("type", _this.ajaxType);
 
         jQuery.get(
@@ -25,9 +25,8 @@ function SearchController() {
             function(data) {
                 solrContainer = solrContainer.replaceWith(data);
                 _this.scrollToTopOfElement(solrParent, 50);
-
                 jQuery("body").trigger("tx_solr_updated");
-                loader.fadeOut();
+                loader.fadeOut().remove();
             }
         );
         return false;

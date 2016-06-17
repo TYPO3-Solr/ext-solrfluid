@@ -39,3 +39,7 @@ page.includeJSFooterlibs {
     solrfluid-ajaxify = EXT:solrfluid/Resources/Public/JavaScript/search_controller.js
 }
 
+
+page.includeCSS {
+	solr-loader = EXT:solrfluid/Resources/Public/Css/loader.css
+}
