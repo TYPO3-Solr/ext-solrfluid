@@ -58,6 +58,7 @@
    Frontend/Index
    Backend/Index
    Development/Index
+   Releases/Index
 
 
 
