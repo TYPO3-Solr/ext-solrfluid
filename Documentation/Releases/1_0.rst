@@ -1,0 +1,102 @@
+================================
+EXT:solrfluid Releasenotes 1.0.0
+================================
+
+We're very happy to announce the release of EXT:solrfluid 1.0.0 today. EXT:solrfluid allows you to render your search results with the fluid templating engine.
+
+Key Features
+============
+
+With solr fluid we provide the following key features:
+
+**Flexible Domain Model to render Search Results and Facets**
+
+Solr fluid extends the domain model of EXT:solr and provides a re-implementation of the facets to have an optimal domain model for rendering in the view.
+
+**Documentation included**
+
+With EXT:solrfluid 1.0.0 we ship a documentation of the extension in the rst format. This should help you to get started with EXT:solrfluid very quickly.
+
+**High Performance**
+
+To ensure the performance of solrfluid is excellent we did several profiling sessions. Beside small adjustments we did the following bigger optimizations:
+
+*Compilable ViewHelpers*
+
+Most of the ViewHelpers that we ship in solrfluid are compileable. TYPO3 compiles them into a single PHP closure and caches them in the filesystem. With this approach ViewHelpers in EXT:solr are build to be fast.
+
+*Smart Link Building*
+
+Since links for new facets are often the same, the typolink calls are replaced with markers and cached to reduce the creation of links to a minimum.
+
+*Ajaxified Search Results*
+
+When you browse in the results page, all subpages can be retrieved with ajax over a custom TYPO3 pagetype. Since the overhead is much less, a sub-request, is more then two times faster then a regular request.
+
+*Unit and Integration tested*
+
+At the beginning we started with porting the existing integration tests from EXT:solr to EXT:solrfluid and re implement the frontend rendering based on that.
+Beside that, we tried to cover new code with unit test. All changes that are done, are checked with travis-ci to make sure that the quality of the code is good.
+
+Minor Features
+==============
+
+Beside that solrfluid provides some minor features that simplify the implementation of solr projects
+
+*Easy Filter configuration in the backend*
+
+When you add a new Plugin instance of EXT:solr in the TYPO3 Backend you can now simply configure the entry filters with a flexform. The flexform shows you the available fields from the solr server that can be used to create filters.
+
+*Single View for solr documents*
+
+The SearchController provides a detailAction. It requires the arguments $documentId and can be used to render a single view of a solr document directly with fluid.
+
+If you want to know more details about the features and how to use them, you should read the documentation, that is linked below this article.
+
+Thanks
+======
+
+Thanks to the following contributors and partners that supported the work on solrfluid.
+
+* Frans Saris:
+
+Thanks for working on the fluid integration and a productive codesprint in Venlo.
+
+* Daniel Siepmann
+
+Thanks for using solrfluid and contributing to the backend and documentation.
+
+* Edward Lenssen
+
+Thanks for hosting the first codesprint @beechit.
+
+* Olivier Dobberkau
+
+Thanks for supporting the codesprint and the development.
+
+In addition we also want to say "thank you" to all of our EB Partners that subscribed a new partnership for 2016:
+
+* web-vision GmbH
+* die_schnittsteller GmbH
+* Star Finanz-Software Entwicklung und Vertriebs GmbH
+* datenwerk innovationsagentur gmbh
+* websedit AG - Internetagentur
+* Future Connection AG
+* L.N. Schaffrath DigitalMedien GmbH
+* pixolith GmbH & Co. KG
+* Stefan Galinski Interndienstleistungen
+* Webstobe GmbH
+* hs-digital GmbH
+* RUAG Corporate Services AG
+* Q3i GmbH & Co. KG
+* Daniz online markting
+* Cosmoblone GmbH
+* Hirsch & Wölfl GmbH
+* Systime A/S
+
+How to get it?
+==============
+
+All EB partner can download the release 1.0 from our download page. Not yet a partner? Call dkd +49 (0)69 - 247 52 18-0 to sign up for a partner ship and be one of the first users of solrfluid.
+
+

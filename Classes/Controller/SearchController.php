@@ -26,6 +26,19 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class SearchController extends AbstractBaseController
 {
+    /**
+     * Provide search query in extbase arguments.
+     */
+    protected function initializeAction()
+    {
+        parent::initializeAction();
+
+        $query = GeneralUtility::_GET('q');
+        if ($query === null) {
+            $query = '';
+        }
+        $this->request->setArgument('q', $query);
+    }
 
     /**
      * Results
@@ -59,7 +72,10 @@ class SearchController extends AbstractBaseController
      */
     private function buildSearchRequest()
     {
-        $rawUserQuery = GeneralUtility::_GET('q');
+        $rawUserQuery = null;
+        if ($this->request->hasArgument('q')) {
+            $rawUserQuery = $this->request->getArgument('q');
+        }
         $arguments = $this->request->getArguments();
         $page = isset($arguments['page']) ? $arguments['page'] - 1 : 0;
         $arguments['page'] = max($page, 0);
