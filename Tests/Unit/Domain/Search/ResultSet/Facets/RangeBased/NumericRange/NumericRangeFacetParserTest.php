@@ -23,7 +23,7 @@ use ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets\AbstractFac
 /**
  * Class DateRangeFacetParserTest
  *
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  */
 class NumericRangeFacetParserTest extends AbstractFacetParserTest
 {

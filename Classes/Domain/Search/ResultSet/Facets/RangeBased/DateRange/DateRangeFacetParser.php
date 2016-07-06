@@ -23,7 +23,7 @@ use ApacheSolrForTypo3\Solrfluid\System\Data\DateTimeProxy;
  * Class DateRangeFacetParser
  *
  * @author Frans Saris <frans@beech.it>
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets
  */
 class DateRangeFacetParser extends AbstractRangeFacetParser

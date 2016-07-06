@@ -30,7 +30,7 @@ use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
  * arguments to build the url for a search sub request.
  *
  * @author Frans Saris <frans@beech.it>
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\Uri
  */
 

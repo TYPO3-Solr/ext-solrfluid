@@ -20,7 +20,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetIte
  * Abstract class that is used as base class for range facet items
  *
  * @author Frans Saris <frans@beech.it>
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
 abstract class AbstractRangeFacetItem extends AbstractFacetItem

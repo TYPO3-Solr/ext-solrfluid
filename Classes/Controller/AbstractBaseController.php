@@ -32,7 +32,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  * Class AbstractBaseController
  *
  * @author Frans Saris <frans@beech.it>
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Controller
  */
 abstract class AbstractBaseController extends ActionController

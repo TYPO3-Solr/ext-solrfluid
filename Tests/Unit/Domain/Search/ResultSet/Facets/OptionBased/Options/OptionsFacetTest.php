@@ -23,7 +23,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 /**
  * Unit test for the OptionsFacet
  *
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @author Frans Saris <frans@beech.it>
  */
 class OptionsFacetTest extends UnitTest

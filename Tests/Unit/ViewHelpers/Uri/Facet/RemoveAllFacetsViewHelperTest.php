@@ -4,7 +4,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\ViewHelpers\Facet\Uri;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015-2016 Timo Schmidt <timo.schmidt@dkd.de>
+ *  (c) 2015-2016 Timo Hund <timo.hund@dkd.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -44,7 +44,7 @@ use TYPO3\CMS\Form\Mvc\Controller\ControllerContext;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  */
 class RemoveAllFacetsViewHelperTest extends AbstractFacetItemViewHelperTest
 {

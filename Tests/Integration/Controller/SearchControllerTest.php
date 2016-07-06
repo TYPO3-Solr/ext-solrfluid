@@ -4,7 +4,7 @@ namespace ApacheSolrForTypo3\Solr\Tests\Integration\Plugin\Results;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2010-2015 Timo Schmidt <timo.schmidt@dkd.de>
+ *  (c) 2010-2015 Timo Hund <timo.hund@dkd.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,7 +39,7 @@ use TYPO3\CMS\Frontend\Page\PageGenerator;
 /**
  * Integration testcase to test for the SearchController
  *
- * @author Timo Schmidt
+ * @author Timo Hund
  */
 class SearchControllerTest extends IntegrationTest
 {

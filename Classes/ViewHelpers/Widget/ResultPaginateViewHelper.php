@@ -4,7 +4,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2016 Frans Saris <frans@beech.it> & Timo Schmidt <timo.schmidt@dkd.de>
+ *  (c) 2016 Frans Saris <frans@beech.it> & Timo Hund <timo.hund@dkd.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is

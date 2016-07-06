@@ -24,7 +24,7 @@ use ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets\AbstractFac
 /**
  * Class HierarchyFacetParserTest
  *
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @author Frans Saris <frans@beech.it>
  */
 class HierarchyFacetParserTest extends AbstractFacetParserTest

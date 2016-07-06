@@ -4,7 +4,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets\Optio
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015-2016 Timo Schmidt <timo.schmidt@dkd.de>
+ *  (c) 2015-2016 Timo Hund <timo.hund@dkd.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -33,7 +33,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 /**
  * Unit test for the OptionsFacet
  *
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  */
 class OptionCollectionTest extends UnitTest
 {

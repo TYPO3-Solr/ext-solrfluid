@@ -4,7 +4,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015-2016 Timo Schmidt <timo.schmidt@dkd.de>
+ *  (c) 2015-2016 Timo Hund <timo.hund@dkd.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,7 +30,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResult;
 /**
  * Unit test case for the SearchResult.
  *
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  */
 class SearchResultTest extends UnitTest
 {

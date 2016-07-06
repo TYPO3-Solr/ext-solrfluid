@@ -21,7 +21,7 @@ use DateTime;
  * Value object that represent an date range count. The count has a date and the count of documents
  *
  * @author Frans Saris <frans@beech.it>
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
 class DateRangeCount

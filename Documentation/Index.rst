@@ -30,10 +30,10 @@
 		2009-2015
 
 	:Author:
-		Frans Saris & Timo Schmidt
+		Frans Saris & Timo Hund
 
 	:Email:
-		timo.schmidt@dkd.de
+		timo.hund@dkd.de
 
 	:License:
 		This document is published under the Open Content License

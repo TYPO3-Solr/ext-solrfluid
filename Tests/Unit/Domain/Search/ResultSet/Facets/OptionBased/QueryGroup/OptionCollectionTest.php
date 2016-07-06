@@ -22,7 +22,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 /**
  * Unit test for the QueryGroupFacet options collection
  *
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @author Frans Saris <frans@beech.it>
  */
 class OptionCollectionTest extends UnitTest

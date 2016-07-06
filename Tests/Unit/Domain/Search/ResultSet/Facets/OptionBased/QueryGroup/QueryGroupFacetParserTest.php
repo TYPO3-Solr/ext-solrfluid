@@ -26,7 +26,7 @@ use ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets\AbstractFac
 /**
  * Class QueryGroupFacetParserTest
  *
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @author Frans Saris <frans@beech.it>
  */
 class QueryGroupFacetParserTest extends AbstractFacetParserTest

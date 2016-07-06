@@ -20,7 +20,7 @@ use ApacheSolrForTypo3\Solrfluid\Widget\AbstractWidgetViewHelper;
  * Class LastSearchesViewHelper
  *
  * @author Frans Saris <frans@beech.it>
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget
  */
 class LastSearchesViewHelper extends AbstractWidgetViewHelper

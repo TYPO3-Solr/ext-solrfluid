@@ -4,7 +4,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\ViewHelpers\Facet\Uri;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015-2016 Timo Schmidt <timo.schmidt@dkd.de>
+ *  (c) 2015-2016 Timo Hund <timo.hund@dkd.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -34,7 +34,7 @@ use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document\HighlightResultViewHelper;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
 
 /**
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  */
 class HighlightingResultViewHelperTest extends UnitTest
 {

@@ -33,7 +33,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestio
  * @todo: the logic in this class can be added to the SearchResultSet after adding EXT:solrfluid to EXT:solr
  *
  * @author Frans Saris <frans@beech.it>
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet
  */
 class SearchResultSet extends SolrSearchResultSet

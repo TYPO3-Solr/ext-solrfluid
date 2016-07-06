@@ -18,7 +18,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Widget;
  * Class WidgetRequest
  *
  * @author Frans Saris <frans@beech.it>
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Widget
  */
 class WidgetRequest extends \TYPO3\CMS\Fluid\Core\Widget\WidgetRequest

@@ -28,7 +28,7 @@ use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
  * Class FacetAddOptionViewHelper
  *
  * @author Frans Saris <frans@beech.it>
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri
  */
 class AbstractUriViewHelper extends AbstractViewHelper

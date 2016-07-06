@@ -33,7 +33,7 @@ use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper as AbstractCoreWidgetVi
  * todo: find cleaner way to let widget listen to tx_solr[] instead of tx_solr[@widget]
  *
  * @author Frans Saris <frans@beech.it>
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Widget
  */
 abstract class AbstractWidgetViewHelper extends AbstractCoreWidgetViewHelper implements ChildNodeAccessInterface

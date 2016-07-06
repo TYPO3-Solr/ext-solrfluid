@@ -18,7 +18,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking;
  * Value object that represent a spellchecking suggestion.
  *
  * @author Frans Saris <frans@beech.it>
- * @author Timo Schmidt <timo.schmidt@dkd.de>
+ * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking
  */
 class Suggestion
