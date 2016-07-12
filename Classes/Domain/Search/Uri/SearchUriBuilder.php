@@ -105,7 +105,6 @@ class SearchUriBuilder
         return $this->getAddFacetValueUri($previousSearchRequest, $facetName, $facetValue);
     }
 
-
     /**
      * @param SearchRequest $previousSearchRequest
      * @param $facetName
@@ -116,6 +115,28 @@ class SearchUriBuilder
     {
         $persistentAndFacetArguments = $previousSearchRequest
             ->getCopyForSubRequest()->removeFacetValue($facetName, $facetValue)
+            ->getAsArray();
+
+        $additionalArguments = [];
+        if ($previousSearchRequest->getContextTypoScriptConfiguration()->getSearchFacetingFacetLinkUrlParametersUseForFacetResetLinkUrl()) {
+            $additionalArguments = $this->getAdditionalArgumentsFromRequestConfiguration($previousSearchRequest);
+        }
+
+        $arguments = $persistentAndFacetArguments + $additionalArguments;
+
+        $pageUid = $this->getTargetPageUidFromRequestConfiguration($previousSearchRequest);
+        return $this->buildLinkWithInMemoryCache($pageUid, $arguments);
+    }
+
+    /**
+     * @param SearchRequest $previousSearchRequest
+     * @param $facetName
+     * @return string
+     */
+    public function getRemoveFacetUri(SearchRequest $previousSearchRequest, $facetName)
+    {
+        $persistentAndFacetArguments = $previousSearchRequest
+            ->getCopyForSubRequest()->removeAllFacetValuesByName($facetName)
             ->getAsArray();
 
         $additionalArguments = [];
