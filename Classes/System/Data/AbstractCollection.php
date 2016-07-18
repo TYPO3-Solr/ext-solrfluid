@@ -18,7 +18,7 @@ namespace ApacheSolrForTypo3\Solrfluid\System\Data;
 /**
  * Class AbstractCollection
  */
-abstract class AbstractCollection implements \IteratorAggregate, \Countable
+abstract class AbstractCollection implements \IteratorAggregate, \Countable, \ArrayAccess
 {
 
     /**
@@ -110,5 +110,56 @@ abstract class AbstractCollection implements \IteratorAggregate, \Countable
     public function getCount()
     {
         return $this->count();
+    }
+
+    /**
+     * Whether a offset exists
+     *
+     * @param mixed $offset
+     * @return bool true on success or false on failure
+     */
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->data);
+    }
+
+    /**
+     * Offset to retrieve
+     *
+     * @param mixed $offset
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        if ($this->offsetExists($offset)) {
+            return $this->data[$offset];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Offset to set
+     *
+     * @param mixed $offset
+     * @param mixed $value
+     * @return void
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->data[$offset] = $value;
+    }
+
+    /**
+     * Offset to unset
+     *
+     * @param mixed $offset
+     * @return void
+     */
+    public function offsetUnset($offset)
+    {
+        if ($this->offsetExists($offset)) {
+            unset($this->data[$offset]);
+        }
     }
 }
