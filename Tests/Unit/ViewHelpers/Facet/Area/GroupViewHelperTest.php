@@ -62,6 +62,9 @@ class GroupViewHelperTest extends UnitTest
             /** @var  $facetCollection FacetCollection */
         $facetCollection = $variableContainer->get('areaFacets');
         $this->assertEquals(2, $facetCollection->getCount());
+
+        $facetKeys = array_keys($facetCollection->getArrayCopy());
+        $this->assertEquals(['color', 'brand'], $facetKeys);
     }
 
 
@@ -85,6 +88,9 @@ class GroupViewHelperTest extends UnitTest
         /** @var  $facetCollection FacetCollection */
         $facetCollection = $variableContainer->get('areaFacets');
         $this->assertEquals(2, $facetCollection->getCount());
+
+        $facetKeys = array_keys($facetCollection->getArrayCopy());
+        $this->assertEquals(['color', 'brand'], $facetKeys);
     }
 
     /**
