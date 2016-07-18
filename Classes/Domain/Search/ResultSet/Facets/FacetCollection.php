@@ -16,7 +16,7 @@ class FacetCollection extends AbstractCollection
      */
     public function addFacet(AbstractFacet $facet)
     {
-        $this->data[] = $facet;
+        $this->data[$facet->getName()] = $facet;
     }
 
     /**

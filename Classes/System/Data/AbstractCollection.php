@@ -54,9 +54,9 @@ abstract class AbstractCollection implements \IteratorAggregate, \Countable
     {
         $copy = clone $this;
         $filteredData = [];
-        foreach ($this->data as $item) {
+        foreach ($this->data as $key => $item) {
             if ($filter($item)) {
-                $filteredData[] = $item;
+                $filteredData[$key] = $item;
             }
         }
 
