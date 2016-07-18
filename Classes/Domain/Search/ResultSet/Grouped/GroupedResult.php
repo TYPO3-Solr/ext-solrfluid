@@ -14,18 +14,17 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped;
  */
 
 /**
- * Class Section
+ * Class GroupedResult
  *
  * @author Frans Saris <frans@beech.it>
- * @author Timo Schmidt <timo.schmidt@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped
  */
-class Section
+class GroupedResult
 {
     /**
      * @var string
      */
-    protected $id;
+    protected $name;
 
     /**
      * @var Group[]
@@ -33,29 +32,37 @@ class Section
     protected $groups;
 
     /**
+     * @var int
+     */
+    protected $numFound = 0;
+
+    /**
      * Section constructor
      *
-     * @param string $id
+     * @param string $name
      */
-    public function __construct($id)
+    public function __construct($name)
     {
-        $this->id = $id;
+        $this->name = $name;
     }
 
     /**
-     * Get id
+     * Get name
      *
      * @return string
      */
-    public function getId()
+    public function getName()
     {
-        return $this->id;
+        return $this->name;
     }
-    
 
+    /**
+     * @param Group $group
+     */
     public function addGroup(Group $group)
     {
         $this->groups[] = $group;
+        $this->numFound += $group->getNumFound();
     }
 
     /**
@@ -68,4 +75,13 @@ class Section
         return $this->groups;
     }
 
+    /**
+     * @todo: implement count
+     *
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->numFound;
+    }
 }

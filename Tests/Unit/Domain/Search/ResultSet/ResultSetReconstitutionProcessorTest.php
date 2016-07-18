@@ -50,6 +50,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     protected function initializeSearchResultSetFromFakeResponse($fixtureFile)
     {
         $fakeResponseJson = $this->getFixtureContent($fixtureFile);
+
         $httpResponseMock = $this->getDumbMock('\Apache_Solr_HttpTransport_Response');
         $httpResponseMock->expects($this->any())->method('getBody')->will($this->returnValue($fakeResponseJson));
 
@@ -664,6 +665,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $this->assertTrue($searchResultSet->getSortings()->getHasSelected(), 'Expected that a selected sorting was present');
         $this->assertSame('desc', $searchResultSet->getSortings()->getSelected()->getDirection(), 'Selected sorting as unexpected direction');
     }
+
     /**
      * @test
      */
@@ -675,7 +677,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         // are present
         $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
 
-        $facetConfiguration = [
+        $configuration['plugin.']['tx_solr.']['search.'] = [
             'showEmptyFacets' => 1,
             'grouping.' => [
                 'groups.' => [
@@ -683,21 +685,20 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
                         'field' => 'type',
                     ],
                     'siteSection.' => [
-                        'queries' => [
-                            'pid4' => 'pid_stringS:4',
-                            'pid63' => 'pid_stringS:62'
+                        'queries.' => [
+                            'pid1' => 'pid_stringS:1',
+                            'pid16' => 'pid_stringS:16'
                         ]
                     ]
                 ]
             ]
         ];
 
-        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
         $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
         $processor->process($searchResultSet);
 
-        // after the reconstitution they should be 1 facet present
-        $this->assertCount(1, $searchResultSet->getFacets());
+        // after the reconstitution they should be 2 groupedResult objects present
+        $this->assertCount(2, $searchResultSet->getGroupedResults());
     }
 
     /**

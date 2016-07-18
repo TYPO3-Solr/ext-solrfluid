@@ -17,7 +17,8 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet;
 use \ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet as SolrSearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetCollection;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\Section;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\GroupedResult;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\GroupedResultCollection;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Sorting\Sorting;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Sorting\SortingCollection;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestion;
@@ -60,9 +61,9 @@ class SearchResultSet extends SolrSearchResultSet
     protected $sortings = null;
 
     /**
-     * @var Grouped\Section[]
+     * @var GroupedResultCollection
      */
-    protected $groupedSections = null;
+    protected $groupedResults = null;
 
     /**
      * @return \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet
@@ -71,6 +72,7 @@ class SearchResultSet extends SolrSearchResultSet
     {
         $this->facets = new FacetCollection();
         $this->sortings = new SortingCollection();
+        $this->groupedResults = new GroupedResultCollection();
     }
 
     /**
@@ -154,34 +156,29 @@ class SearchResultSet extends SolrSearchResultSet
     }
 
     /**
-     * @param Section $section
+     * @param GroupedResult $groupedResult
      */
-    public function addGroupedSection(Section $section)
+    public function addGroupedResult(GroupedResult $groupedResult)
     {
-
-        $this->groupedSections[$section->getId()] = $section;
+        $this->groupedResults->addGroupedResult($groupedResult);
     }
 
     /**
      * Get groupedSections
      *
-     * @return Grouped\Section[]
+     * @return GroupedResultCollection
      */
-    public function getGroupedSections()
+    public function getGroupedResults()
     {
-        return $this->groupedSections;
+        return $this->groupedResults;
     }
 
     /**
-     * @param string $id
-     * @return Section|null
+     * @param string $name
+     * @return GroupedResult|null
      */
-    public function getGroupedSection($id)
+    public function getGroupedResult($name)
     {
-        if (isset($this->groupedSections[$id])) {
-            return $this->groupedSections[$id];
-        } else {
-            return null;
-        }
+        return $this->groupedResults[$name];
     }
 }

@@ -38,16 +38,35 @@
 		</f:if>
 
 		<f:if condition="{hasSearched}">
-			<f:if condition="{resultSet.usedSearch.numberOfResults}">
-				<f:render partial="Result/PerPage" section="PerPage" arguments="{resultSet: resultSet}" />
-			</f:if>
-			<s:widget.resultPaginate resultSet="{resultSet}">
-				<ol start="{pagination.displayRangeStart}" class="results-list">
-					<f:for each="{documents}" as="document">
-						<f:render partial="Result/Document" section="Document" arguments="{resultSet:resultSet, document:document}" />
+			<f:if condition="{resultSet.groupedResults}">
+				<f:then>
+					<f:for each="{resultSet.groupedResults}" as="groupedResult">
+						<h2>{groupedResult.name}</h2>
+						<f:for each="{groupedResult.groups}" as="group">
+							<div>
+							<strong>{group.groupValue} <span>({group.numFound})</span></strong>
+							<f:for each="{group.documents}" as="document">
+								<f:comment>
+									<f:render partial="Result/Document" section="Document" arguments="{resultSet:resultSet, document:document}" />
+								</f:comment>
+							</f:for>
+							</div>
+						</f:for>
 					</f:for>
-				</ol>
-			</s:widget.resultPaginate>
+				</f:then>
+				<f:else>
+					<f:if condition="{resultSet.usedSearch.numberOfResults}">
+						<f:render partial="Result/PerPage" section="PerPage" arguments="{resultSet: resultSet}" />
+					</f:if>
+					<s:widget.resultPaginate resultSet="{resultSet}">
+						<ol start="{pagination.displayRangeStart}" class="results-list">
+							<f:for each="{documents}" as="document"><f:debug>{document}</f:debug>
+								<f:render partial="Result/Document" section="Document" arguments="{resultSet:resultSet, document:document}" />
+							</f:for>
+						</ol>
+					</s:widget.resultPaginate>
+				</f:else>
+			</f:if>
 		</f:if>
 
 	</div>

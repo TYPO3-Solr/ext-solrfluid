@@ -17,9 +17,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet;
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet as SolrSearchResultSet;
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetProcessor;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserRegistry;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacetParser;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\Group;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\Section;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\GroupedResultParserRegistry;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Sorting\Sorting;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestion;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -64,7 +62,6 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
         // here we can reconstitute other domain objects from the solr response
         $resultSet = $this->parseFacetsIntoObjects($resultSet);
 
-        DebuggerUtility::var_dump($resultSet);
         $this->storeLastSearches($resultSet);
 
         return $resultSet;
@@ -93,54 +90,34 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
      */
     protected function parseGroupedResult(SearchResultSet $resultSet)
     {
-        $groupedResponse = $resultSet->getResponse()->grouped;
-        $resultCount = 0;
-        
-        $groupedConfiguration = $resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->$this->getValueByPathOrDefaultValue('plugin.tx_solr.search.faceting.removeFacetLinkText', $defaultIfEmpty);
+        $searchConfiguration = $resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->getSearchConfiguration();
 
-        foreach ($groupedConfiguration as $name => $options) {
-            if (!is_array($options)) {
+        if (empty($searchConfiguration['grouping.']['groups.'])) {
+            return $resultSet;
+        }
+
+        /** @var GroupedResultParserRegistry $groupedResultParserRegistry */
+        $groupedResultParserRegistry = GeneralUtility::makeInstance(GroupedResultParserRegistry::class);
+        $resultCount = 0;
+
+        foreach ($searchConfiguration['grouping.']['groups.'] as $name => $options) {
+            $name = rtrim($name, '.');
+            $groupedResultParser = $groupedResultParserRegistry->getParser($name, $options);
+            if ($groupedResultParser === null) {
                 continue;
             }
-            $facetName = rtrim($name, '.');
-            $type = !empty($options['type']) ? $options['type'] : '';
 
-            $parser = $facetParserRegistry->getParser($type);
-            $facet = $parser->parse($resultSet, $facetName, $options);
-            if ($facet !== null) {
-                $resultSet->addFacet($facet);
+            $groupedResult = $groupedResultParser->parse($resultSet, $name, $options);
+            if ($groupedResult) {
+                $resultSet->addGroupedResult($groupedResult);
+                $resultCount += $groupedResult->getCount();
             }
         }
 
-        return $resultSet;
-//        
-//DebuggerUtility::var_dump($groupedResponse, 'grouped');
-//        foreach ($groupedResponse as $rawGroupedSection) {
-//
-//            $resultCount += $rawGroupedSection->matches;
-//
-//            /** @var Section $section */
-//            $section = GeneralUtility::makeInstance(Section::class);
-//
-//            foreach ($rawGroupedSection->groups as $rawGroup) {
-//                /** @var Group $group */
-//                $group = GeneralUtility::makeInstance(
-//                    Group::class,
-//                    $rawGroup->groupValue,
-//                    $rawGroup->doclist->numFound,
-//                    $rawGroup->doclist->start,
-//                    $rawGroup->doclist->maxScore
-//                );
-//                foreach ($rawGroup->doclist->docs as $rawDoc) {
-//                    $group->addDocument($rawDoc);
-//                }
-//                $section->addGroup($group);
-//            }
-//        }
-//
-//        $resultSet->addGroupedSection($section);
-
-        $resultSet->setAllResultCount($resultCount);
+        $firstRawGroup = reset($resultSet->getResponse()->grouped);
+        if ($firstRawGroup) {
+            $resultSet->setAllResultCount($firstRawGroup->matches);
+        }
 
         return $resultSet;
     }
