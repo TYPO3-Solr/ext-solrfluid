@@ -18,9 +18,12 @@ use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet as SolrSearc
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetProcessor;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserRegistry;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacetParser;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\Group;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\Section;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Sorting\Sorting;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestion;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * This processor is used to transform the solr response into a
@@ -49,13 +52,19 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
             return $resultSet;
         }
 
-        $resultSet = $this->parseResultCount($resultSet);
+        if ($resultSet->getResponse()->grouped) {
+            $resultSet = $this->parseGroupedResult($resultSet);
+        } else {
+            $resultSet = $this->parseResultCount($resultSet);
+        }
+
         $resultSet = $this->parseSpellCheckingResponseIntoObjects($resultSet);
         $resultSet = $this->parseSortingIntoObjects($resultSet);
 
         // here we can reconstitute other domain objects from the solr response
         $resultSet = $this->parseFacetsIntoObjects($resultSet);
 
+        DebuggerUtility::var_dump($resultSet);
         $this->storeLastSearches($resultSet);
 
         return $resultSet;
@@ -73,6 +82,66 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
         }
 
         $resultSet->setAllResultCount($response->response->numFound);
+        return $resultSet;
+    }
+
+    /**
+     * Parse response.grouped
+     *
+     * @param SearchResultSet $resultSet
+     * @return SearchResultSet
+     */
+    protected function parseGroupedResult(SearchResultSet $resultSet)
+    {
+        $groupedResponse = $resultSet->getResponse()->grouped;
+        $resultCount = 0;
+        
+        $groupedConfiguration = $resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->$this->getValueByPathOrDefaultValue('plugin.tx_solr.search.faceting.removeFacetLinkText', $defaultIfEmpty);
+
+        foreach ($groupedConfiguration as $name => $options) {
+            if (!is_array($options)) {
+                continue;
+            }
+            $facetName = rtrim($name, '.');
+            $type = !empty($options['type']) ? $options['type'] : '';
+
+            $parser = $facetParserRegistry->getParser($type);
+            $facet = $parser->parse($resultSet, $facetName, $options);
+            if ($facet !== null) {
+                $resultSet->addFacet($facet);
+            }
+        }
+
+        return $resultSet;
+//        
+//DebuggerUtility::var_dump($groupedResponse, 'grouped');
+//        foreach ($groupedResponse as $rawGroupedSection) {
+//
+//            $resultCount += $rawGroupedSection->matches;
+//
+//            /** @var Section $section */
+//            $section = GeneralUtility::makeInstance(Section::class);
+//
+//            foreach ($rawGroupedSection->groups as $rawGroup) {
+//                /** @var Group $group */
+//                $group = GeneralUtility::makeInstance(
+//                    Group::class,
+//                    $rawGroup->groupValue,
+//                    $rawGroup->doclist->numFound,
+//                    $rawGroup->doclist->start,
+//                    $rawGroup->doclist->maxScore
+//                );
+//                foreach ($rawGroup->doclist->docs as $rawDoc) {
+//                    $group->addDocument($rawDoc);
+//                }
+//                $section->addGroup($group);
+//            }
+//        }
+//
+//        $resultSet->addGroupedSection($section);
+
+        $resultSet->setAllResultCount($resultCount);
+
         return $resultSet;
     }
 

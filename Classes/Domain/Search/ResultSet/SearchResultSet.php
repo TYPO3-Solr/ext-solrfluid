@@ -17,6 +17,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet;
 use \ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet as SolrSearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetCollection;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\Section;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Sorting\Sorting;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Sorting\SortingCollection;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestion;
@@ -57,6 +58,11 @@ class SearchResultSet extends SolrSearchResultSet
      * @var SortingCollection
      */
     protected $sortings = null;
+
+    /**
+     * @var Grouped\Section[]
+     */
+    protected $groupedSections = null;
 
     /**
      * @return \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet
@@ -145,5 +151,37 @@ class SearchResultSet extends SolrSearchResultSet
     public function getSortings()
     {
         return $this->sortings;
+    }
+
+    /**
+     * @param Section $section
+     */
+    public function addGroupedSection(Section $section)
+    {
+
+        $this->groupedSections[$section->getId()] = $section;
+    }
+
+    /**
+     * Get groupedSections
+     *
+     * @return Grouped\Section[]
+     */
+    public function getGroupedSections()
+    {
+        return $this->groupedSections;
+    }
+
+    /**
+     * @param string $id
+     * @return Section|null
+     */
+    public function getGroupedSection($id)
+    {
+        if (isset($this->groupedSections[$id])) {
+            return $this->groupedSections[$id];
+        } else {
+            return null;
+        }
     }
 }

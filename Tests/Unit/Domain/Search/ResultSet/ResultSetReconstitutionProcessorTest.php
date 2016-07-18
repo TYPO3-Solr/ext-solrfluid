@@ -664,6 +664,41 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $this->assertTrue($searchResultSet->getSortings()->getHasSelected(), 'Expected that a selected sorting was present');
         $this->assertSame('desc', $searchResultSet->getSortings()->getSelected()->getDirection(), 'Selected sorting as unexpected direction');
     }
+    /**
+     * @test
+     */
+    public function canReconstituteGroupedResultFromResponse()
+    {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_grouped_documents.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'showEmptyFacets' => 1,
+            'grouping.' => [
+                'groups.' => [
+                    'typeGroup.' => [
+                        'field' => 'type',
+                    ],
+                    'siteSection.' => [
+                        'queries' => [
+                            'pid4' => 'pid_stringS:4',
+                            'pid63' => 'pid_stringS:62'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        // after the reconstitution they should be 1 facet present
+        $this->assertCount(1, $searchResultSet->getFacets());
+    }
 
     /**
      * @param array $facetConfiguration
