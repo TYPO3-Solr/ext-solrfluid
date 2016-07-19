@@ -15,17 +15,15 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\GroupedRe
  */
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\Group;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\GroupedResult;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\GroupedResultParserInterface;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Class GroupedResultParser
  *
  * @author Frans Saris <frans@beech.it>
  */
-class GroupedByQueryParser implements GroupedResultParserInterface
+class GroupedByQueryParser extends AbstractGroupedResultParser
 {
     /**
      * Check if parser can handle given configuration
@@ -43,19 +41,18 @@ class GroupedByQueryParser implements GroupedResultParserInterface
     /**
      * Parse grouped result
      *
-     * @param SearchResultSet $resultSet
      * @param string $groupedResultName
      * @param array $groupedResultConfiguration
      *
      * @return GroupedResult|null
      */
-    public function parse(SearchResultSet $resultSet, $groupedResultName, array $groupedResultConfiguration)
+    public function parse($groupedResultName, array $groupedResultConfiguration)
     {
         $groupedResult = null;
         $groups = [];
 
         foreach ($groupedResultConfiguration['queries.'] as $queryKey => $queryString) {
-            $rawGroup = $this->getGroupedResultForQuery($resultSet, $queryString);
+            $rawGroup = $this->getGroupedResultForQuery($this->searchResultSet, $queryString);
 
             if ($rawGroup === null) {
                 continue;
@@ -71,12 +68,13 @@ class GroupedByQueryParser implements GroupedResultParserInterface
             );
 
             foreach ($rawGroup->doclist->docs as $rawDoc) {
-                // todo: parse documents
-                $doc = $rawDoc;
-                $group->addDocument($doc);
+                $document = $this->searchResultService->parseRawDocument($rawDoc);
+                $group->addDocument($document);
             }
 
-            $groups[] = $group;
+            if ($group->getDocuments()) {
+                $groups[] = $group;
+            }
         }
 
         if ($groups !== []) {

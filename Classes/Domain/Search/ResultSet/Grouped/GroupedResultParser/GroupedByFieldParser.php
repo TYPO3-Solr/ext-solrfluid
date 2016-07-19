@@ -21,8 +21,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class GroupedByFieldParser
+ *
+ * @author Frans Saris <frans@beech.it>
  */
-class GroupedByFieldParser implements GroupedResultParserInterface
+class GroupedByFieldParser extends AbstractGroupedResultParser
 {
     /**
      * Check if parser can handle given configuration
@@ -40,19 +42,19 @@ class GroupedByFieldParser implements GroupedResultParserInterface
     /**
      * Parse grouped result
      *
-     * @param \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet $resultSet
+     * @param \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet $this->searchResultSet
      * @param string $groupedResultName
      * @param array $groupedResultConfiguration
      *
      * @return GroupedResult|null
      */
-    public function parse(SearchResultSet $resultSet, $groupedResultName, array $groupedResultConfiguration)
+    public function parse($groupedResultName, array $groupedResultConfiguration)
     {
-        if (empty($resultSet->getResponse()->grouped->{$groupedResultConfiguration['field']})) {
+        if (empty($this->searchResultSet->getResponse()->grouped->{$groupedResultConfiguration['field']})) {
             return null;
         }
 
-        $rawGroupedResult = $resultSet->getResponse()->grouped->{$groupedResultConfiguration['field']};
+        $rawGroupedResult = $this->searchResultSet->getResponse()->grouped->{$groupedResultConfiguration['field']};
         $groupedResult = GeneralUtility::makeInstance(GroupedResult::class, $groupedResultName);
 
         foreach ($rawGroupedResult->groups as $rawGroup) {
@@ -66,9 +68,8 @@ class GroupedByFieldParser implements GroupedResultParserInterface
             );
 
             foreach ($rawGroup->doclist->docs as $rawDoc) {
-                // todo: parse documents
-                $doc = $rawDoc;
-                $group->addDocument($doc);
+                $document = $this->searchResultService->parseRawDocument($rawDoc);
+                $group->addDocument($document);
             }
 
             $groupedResult->addGroup($group);

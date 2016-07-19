@@ -102,12 +102,12 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
 
         foreach ($searchConfiguration['grouping.']['groups.'] as $name => $options) {
             $name = rtrim($name, '.');
-            $groupedResultParser = $groupedResultParserRegistry->getParser($name, $options);
+            $groupedResultParser = $groupedResultParserRegistry->getParser($resultSet, $name, $options);
             if ($groupedResultParser === null) {
                 continue;
             }
 
-            $groupedResult = $groupedResultParser->parse($resultSet, $name, $options);
+            $groupedResult = $groupedResultParser->parse($name, $options);
             if ($groupedResult) {
                 $resultSet->addGroupedResult($groupedResult);
                 $resultCount += $groupedResult->getCount();

@@ -46,9 +46,7 @@
 							<div>
 							<strong>{group.groupValue} <span>({group.numFound})</span></strong>
 							<f:for each="{group.documents}" as="document">
-								<f:comment>
-									<f:render partial="Result/Document" section="Document" arguments="{resultSet:resultSet, document:document}" />
-								</f:comment>
+								<f:render partial="Result/Document" section="Document" arguments="{resultSet:resultSet, document:document}" />
 							</f:for>
 							</div>
 						</f:for>

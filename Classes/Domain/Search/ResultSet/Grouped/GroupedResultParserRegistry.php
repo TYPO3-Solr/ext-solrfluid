@@ -14,6 +14,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped;
  * The TYPO3 project - inspiring people to share!
  */
 
+use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\GroupedResultParser\GroupedByFieldParser;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped\GroupedResultParser\GroupedByQueryParser;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -77,14 +78,15 @@ class GroupedResultParserRegistry implements SingletonInterface
     }
 
     /**
+     * @param SearchResultSet $searchResultSet
      * @return GroupedResultParserInterface[]
      */
-    public function getParserInstances()
+    public function getParserInstances(SearchResultSet $searchResultSet)
     {
         if ($this->parserInstances === null) {
             ksort($this->parsers);
             foreach ($this->parsers as $className) {
-                $this->parserInstances[] = $this->createParserInstance($className);
+                $this->parserInstances[] = $this->createParserInstance($searchResultSet, $className);
             }
         }
         return $this->parserInstances;
@@ -93,14 +95,15 @@ class GroupedResultParserRegistry implements SingletonInterface
     /**
      * Get parser
      *
+     * @param SearchResultSet $searchResultSet
      * @param string $groupedResultName
      * @param array $groupedResultConfiguration
      * @return GroupedResultParserInterface|null
      */
-    public function getParser($groupedResultName, array $groupedResultConfiguration)
+    public function getParser(SearchResultSet $searchResultSet, $groupedResultName, array $groupedResultConfiguration)
     {
         /** @var GroupedResultParserInterface $parser */
-        foreach ($this->getParserInstances() as $parser) {
+        foreach ($this->getParserInstances($searchResultSet) as $parser) {
             if ($parser->canParse($groupedResultName, $groupedResultConfiguration)) {
                 return $parser;
             }
@@ -111,11 +114,12 @@ class GroupedResultParserRegistry implements SingletonInterface
     /**
      * Create an instance of a certain parser class
      *
+     * @param SearchResultSet $searchResultSet
      * @param string $className
      * @return FacetParserInterface
      */
-    protected function createParserInstance($className)
+    protected function createParserInstance(SearchResultSet $searchResultSet, $className)
     {
-        return GeneralUtility::makeInstance($className);
+        return GeneralUtility::makeInstance($className, $searchResultSet);
     }
 }

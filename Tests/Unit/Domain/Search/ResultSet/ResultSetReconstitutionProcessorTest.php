@@ -25,6 +25,8 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet;
  ***************************************************************/
 
 use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
+use ApacheSolrForTypo3\Solr\Search;
+use ApacheSolrForTypo3\Solr\SolrService;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\Options\Option;
@@ -56,11 +58,16 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
 
         $searchRequestMock = $this->getDumbMock(SearchRequest::class);
 
+        $solrServiceMock = $this->getDumbMock(SolrService::class);
+        $searchMock = $this->getDumbMock(Search::class);
+        $searchMock->expects($this->any())->method('getSolrConnection')->will($this->returnValue($solrServiceMock));
+
         $fakeResponse = new \Apache_Solr_Response($httpResponseMock);
 
         $searchResultSet = new SearchResultSet();
         $searchResultSet->setUsedSearchRequest($searchRequestMock);
         $searchResultSet->setResponse($fakeResponse);
+        $searchResultSet->setUsedSearch($searchMock);
 
         return $searchResultSet;
     }

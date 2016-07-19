@@ -21,6 +21,13 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 interface GroupedResultParserInterface
 {
     /**
+     * Constructor
+     *
+     * @param SearchResultSet $searchResultSet
+     */
+    public function __construct(SearchResultSet $searchResultSet);
+
+    /**
      * Check if parser can handle given configuration
      *
      * @param string $groupedResultName
@@ -33,11 +40,10 @@ interface GroupedResultParserInterface
     /**
      * Parse grouped result
      *
-     * @param SearchResultSet $resultSet
      * @param string $groupedResultName
      * @param array $groupedResultConfiguration
      *
      * @return GroupedResult|null
      */
-    public function parse(SearchResultSet $resultSet, $groupedResultName, array $groupedResultConfiguration);
+    public function parse($groupedResultName, array $groupedResultConfiguration);
 }
