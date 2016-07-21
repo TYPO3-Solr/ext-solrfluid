@@ -34,10 +34,9 @@ class SearchController extends AbstractBaseController
         parent::initializeAction();
 
         $query = GeneralUtility::_GET('q');
-        if ($query === null) {
-            $query = '';
+        if ($query !== null) {
+            $this->request->setArgument('q', $query);
         }
-        $this->request->setArgument('q', $query);
     }
 
     /**
