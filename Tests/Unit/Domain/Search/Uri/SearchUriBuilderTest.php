@@ -27,11 +27,8 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\Uri;
 use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\Uri\SearchUriBuilder;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Unit test case for the ObjectReconstitutionProcessor.
@@ -157,5 +154,29 @@ class SearchUriBuilderTest extends UnitTest
         $this->extBaseUriBuilderMock->expects($this->once())->method('setArguments')->with($expectedArguments)->will($this->returnValue($this->extBaseUriBuilderMock));
         $this->extBaseUriBuilderMock->expects($this->once())->method('setUseCacheHash')->with(false)->will($this->returnValue($this->extBaseUriBuilderMock));
         $this->searchUrlBuilder->getRemoveFacetValueUri($previousRequest, 'type', 'pages');
+    }
+
+    /**
+     * @test
+     */
+    public function canGetRemoveFacetUri()
+    {
+        $configurationMock = $this->getDumbMock(TypoScriptConfiguration::class);
+        $previousRequest =  new SearchRequest([
+                    'tx_solr' => [
+                        'filter' => [
+                            'type:pages'
+                        ]
+                    ]
+                ],
+                0,
+                0,
+                $configurationMock);
+
+        // we expect that the filters are empty after remove
+        $expectedArguments = [];
+        $this->extBaseUriBuilderMock->expects($this->once())->method('setArguments')->with($expectedArguments)->will($this->returnValue($this->extBaseUriBuilderMock));
+        $this->extBaseUriBuilderMock->expects($this->once())->method('setUseCacheHash')->with(false)->will($this->returnValue($this->extBaseUriBuilderMock));
+        $this->searchUrlBuilder->getRemoveFacetUri($previousRequest, 'type');
     }
 }
