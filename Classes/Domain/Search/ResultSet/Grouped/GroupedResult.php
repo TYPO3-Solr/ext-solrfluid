@@ -1,5 +1,6 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Grouped;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *

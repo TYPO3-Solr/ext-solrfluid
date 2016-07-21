@@ -99,6 +99,5 @@ class GroupedByQueryParser extends AbstractGroupedResultParser
         } else {
             return null;
         }
-
     }
 }

@@ -25,5 +25,4 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
  */
 class GroupedResultTest extends UnitTest
 {
-
 }

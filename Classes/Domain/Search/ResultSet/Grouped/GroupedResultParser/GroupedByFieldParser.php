@@ -77,6 +77,4 @@ class GroupedByFieldParser extends AbstractGroupedResultParser
 
         return $groupedResult;
     }
-
-
 }

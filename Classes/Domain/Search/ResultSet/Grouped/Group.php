@@ -121,7 +121,4 @@ class Group
     {
         $this->documents[] = $document;
     }
-    
-    
-
 }

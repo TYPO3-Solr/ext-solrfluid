@@ -43,12 +43,10 @@ abstract class AbstractGroupedResultParser implements GroupedResultParserInterfa
      */
     public function __construct(SearchResultSet $searchResultSet)
     {
-       $this->searchResultSet = $searchResultSet;
+        $this->searchResultSet = $searchResultSet;
         $this->searchResultService = GeneralUtility::makeInstance(
             SearchResultService::class,
             $this->searchResultSet->getUsedSearch()
         );
     }
-
-
 }
