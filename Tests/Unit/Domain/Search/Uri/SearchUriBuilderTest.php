@@ -165,7 +165,8 @@ class SearchUriBuilderTest extends UnitTest
         $previousRequest =  new SearchRequest([
                     'tx_solr' => [
                         'filter' => [
-                            'type:pages'
+                            'type:pages',
+                            'type:tt_news',
                         ]
                     ]
                 ],
@@ -174,7 +175,8 @@ class SearchUriBuilderTest extends UnitTest
                 $configurationMock);
 
         // we expect that the filters are empty after remove
-        $expectedArguments = [];
+        //@todo we need to refactor the request in ext:solr to cleanup empty arguments completely to assert  $expectedArguments = []
+        $expectedArguments = ['tx_solr' => ['filter' => []]];
         $this->extBaseUriBuilderMock->expects($this->once())->method('setArguments')->with($expectedArguments)->will($this->returnValue($this->extBaseUriBuilderMock));
         $this->extBaseUriBuilderMock->expects($this->once())->method('setUseCacheHash')->with(false)->will($this->returnValue($this->extBaseUriBuilderMock));
         $this->searchUrlBuilder->getRemoveFacetUri($previousRequest, 'type');
