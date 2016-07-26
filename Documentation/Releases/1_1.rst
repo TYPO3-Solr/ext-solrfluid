@@ -9,9 +9,14 @@ This release provides a few bugfixes and new features from the first expierences
 
 This ViewHelper can be used to remove all selected items for a whole facet.
 
-```html
+|
+
+.. code-block:: xml
+
     <a href="{s:uri.facet.removeFacet(facet: facet)}">Reset values</a>
-```
+
+|
+
 
 Thanks to Frans Saris for implementing this.
 
@@ -19,9 +24,14 @@ Thanks to Frans Saris for implementing this.
 
 With this you are able to retrieve a facet in the template just by using the name.
 
-```html
+
+|
+
+.. code-block:: xml
+
     {resultSet.facets.<facetName>}
-```
+
+|
 
 Thanks to Frans Saris for implementing this.
 
@@ -32,10 +42,14 @@ This is fixed now by using a consistent, same key "pi_search" as in EXT:solr.
 
 Thanks to Thomas Beck for reporting this problem.
 
-
 4. Moving the query initialization to initializeAction.
 
 We now initialize the query parameter in initializeAction and pass it as argument to have it available in the extbase context.
 
 Thanks to Daniel Siepmann for implementing this.
 
+5. Add missing s:translate calls
+
+We added some missing calls for s:translate to have the possibility to translate all labels.
+
+Thanks to Thomas Beck for reporting this problem.
