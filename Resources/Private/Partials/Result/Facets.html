@@ -6,7 +6,7 @@
 	<div id="tx-solr-faceting">
 		<f:if condition="{resultSet.facets.used -> f:count()}">
 			<div id="tx-solr-facets-in-use">
-				<h3>Used facets</h3>
+				<h3><s:translate key="faceting_resultsNarrowedBy">Used facets</s:translate></h3>
 				<ul class="facets">
 					<f:for each="{resultSet.facets.used}" as="facet">
 						<f:for each="{facet.allFacetItems.selected}" as="item">
@@ -16,7 +16,9 @@
 						</f:for>
 					</f:for>
 					<li class="facets-remove-all">
-						<a href="{s:uri.facet.removeAllFacets()}" class="solr-ajaxified">Remove all filters</a>
+						<a href="{s:uri.facet.removeAllFacets()}" class="solr-ajaxified">
+							<s:translate key="faceting_removeAllFilters">Remove all filters</s:translate>
+						</a>
 					</li>
 				</ul>
 			</div>
@@ -26,7 +28,7 @@
 			<div class="facet-area-main">
 				<div class="solr-facets-available secondaryContentSection">
 					<div class="csc-header">
-						<h3 class="csc-firstHeader">Narrow Search</h3>
+						<h3 class="csc-firstHeader"><s:translate key="faceting_narrowSearch">Narrow Search</s:translate></h3>
 					</div>
 					<ul class="facets">
 						<f:for each="{areaFacets}" as="facet">
