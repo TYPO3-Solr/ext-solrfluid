@@ -29,11 +29,9 @@ class RemoveFacetViewHelper extends AbstractUriViewHelper implements CompilableI
 {
     /**
      * @param \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet $facet
-     * @param \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItem $facetItem
-     * @param string $facetItemValue
      * @return string
      */
-    public function render($facet, $facetItem = null, $facetItemValue = null)
+    public function render($facet)
     {
         return static::renderStatic(
             array(
