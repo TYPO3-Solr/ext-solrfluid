@@ -27,6 +27,8 @@ With the current release we ship the following concrete ViewHelpers:
 +---------------------------------+----------------------------------------------------------------+
 | s:uri.facet.removeAllFacets     | Removes all facet items from the current url.                  |
 +---------------------------------+----------------------------------------------------------------+
+| s:uri.facet.removeFacet         | Removes all options from one facet.                            |
++---------------------------------+----------------------------------------------------------------+
 | s:uri.facet.removeFacetItem     | Removes a single facet item from the url.                      |
 +---------------------------------+----------------------------------------------------------------+
 | s:uri.facet.setFacetItem        | Sets one single item for a facet (and removes other setted)    |
