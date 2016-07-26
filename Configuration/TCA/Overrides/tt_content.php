@@ -8,7 +8,7 @@ if (!defined ('TYPO3_MODE')) {
 $pluginSignature = 'solrfluid_pi_form';
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     'solrfluid',
-    'pi_form',
+    'pi_search',
     'LLL:EXT:solrfluid/Resources/Private/Language/locallang_db.xlf:tt_content.list_type_pi_search'
 );
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature]

@@ -584,7 +584,7 @@ class SearchControllerTest extends IntegrationTest
 
         $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
 
-        $contentObjectRendererMock = $this->getMock(ContentObjectRenderer::class, array(), array(), '', false);
+        $contentObjectRendererMock = $this->getMockBuilder(ContentObjectRenderer::class)->disableOriginalConstructor()->getMock();
         $flexFormData = $this->getFixtureContent('fakedFlexFormData.xml');
         $contentObjectRendererMock->data = ['pi_flexform' => $flexFormData];
         $this->searchController->setContentObjectRenderer($contentObjectRendererMock);
@@ -654,6 +654,20 @@ class SearchControllerTest extends IntegrationTest
         $this->indexPages(array(1, 2));
         $this->searchController->processRequest($request, $this->searchResponse);
         $this->assertContains("Products", $this->searchResponse->getContent());
+    }
+
+    /**
+     * @test
+     */
+    public function canRenderSearchFormOnly()
+    {
+        $request = $this->getPreparedRequest('form', 'pi_search');
+
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->searchController->processRequest($request, $this->searchResponse);
+        $this->assertContains('id="tx-solr-search-form-pi-results"', $this->searchResponse->getContent());
     }
 
     /**
@@ -730,16 +744,18 @@ class SearchControllerTest extends IntegrationTest
     }
 
     /**
+     * @param string $actionName
+     * @param string $plugin
      * @return Request
      */
-    protected function getPreparedRequest($actionName = 'results')
+    protected function getPreparedRequest($actionName = 'results', $plugin = 'pi_result')
     {
         /** @var Request $request */
         $request = $this->objectManager->get(Request::class);
         $request->setControllerName('Search');
         $request->setControllerActionName($actionName);
         $request->setControllerVendorName('ApacheSolrForTypo3');
-        $request->setPluginName('pi_result');
+        $request->setPluginName($plugin);
         $request->setFormat('html');
         $request->setControllerExtensionName('Solrfluid');
 
