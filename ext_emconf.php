@@ -2,7 +2,7 @@
 $EM_CONF[$_EXTKEY] = array(
     'title' => 'Apache Solr for TYPO3 - Fluid Frontend Rendering',
     'description' => 'This addon provides the fluid templating for EXT:solr',
-    'version' => '1.1.0-dev',
+    'version' => '1.1.0',
     'state' => 'stable',
     'category' => 'plugin',
     'author' => 'Timo Hund, Markus Friedrich, Frans Saris and Daniel Siepmann',
