@@ -46,7 +46,7 @@ class StartNewSearchViewHelper extends AbstractUriViewHelper implements Compilab
 
     /**
      * @param array $arguments
-     * @param callable $renderChildrenClosure
+     * @param callable|\Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
      * @return string
      */

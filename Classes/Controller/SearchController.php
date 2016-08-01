@@ -15,6 +15,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Controller;
  */
 
 use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -75,22 +76,29 @@ class SearchController extends AbstractBaseController
         if ($this->request->hasArgument('q')) {
             $rawUserQuery = $this->request->getArgument('q');
         }
+
         $arguments = $this->request->getArguments();
         $page = isset($arguments['page']) ? $arguments['page'] - 1 : 0;
         $arguments['page'] = max($page, 0);
 
         /** @var $searchRequest SearchRequest */
+        $searchRequest = $this->getRequest(['q' => $rawUserQuery, 'tx_solr' => $arguments]);
+
+        return $searchRequest;
+    }
+
+    /**
+     * @param array $requestArguments
+     * @return SearchRequest
+     */
+    private function getRequest(array $requestArguments = [])
+    {
         $searchRequest = GeneralUtility::makeInstance(
             SearchRequest::class,
-            [
-                'q' => $rawUserQuery,
-                'tx_solr' => $arguments
-            ],
+            $requestArguments,
             $this->typoScriptFrontendController->getRequestedId(),
             $this->typoScriptFrontendController->sys_language_uid,
-            $this->typoScriptConfiguration
-        );
-
+            $this->typoScriptConfiguration);
         return $searchRequest;
     }
 
@@ -112,6 +120,18 @@ class SearchController extends AbstractBaseController
      */
     public function frequentlySearchedAction()
     {
+            /** @var  $searchResultSet SearchResultSet */
+        $searchResultSet = GeneralUtility::makeInstance(SearchResultSet::class);
+        $searchResultSet->setUsedSearchRequest($this->getRequest());
+        $this->controllerContext->setSearchResultSet($searchResultSet);
+
+        $this->view->assignMultiple(
+            array(
+                'hasSearched' => $this->searchService->getHasSearched(),
+                'additionalFilters' => $this->searchService->getAdditionalFilters(),
+                'resultSet' => $searchResultSet
+            )
+        );
     }
 
     /**

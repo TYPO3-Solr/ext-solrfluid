@@ -75,7 +75,11 @@ class AbstractWidgetController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidg
         $controllerContext->setTypoScriptConfiguration($typoScriptConfiguration);
 
         $searchService = $this->initializeSearch($typoScriptConfiguration);
-        $controllerContext->setSearchResultSet($searchService->getLastResultSet());
+        $resultSet = $searchService->getLastResultSet();
+
+        if ($resultSet !== null) {
+            $controllerContext->setSearchResultSet($resultSet);
+        }
 
         return $controllerContext;
     }

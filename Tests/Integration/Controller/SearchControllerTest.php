@@ -569,7 +569,7 @@ class SearchControllerTest extends IntegrationTest
         $searchRequest2 = $this->getPreparedRequest();
         $searchResponse2 = $this->getPreparedResponse();
         $this->searchController->processRequest($searchRequest2, $searchResponse2);
-        $resultPage2 = $this->searchResponse->getContent();
+        $resultPage2 = $searchResponse2->getContent();
 
         $this->assertContainerByIdNotContains('>nothingwillbefound</a>', $resultPage2, 'tx-solr-lastsearches');
     }
@@ -638,6 +638,25 @@ class SearchControllerTest extends IntegrationTest
 
         $formContent = $formResponse->getContent();
         $this->assertContains('<div class="tx-solr-search-form">', $formContent);
+    }
+
+    /**
+     * @test
+     */
+    public function searchingAndRenderingFrequentSearchesIsShowingTheTermAsFrequentSearch()
+    {
+        $this->importDataSetFromFixture('can_render_search_controller.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+
+        $this->indexPages(array(1));
+
+        $searchRequest = $this->getPreparedRequest('frequentlySearched','pi_frequentlySearched');
+        $searchResponse = $this->getPreparedResponse();
+
+        $this->searchController->processRequest($searchRequest, $searchResponse);
+        $resultPage = $searchResponse->getContent();
+
+        $this->assertContainerByIdContains('>shoes</a>', $resultPage, 'tx-solr-lastsearches');
     }
 
     /**
