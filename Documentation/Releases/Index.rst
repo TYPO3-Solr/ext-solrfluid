@@ -20,5 +20,6 @@ Releases
     :glob:
 
     1_0.rst
+    1_1.rst
 
 
