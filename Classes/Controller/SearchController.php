@@ -120,7 +120,7 @@ class SearchController extends AbstractBaseController
      */
     public function frequentlySearchedAction()
     {
-            /** @var  $searchResultSet SearchResultSet */
+        /** @var  $searchResultSet SearchResultSet */
         $searchResultSet = GeneralUtility::makeInstance(SearchResultSet::class);
         $searchResultSet->setUsedSearchRequest($this->getRequest());
         $this->controllerContext->setSearchResultSet($searchResultSet);
