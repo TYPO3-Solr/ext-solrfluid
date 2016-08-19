@@ -70,7 +70,7 @@ class SearchController extends AbstractBaseController
     /**
      * @return SearchRequest
      */
-    private function buildSearchRequest()
+    protected function buildSearchRequest()
     {
         $rawUserQuery = null;
         if ($this->request->hasArgument('q')) {
