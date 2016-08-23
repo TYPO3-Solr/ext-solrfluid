@@ -17,10 +17,11 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet;
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet as SolrSearchResultSet;
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetProcessor;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserRegistry;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacetParser;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Sorting\Sorting;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestion;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
  * This processor is used to transform the solr response into a
@@ -35,6 +36,38 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
 {
+    /**
+     * @var ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
+     * @return ObjectManagerInterface
+     */
+    public function getObjectManager()
+    {
+        if($this->objectManager === null) {
+            $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        }
+        return $this->objectManager;
+    }
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     */
+    public function setObjectManager($objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
+
+    /**
+     * @return FacetParserRegistry
+     */
+    protected function getFacetParserRegistry()
+    {
+        return $this->getObjectManager()->get(FacetParserRegistry::class);
+    }
 
     /**
      * The implementation can be used to influence a SearchResultSet that is
@@ -192,7 +225,7 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
         }
 
         /** @var FacetParserRegistry $facetParserRegistry */
-        $facetParserRegistry = GeneralUtility::makeInstance(FacetParserRegistry::class);
+        $facetParserRegistry = $this->getFacetParserRegistry();
         $facetsConfiguration = $resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->getSearchFacetingFacets();
 
         foreach ($facetsConfiguration as $name => $options) {

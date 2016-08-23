@@ -13,9 +13,10 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets;
  *
  * The TYPO3 project - inspiring people to share!
  */
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet\OptionsFacet;
+
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
@@ -31,6 +32,19 @@ abstract class AbstractFacetParser implements FacetParserInterface
      * @var ContentObjectRenderer
      */
     protected static $reUseAbleContentObject;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     */
+    public function injectObjectManager(ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
 
     /**
      * @return ContentObjectRenderer

@@ -49,7 +49,7 @@ class QueryGroupFacetParser extends AbstractFacetParser
         }
 
         /** @var QueryGroupFacet $facet */
-        $facet = GeneralUtility::makeInstance(
+        $facet = $this->objectManager->get(
             QueryGroupFacet::class,
             $resultSet,
             $facetName,

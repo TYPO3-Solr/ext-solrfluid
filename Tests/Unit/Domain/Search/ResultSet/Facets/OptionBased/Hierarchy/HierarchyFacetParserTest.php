@@ -20,6 +20,7 @@ use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\Hierarchy\HierarchyFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\Hierarchy\HierarchyFacetParser;
 use ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets\AbstractFacetParserTest;
+use ApacheSolrForTypo3\Solrfluid\Tests\Unit\Helper\FakeObjectManager;
 
 /**
  * Class HierarchyFacetParserTest
@@ -47,7 +48,9 @@ class HierarchyFacetParserTest extends AbstractFacetParserTest
             'fake_solr_response_with_hierarchy_facet.json',
             $facetConfiguration
         );
-        $parser = new HierarchyFacetParser();
+
+        /** @var $parser HierarchyFacetParser */
+        $parser = $this->getInitializedParser(HierarchyFacetParser::class);
         $facet = $parser->parse($searchResultSet, 'pageHierarchy', $facetConfiguration['pageHierarchy.']);
         $this->assertInstanceOf(HierarchyFacet::class, $facet);
 
@@ -76,7 +79,9 @@ class HierarchyFacetParserTest extends AbstractFacetParserTest
             'fake_solr_response_with_hierarchy_facet.json',
             $facetConfiguration
         );
-        $parser = new HierarchyFacetParser();
+
+            /** @var $parser HierarchyFacetParser */
+        $parser = $this->getInitializedParser(HierarchyFacetParser::class);
         $facet = $parser->parse($searchResultSet, 'pageHierarchy', $facetConfiguration['pageHierarchy.']);
         $this->assertFalse($facet->getIsUsed());
     }

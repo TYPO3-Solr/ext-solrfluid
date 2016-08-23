@@ -43,7 +43,7 @@ abstract class AbstractRangeFacetParser extends AbstractFacetParser
         $response = $resultSet->getResponse();
         $valuesFromResponse = isset($response->facet_counts->facet_ranges->{$fieldName}) ? get_object_vars($response->facet_counts->facet_ranges->{$fieldName}) : [];
 
-        $facet = GeneralUtility::makeInstance(
+        $facet = $this->objectManager->get(
             $facetClass,
             $resultSet,
             $facetName,

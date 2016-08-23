@@ -50,7 +50,7 @@ class OptionsFacetParser extends AbstractFacetParser
         }
 
         /** @var $facet OptionsFacet */
-        $facet = GeneralUtility::makeInstance(
+        $facet = $this->objectManager->get(
             OptionsFacet::class,
             $resultSet,
             $facetName,

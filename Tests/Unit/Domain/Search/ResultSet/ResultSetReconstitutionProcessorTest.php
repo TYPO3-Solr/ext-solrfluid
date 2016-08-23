@@ -27,11 +27,13 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet;
 use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserRegistry;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\Options\Option;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\Options\OptionsFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\QueryGroup\QueryGroupFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\ResultSetReconstitutionProcessor;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use ApacheSolrForTypo3\Solrfluid\Tests\Unit\Helper\FakeObjectManager;
 use TYPO3\CMS\Core\TimeTracker\TimeTracker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -688,6 +690,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getActiveFacetNames')->will($this->returnValue([]));
 
         $processor = new ResultSetReconstitutionProcessor();
+        $processor->setObjectManager(new FakeObjectManager());
         return $processor;
     }
 

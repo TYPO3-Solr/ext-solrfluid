@@ -51,8 +51,11 @@ class NumericRangeFacetParserTest extends AbstractFacetParserTest
             })
         );
 
-        $parser = new NumericRangeFacetParser();
+
+        /** @var $parser NumericRangeFacetParser */
+        $parser = $this->getInitializedParser(NumericRangeFacetParser::class);
         $facet = $parser->parse($searchResultSet, 'myPids', $facetConfiguration['myPids.']);
+
         $this->assertInstanceOf(NumericRangeFacet::class, $facet);
         $this->assertSame($facet->getConfiguration(), $facetConfiguration['myPids.'], 'Configuration was not passed to new facets');
         $this->assertTrue($facet->getIsUsed());

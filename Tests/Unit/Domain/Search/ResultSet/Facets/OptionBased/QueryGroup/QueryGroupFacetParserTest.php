@@ -94,8 +94,8 @@ class QueryGroupFacetParserTest extends AbstractFacetParserTest
             'fake_solr_response_with_query_fields_facets_and_used_facet.json',
             $facetConfiguration
         );
-        $parser = new QueryGroupFacetParser();
-
+        /** @var $parser QueryGroupFacetParser */
+        $parser = $this->getInitializedParser(QueryGroupFacetParser::class);
         $facet = $parser->parse($searchResultSet, 'age', $facetConfiguration['age.']);
 
         $this->assertInstanceOf(QueryGroupFacet::class, $facet);
@@ -125,8 +125,9 @@ class QueryGroupFacetParserTest extends AbstractFacetParserTest
             'fake_solr_response_with_query_fields_facets_and_used_facet.json',
             $facetConfiguration
         );
-        $parser = new QueryGroupFacetParser();
 
+         /** @var $parser QueryGroupFacetParser */
+        $parser = $this->getInitializedParser(QueryGroupFacetParser::class);
         $facet = $parser->parse($searchResultSet, 'age', $facetConfiguration['age.']);
 
         $this->assertFalse($facet->getIsUsed());
@@ -157,8 +158,8 @@ class QueryGroupFacetParserTest extends AbstractFacetParserTest
             $facetConfiguration,
             ['age:week']
         );
-        $parser = new QueryGroupFacetParser();
-
+        /** @var $parser QueryGroupFacetParser */
+        $parser = $this->getInitializedParser(QueryGroupFacetParser::class);
         $facet = $parser->parse($searchResultSet, 'age', $facetConfiguration['age.']);
 
         $this->assertTrue($facet->getIsUsed());
@@ -189,8 +190,8 @@ class QueryGroupFacetParserTest extends AbstractFacetParserTest
             $facetConfiguration,
             ['age:week']
         );
-        $parser = new QueryGroupFacetParser();
-
+        /** @var $parser QueryGroupFacetParser */
+        $parser = $this->getInitializedParser(QueryGroupFacetParser::class);
         /** @var QueryGroupFacet $facet */
         $facet = $parser->parse($searchResultSet, 'age', $facetConfiguration['age.']);
 

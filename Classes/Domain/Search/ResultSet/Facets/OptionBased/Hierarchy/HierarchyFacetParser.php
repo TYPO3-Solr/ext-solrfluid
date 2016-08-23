@@ -50,7 +50,7 @@ class HierarchyFacetParser extends AbstractFacetParser
         }
 
         /** @var $facet HierarchyFacet */
-        $facet = GeneralUtility::makeInstance(HierarchyFacet::class, $resultSet, $facetName, $fieldName, $label, $facetConfiguration);
+        $facet = $this->objectManager->get(HierarchyFacet::class, $resultSet, $facetName, $fieldName, $label, $facetConfiguration);
 
         $hasActiveOptions = count($optionsFromRequest) > 0;
         $facet->setIsUsed($hasActiveOptions);

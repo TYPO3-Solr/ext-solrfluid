@@ -16,6 +16,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets;
 
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
  * Class FacetParserRegistry
@@ -37,15 +38,26 @@ class FacetParserRegistry implements SingletonInterface
         'queryGroup' => OptionBased\QueryGroup\QueryGroupFacetParser::class,
         'dateRange' => RangeBased\DateRange\DateRangeFacetParser::class,
         'numericRange' => RangeBased\NumericRange\NumericRangeFacetParser::class,
-
     ];
-
     /**
      * Default parser className
      *
      * @var string
      */
     protected $defaultParser = OptionBased\Options\OptionsFacetParser::class;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     */
+    public function injectObjectManager(ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
 
     /**
      * Get defaultParser
@@ -122,6 +134,8 @@ class FacetParserRegistry implements SingletonInterface
      */
     protected function createParserInstance($className)
     {
-        return GeneralUtility::makeInstance($className);
+        /** @var $instance FacetParserInterface */
+        $instance = $this->objectManager->get($className);
+        return $instance;
     }
 }

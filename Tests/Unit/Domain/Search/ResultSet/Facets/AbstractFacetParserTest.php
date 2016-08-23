@@ -17,7 +17,10 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets;
 use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetParser;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use ApacheSolrForTypo3\Solrfluid\Tests\Unit\Helper\FakeObjectManager;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class QueryGroupFacetParserTest
@@ -64,5 +67,17 @@ abstract class AbstractFacetParserTest extends UnitTest
         $searchRequestMock->expects($this->any())->method('getHasFacetValue')->will($this->returnValueMap($activeFacetValueMap));
 
         return $searchResultSet;
+    }
+
+    /**
+     * @param string $className
+     * @return AbstractFacetParser
+     */
+    protected function getInitializedParser($className)
+    {
+        $parser = GeneralUtility::makeInstance($className);
+        $parser->injectObjectManager(new FakeObjectManager());
+
+        return $parser;
     }
 }

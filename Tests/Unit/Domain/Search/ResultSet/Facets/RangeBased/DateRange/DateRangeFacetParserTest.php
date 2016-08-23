@@ -50,7 +50,9 @@ class DateRangeFacetParserTest extends AbstractFacetParserTest
             })
         );
 
-        $parser = new DateRangeFacetParser();
+        /** @var $parser DateRangeFacetParser */
+        $parser = $this->getInitializedParser(DateRangeFacetParser::class);
+
         $facet = $parser->parse($searchResultSet, 'myCreated', $facetConfiguration['myCreated.']);
         $this->assertInstanceOf(DateRangeFacet::class, $facet);
         $this->assertSame($facet->getConfiguration(), $facetConfiguration['myCreated.'], 'Configuration was not passed to new facets');
