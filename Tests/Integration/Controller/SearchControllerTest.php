@@ -650,7 +650,7 @@ class SearchControllerTest extends IntegrationTest
 
         $this->indexPages(array(1));
 
-        $searchRequest = $this->getPreparedRequest('frequentlySearched','pi_frequentlySearched');
+        $searchRequest = $this->getPreparedRequest('frequentlySearched', 'pi_frequentlySearched');
         $searchResponse = $this->getPreparedResponse();
 
         $this->searchController->processRequest($searchRequest, $searchResponse);

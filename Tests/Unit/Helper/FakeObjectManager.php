@@ -35,7 +35,8 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
  *
  * @package ApacheSolrForTypo3\Solrfluid\Tests\Unit\Helper
  */
-class FakeObjectManager implements ObjectManagerInterface {
+class FakeObjectManager implements ObjectManagerInterface
+{
 
     /**
      * Returns TRUE if an object with the given name is registered
@@ -60,7 +61,7 @@ class FakeObjectManager implements ObjectManagerInterface {
         $arguments = func_get_args();
 
         $instance = call_user_func_array(array(\TYPO3\CMS\Core\Utility\GeneralUtility::class, 'makeInstance'), $arguments);
-        if(method_exists($instance,'injectObjectManager'))  {
+        if (method_exists($instance, 'injectObjectManager')) {
             $instance->injectObjectManager($this);
         }
 

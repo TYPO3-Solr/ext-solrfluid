@@ -46,7 +46,7 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
      */
     public function getObjectManager()
     {
-        if($this->objectManager === null) {
+        if ($this->objectManager === null) {
             $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         }
         return $this->objectManager;
