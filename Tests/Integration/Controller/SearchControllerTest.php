@@ -25,6 +25,7 @@ namespace ApacheSolrForTypo3\Solr\Tests\Integration\Plugin\Results;
  ***************************************************************/
 
 use ApacheSolrForTypo3\Solr\Site;
+use ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager;
 use ApacheSolrForTypo3\Solr\Tests\Integration\IntegrationTest;
 use ApacheSolrForTypo3\Solrfluid\Controller\SearchController;
 use TYPO3\CMS\Core\TimeTracker\TimeTracker;
@@ -258,7 +259,7 @@ class SearchControllerTest extends IntegrationTest
         $overwriteConfiguration = array();
         $overwriteConfiguration['search.']['faceting.']['facets.']['type.']['partialName'] = 'NotFound';
 
-        /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
+        /** @var $configurationManager ConfigurationManager */
         $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
         $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
 
@@ -313,7 +314,7 @@ class SearchControllerTest extends IntegrationTest
         $overwriteConfiguration['search.']['faceting.']['facets.']['subtitle.']['sortBy'] = 'lex';
 
 
-        /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
+        /** @var $configurationManager ConfigurationManager */
         $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
         $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
 
@@ -409,7 +410,7 @@ class SearchControllerTest extends IntegrationTest
         $overwriteConfiguration['search.']['faceting.']['facets.']['subtitle.']['manualSortOrder'] = 'men, woman';
 
 
-        /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
+        /** @var $configurationManager ConfigurationManager */
         $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
         $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
 
@@ -527,7 +528,7 @@ class SearchControllerTest extends IntegrationTest
         $overwriteConfiguration = array();
         $overwriteConfiguration['search.']['lastSearches.']['mode'] = 'global';
 
-        /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
+        /** @var $configurationManager ConfigurationManager */
         $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
         $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
         $this->searchController->setResetConfigurationBeforeInitialize(false);
@@ -557,7 +558,7 @@ class SearchControllerTest extends IntegrationTest
         $overwriteConfiguration = array();
         $overwriteConfiguration['search.']['lastSearches.']['mode'] = 'global';
 
-        /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
+        /** @var $configurationManager ConfigurationManager */
         $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
         $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
         $this->searchController->setResetConfigurationBeforeInitialize(false);
@@ -613,7 +614,7 @@ class SearchControllerTest extends IntegrationTest
             'type' => 'dateRange'
         ];
 
-        /** @var $configurationManager \ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager */
+        /** @var $configurationManager ConfigurationManager */
         $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
         $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
         $this->searchController->setResetConfigurationBeforeInitialize(false);
@@ -704,6 +705,32 @@ class SearchControllerTest extends IntegrationTest
 
         $this->assertContains('Custom Integration Test Search Template', $result, 'Could not find page 3 in result set');
         $this->assertContains('Custom Integration Test Pagination Template', $result, 'Could not find page 2 in result set');
+    }
+
+    /**
+     * @test
+     */
+    public function canPassCustomSettingsToView()
+    {
+        GeneralUtility::_GETset('q', '*');
+        $this->importDataSetFromFixture('can_render_search_customTemplate.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+
+
+        $overwriteConfiguration = [];
+        $overwriteConfiguration['settings.']['foo.']['bar'] = 'mytestsetting';
+
+        /** @var $configurationManager ConfigurationManager */
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
+        $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
+        $this->searchController->setResetConfigurationBeforeInitialize(false);
+
+        $this->searchRequest->setArgument('resultsPerPage', 5);
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $result = $this->searchResponse->getContent();
+
+        $this->assertContains('mytestsetting', $result, 'Can not output passed test setting');
     }
 
     /**

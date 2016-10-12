@@ -181,14 +181,24 @@ abstract class AbstractBaseController extends ActionController
 
         parent::initializeAction();
         $this->typoScriptFrontendController = $GLOBALS['TSFE'];
+        $this->initializeSettings();
+        $this->initializeSearch();
+    }
 
+    /**
+     * Inject settings of plugin.tx_solr
+     *
+     * @return void
+     */
+    protected function initializeSettings()
+    {
+        /** @var $typoScriptService TypoScriptService */
+        $typoScriptService = $this->objectManager->get(TypoScriptService::class);
 
         // Make sure plugin.tx_solr.settings are available in the view as {settings}
         $this->settings = $typoScriptService->convertTypoScriptArrayToPlainArray(
             $this->typoScriptConfiguration->getObjectByPathOrDefault('plugin.tx_solr.settings.', [])
         );
-
-        $this->initializeSearch();
     }
 
     /**
