@@ -40,7 +40,7 @@ if [ $? -ne "0" ]; then
 	exit 1
 fi
 
-composer require --dev typo3/cms="$TYPO3_VERSION"
+composer require --dev --prefer-source typo3/cms="$TYPO3_VERSION"
 composer require --dev apache-solr-for-typo3/solr="$EXT_SOLR_VERSION"
 
 export TYPO3_PATH_WEB=$SCRIPTPATH/.Build/Web
