@@ -16,8 +16,7 @@
     'pi_search',
     array(
         'Search' => 'form'
-    ),
-    array()
+    )
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
