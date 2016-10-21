@@ -16,9 +16,6 @@
     'pi_search',
     array(
         'Search' => 'form'
-    ),
-    array(
-        'Search' => 'form'
     )
 );
 
