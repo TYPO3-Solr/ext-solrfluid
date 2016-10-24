@@ -158,7 +158,7 @@ abstract class AbstractBaseController extends ActionController
         // Merge settings done by typoscript with solrConfiguration plugin.tx_solr (obsolete when part of ext:solr)
         $frameWorkConfiguration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
         $pluginSettings = [];
-        foreach (['search', 'settings', 'suggest', 'statistics', 'logging', 'general', 'solr'] as $key) {
+        foreach (['search', 'settings', 'suggest', 'statistics', 'logging', 'general', 'solr', 'view'] as $key) {
             if (isset($frameWorkConfiguration[$key])) {
                 $pluginSettings[$key] = $frameWorkConfiguration[$key];
             }

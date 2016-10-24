@@ -41,14 +41,6 @@
 
                 page.10.wrap = <!--TYPO3SEARCH_begin--><html><body>|</body></html><!--TYPO3SEARCH_end-->
 
-                tt_content.list.20.solrfluid_pi_result = USER
-				tt_content.list.20.solrfluid_pi_result {
-					userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
-					extensionName = Solrfluid
-					pluginName = pi_results
-					vendorName = ApacheSolrForTypo3
-				}
-
                 plugin.tx_solr {
                     view {
                         layoutRootPaths.10 = EXT:solrfluid/Resources/Private/Frontend/Layouts/

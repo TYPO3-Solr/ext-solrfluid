@@ -17,9 +17,10 @@
             <![CDATA[
                 config.disableAllHeaderCode = 1
                 config.tx_extbase {
-                	mvc {
-
-                	}
+                	view {
+                        templateRootPaths.10 = EXT:solrfluid/Tests/Integration/Controller/Fixtures/customTemplates/
+                        widget.ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\ResultPaginateViewHelper.templateRootPath = EXT:solrfluid/Tests/Integration/Controller/Fixtures/customTemplates/
+                    }
                 }
 
                 page = PAGE
