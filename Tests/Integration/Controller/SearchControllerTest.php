@@ -690,6 +690,23 @@ class SearchControllerTest extends IntegrationTest
     }
 
     /**
+     * @test
+     */
+    public function canRenderAsUserObjectWithCustomTemplate()
+    {
+        $_GET['q'] = '*';
+        $this->importDataSetFromFixture('can_render_search_customTemplate.xml');
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->searchRequest->setArgument('resultsPerPage', 5);
+        $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
+        $result = $this->searchResponse->getContent();
+
+        $this->assertContains('Custom Integration Test Search Template', $result, 'Could not find page 3 in result set');
+        $this->assertContains('Custom Integration Test Pagination Template', $result, 'Could not find page 2 in result set');
+    }
+
+    /**
      * @param string $content
      * @param string $id
      * @return string
