@@ -37,35 +37,6 @@ class TranslateViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelp
     protected $escapeOutput = false;
 
     /**
-     * Render translation
-     *
-     * Wrapper function to support "old solr way" of doing translations
-     *
-     * @param string $key Translation Key
-     * @param string $id Translation Key compatible to TYPO3 Flow
-     * @param string $default If the given locallang key could not be found, this value is used. If this argument is not set, child nodes will be used to render the default
-     * @param bool $htmlEscape TRUE if the result should be htmlescaped. This won't have an effect for the default value
-     * @param array $arguments Arguments to be replaced in the resulting string
-     * @param string $extensionName UpperCamelCased extension key (for example BlogExample)
-     * @return string The translated key or tag body if key doesn't exist
-     */
-    public function render($key = null, $id = null, $default = null, $htmlEscape = null, array $arguments = null, $extensionName = null)
-    {
-        return self::renderStatic(
-            array(
-                'key' => $key,
-                'id' => $id,
-                'default' => $default,
-                'htmlEscape' => $htmlEscape,
-                'arguments' => $arguments,
-                'extensionName' => $extensionName,
-            ),
-            $this->buildRenderChildrenClosure(),
-            $this->renderingContext
-        );
-    }
-
-    /**
      * @param array $arguments
      * @param callable $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
