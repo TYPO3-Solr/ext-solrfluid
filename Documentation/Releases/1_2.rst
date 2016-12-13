@@ -1,0 +1,138 @@
+================================
+EXT:solrfluid Releasenotes 1.2.0
+================================
+
+This release is a bugfix and maintenance only release it contains:
+
+1. Make TranslateViewHelper compatible with TYPO3 8
+
+The render method was removed and the implementation of the core was used and only renderStatic is overwritten now.
+
+2. Allow to override 'view' on plugin basis
+
+The plugin configuration is merged together in the AbstractBaseController but the view property was not part of this merge. So it was not possible to override the view typoscript configuration to define custom templates on a per plugin basis.
+This is now possible and allows configurations like this:
+
+|
+
+.. code-block:: typoscript
+
+    tt_content.lexiconSearch = USER
+    tt_content.lexiconSearch {
+       userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+       extensionName = Solrfluid
+       pluginName = pi_result
+       vendorName = ApacheSolrForTypo3
+
+       view {
+           templateRootPaths {
+               100 = xxx/Resources/Private/Templates/Solr/MyPath
+           }
+       }
+
+       search {
+           targetPage = 4711
+
+           query {
+               filter {
+                   onlyLexiconPages = documentType_stringS:lexicon
+               }
+           }
+       }
+    }
+
+|
+
+3. Make search form cacheable
+
+The form action is now cacheable.
+
+4. buildSearchRequest should be protected
+
+The method buildSearchRequest is now protected, to allow to overwrite it.
+
+5. Use objectManager to create facet and result objects
+
+The facet and result objects are now created with the object manager to allow dependency injection when using custom classes.
+
+Thanks
+======
+
+Thanks to all contributors:
+
+* Andreas Allacher
+* Markus Friedrich
+* Sascha Nowak
+* Sascha Egerer
+* Timo Hund
+
+In addition we also want to say "thank you" to all of our EB Partners that subscribed a new partnership for 2016:
+
+* Arrabiata Solutions GmbH & Co. KG
+* avonis
+* Bank CIC AG
+* Bitmotion GmbH
+* Citkomm services GmbH
+* cron IT
+* CS2 AG
+* Cosmoblonde GmbH
+* Daniz online markting
+* datenwerk innovationsagentur gmbh
+* Die Medialen GmbH
+* die_schnittsteller GmbH
+* E-magineurs
+* Fernando Hernáez Lopez
+* Future Connection AG
+* Gernot Leitgab
+* .hausformat
+* Hirsch & Wölfl GmbH
+* hs-digital GmbH
+* IHK Neubrandenburg
+* internezzo AG
+* jweiland.net
+* L.N. Schaffrath DigitalMedien GmbH
+* mehrwert intermediale kommunikation GmbH
+* netlogix GmbH & Co. KG
+* Pixel Ink
+* Pixelpark AG
+* pixolith GmbH & Co. KG
+* polargold GmbH
+* portrino GmbH
+* Q3i GmbH & Co. KG
+* raphael gmbh
+* RUAG Corporate Services AG
+* sitegeist media solutions GmbH
+* ST3 Elkartea
+* Star Finanz-Software Entwicklung und Vertriebs GmbH
+* Stefan Galinski Interndienstleistungen
+* Speedpartner GmbH
+* sunzinet AG
+* Systime A/S
+* SYZYGY Deutschland GmbH
+* tecsis GmbH
+* web-vision GmbH
+* websedit AG - Internetagentur
+* Webstobe GmbH
+* werkraum GmbH
+* WIND Internet
+* wow! solution
+* zdreicon AG
+
+Thanks also to our partners who already singed up for a 2017 partnership (EB2017):
+
+* Amedick & Sommer Neue Medien GmbH
+* cron IT GmbH
+* b:dreizehn GmbH
+* Die Medialen GmbH
+* Leibniz Universität IT Services, Hannover
+* LOUIS INTERNET
+* polargold GmbH
+* Mercedes-AMG GmbH
+* Triplesense Reply GmbH
+* zdreicom AG
+
+Thanks to everyone who helped in creating this release!
+
+Support us in 2017 by becoming an EB partner:
+
+http://www.typo3-solr.com/en/contact/
