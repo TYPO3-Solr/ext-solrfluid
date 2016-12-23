@@ -4,10 +4,10 @@
 
 ---
 conf.py:
-  copyright: 2016
+  copyright: 2017
   project: EXT:solrfluid Fluid Rendering for ApacheSolrForTypo3
-  version: 1.2.0
-  release: 1.2.0
+  version: 2.0.0
+  release: 2.0.0
   intersphinx_mapping:
     t3tsref:
     - https://docs.typo3.org/typo3cms/TyposcriptReference/

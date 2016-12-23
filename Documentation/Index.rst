@@ -15,7 +15,7 @@
 		solr
 
 	:Version:
-		1.2.0
+		2.0.0
 
 	:Language:
 		en
@@ -27,7 +27,7 @@
 		search, full text, index, solr, lucene, fast, query, fluid, templating
 
 	:Copyright:
-		2009-2016
+		2009-2017
 
 	:Author:
 		Frans Saris & Timo Hund

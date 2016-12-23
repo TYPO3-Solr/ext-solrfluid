@@ -657,7 +657,7 @@ class SearchControllerTest extends IntegrationTest
         $this->searchController->processRequest($searchRequest, $searchResponse);
         $resultPage = $searchResponse->getContent();
 
-        $this->assertContainerByIdContains('>shoes</a>', $resultPage, 'tx-solr-lastsearches');
+        $this->assertContainerByIdContains('>shoes</a>', $resultPage, 'tx-solr-frequent-searches');
     }
 
     /**
@@ -740,9 +740,11 @@ class SearchControllerTest extends IntegrationTest
      */
     protected function getIdContent($content, $id)
     {
+        if(strpos($content, $id) === false) {
+            return '';
+        }
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->loadHTML('<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL . $content);
-
         return $dom->saveXML($dom->getElementById($id));
     }
 
@@ -803,7 +805,7 @@ class SearchControllerTest extends IntegrationTest
         /** @var $beUser  \TYPO3\CMS\Core\Authentication\BackendUserAuthentication */
         $beUser = GeneralUtility::makeInstance('TYPO3\CMS\Core\Authentication\BackendUserAuthentication');
         $GLOBALS['BE_USER'] = $beUser;
-        sleep(1);
+        $this->waitToBeVisibleInSolr();
     }
 
     /**

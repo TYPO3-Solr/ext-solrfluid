@@ -58,7 +58,7 @@ class HierarchyFacetParserTest extends AbstractFacetParserTest
         $this->assertSame(1, $facet->getChildNodes()->getCount());
         $this->assertSame(8, $facet->getChildNodes()->getByPosition(0)->getChildNodes()->getCount());
 
-        $this->assertSame('/1/14', $facet->getChildNodes()->getByPosition(0)->getChildNodes()->getByPosition(0)->getValue());
+        $this->assertSame('/1/14/', $facet->getChildNodes()->getByPosition(0)->getChildNodes()->getByPosition(0)->getValue());
         $this->assertSame('14', $facet->getChildNodes()->getByPosition(0)->getChildNodes()->getByPosition(0)->getKey());
     }
 

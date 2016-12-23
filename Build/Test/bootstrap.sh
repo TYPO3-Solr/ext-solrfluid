@@ -47,5 +47,6 @@ export TYPO3_PATH_WEB=$SCRIPTPATH/.Build/Web
 
 mkdir -p $TYPO3_PATH_WEB/uploads $TYPO3_PATH_WEB/typo3temp
 
-chmod 775 $EXTENSION_ROOTPATH/.Build/Web/typo3conf/ext/solr/Resources/Install/*.sh
-sudo $EXTENSION_ROOTPATH/.Build/Web/typo3conf/ext/solr/Resources/Install/install-solr-tomcat.sh
+# Setup Solr using install script
+chmod 775 $EXTENSION_ROOTPATH/.Build/Web/typo3conf/ext/solr/Resources/Private/Install/*.sh
+$EXTENSION_ROOTPATH/.Build/Web/typo3conf/ext/solr/Resources/Private/Install/install-solr.sh -d "$HOME/solr" -t
