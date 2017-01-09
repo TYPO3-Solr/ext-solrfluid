@@ -26,7 +26,7 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper as AbtractCoreViewHelper;
  * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers
  */
-class AbstractViewHelper extends AbtractCoreViewHelper
+abstract class AbstractViewHelper extends AbtractCoreViewHelper
 {
     /**
      * @var SolrControllerContext

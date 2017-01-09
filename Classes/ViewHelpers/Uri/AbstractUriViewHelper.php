@@ -31,7 +31,7 @@ use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
  * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Uri
  */
-class AbstractUriViewHelper extends AbstractViewHelper
+abstract class AbstractUriViewHelper extends AbstractViewHelper
 {
     /**
      * @var SearchUriBuilder

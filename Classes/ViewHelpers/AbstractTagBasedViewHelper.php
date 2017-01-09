@@ -26,7 +26,7 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper as AbstractTagBas
  * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers
  */
-class AbstractTagBasedViewHelper extends AbstractTagBasedCoreViewHelper
+abstract class AbstractTagBasedViewHelper extends AbstractTagBasedCoreViewHelper
 {
 
     /**

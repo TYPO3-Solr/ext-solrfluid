@@ -32,7 +32,7 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
  * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers\Link
  */
-class AbstractValueViewHelper extends AbstractUriViewHelper
+abstract class AbstractValueViewHelper extends AbstractUriViewHelper
 {
     /**
      * @param \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet $facet
