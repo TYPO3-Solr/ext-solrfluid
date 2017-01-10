@@ -89,4 +89,15 @@ abstract class AbstractFacetItemCollection extends AbstractCollection
 
         return $result;
     }
+
+    /**
+     * @return AbstractFacetItemCollection
+     */
+    public function getReversedOrderCopy()
+    {
+        $result = clone $this;
+        $result->data = array_reverse($result->data, true);
+
+        return $result;
+    }
 }

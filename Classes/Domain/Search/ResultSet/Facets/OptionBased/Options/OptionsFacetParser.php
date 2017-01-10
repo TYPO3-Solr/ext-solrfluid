@@ -75,6 +75,8 @@ class OptionsFacetParser extends AbstractFacetParser
         // need to be handled in the frontend.
         $facet = $this->applyManualSortOrder($facet, $facetConfiguration);
 
+        $facet = $this->applyReverseOrder($facet, $facetConfiguration);
+
         return $facet;
     }
 
@@ -91,6 +93,22 @@ class OptionsFacetParser extends AbstractFacetParser
         $fields = GeneralUtility::trimExplode(',', $facetConfiguration['manualSortOrder']);
         $sortedOptions = $facet->getOptions()->getManualSortedCopy($fields);
         $facet->setOptions($sortedOptions);
+
+        return $facet;
+    }
+
+    /**
+     * @param OptionsFacet $facet
+     * @param array $facetConfiguration
+     * @return OptionsFacet
+     */
+    protected function applyReverseOrder($facet, array $facetConfiguration)
+    {
+        if (empty($facetConfiguration['reverseOrder'])) {
+            return $facet;
+        }
+
+        $facet->setOptions($facet->getOptions()->getReversedOrderCopy());
 
         return $facet;
     }
