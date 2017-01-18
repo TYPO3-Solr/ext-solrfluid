@@ -8,6 +8,10 @@ plugin.tx_solrfluid {
 		# important! else linkbuilding will fail
 		pluginNamespace = tx_solr
 	}
+
+	features {
+		requireCHashArgumentForActionArguments = 0
+	}
 }
 
 page.includeCSS {
