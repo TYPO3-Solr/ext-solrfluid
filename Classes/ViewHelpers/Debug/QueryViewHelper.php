@@ -27,6 +27,10 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
  */
 class QueryViewHelper extends AbstractViewHelper implements CompilableInterface
 {
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
 
     /**
      * Get parsed query debug output

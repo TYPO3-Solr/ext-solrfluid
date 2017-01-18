@@ -38,6 +38,11 @@ class DocumentScoreAnalyzerViewHelper extends AbstractViewHelper implements Comp
     protected static $scoreService;
 
     /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
+
+    /**
      * Get document relevance percentage
      *
      * @param \Apache_Solr_Document $document
