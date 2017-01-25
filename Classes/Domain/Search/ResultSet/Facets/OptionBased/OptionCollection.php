@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\Options;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased;
 
 /*
  * This file is part of the TYPO3 CMS project.

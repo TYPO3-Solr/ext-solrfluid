@@ -14,8 +14,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBase
  * The TYPO3 project - inspiring people to share!
  */
 
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetItemCollection;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\AbstractOptionsFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 
 /**
@@ -25,7 +24,7 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
  * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionsFacet
  */
-class OptionsFacet extends AbstractFacet
+class OptionsFacet extends AbstractOptionsFacet
 {
     const TYPE_OPTIONS = 'options';
 
@@ -34,11 +33,6 @@ class OptionsFacet extends AbstractFacet
      * @var string
      */
     protected static $type = self::TYPE_OPTIONS;
-
-    /**
-     * @var OptionCollection
-     */
-    protected $options;
 
     /**
      * OptionsFacet constructor
@@ -52,50 +46,5 @@ class OptionsFacet extends AbstractFacet
     public function __construct(SearchResultSet $resultSet, $name, $field, $label = '', array $configuration = [])
     {
         parent::__construct($resultSet, $name, $field, $label, $configuration);
-        $this->options = new OptionCollection();
-    }
-
-    /**
-     * @return OptionCollection
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-    /**
-     * @param OptionCollection $options
-     */
-    public function setOptions($options)
-    {
-        $this->options = $options;
-    }
-
-    /**
-     * @param Option $option
-     */
-    public function addOption(Option $option)
-    {
-        $this->options->add($option);
-    }
-
-    /**
-     * Get facet partial name used for rendering the facet
-     *
-     * @return string
-     */
-    public function getPartialName()
-    {
-        return !empty($this->configuration['partialName']) ? $this->configuration['partialName'] : 'Options';
-    }
-
-    /**
-     * The implementation of this method should return a "flatten" collection of all items.
-     *
-     * @return AbstractFacetItemCollection
-     */
-    public function getAllFacetItems()
-    {
-        return $this->options;
     }
 }

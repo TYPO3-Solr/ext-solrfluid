@@ -79,37 +79,4 @@ class OptionsFacetParser extends AbstractFacetParser
 
         return $facet;
     }
-
-    /**
-     * @param OptionsFacet $facet
-     * @param array $facetConfiguration
-     * @return OptionsFacet
-     */
-    protected function applyManualSortOrder($facet, array $facetConfiguration)
-    {
-        if (!isset($facetConfiguration['manualSortOrder'])) {
-            return $facet;
-        }
-        $fields = GeneralUtility::trimExplode(',', $facetConfiguration['manualSortOrder']);
-        $sortedOptions = $facet->getOptions()->getManualSortedCopy($fields);
-        $facet->setOptions($sortedOptions);
-
-        return $facet;
-    }
-
-    /**
-     * @param OptionsFacet $facet
-     * @param array $facetConfiguration
-     * @return OptionsFacet
-     */
-    protected function applyReverseOrder($facet, array $facetConfiguration)
-    {
-        if (empty($facetConfiguration['reverseOrder'])) {
-            return $facet;
-        }
-
-        $facet->setOptions($facet->getOptions()->getReversedOrderCopy());
-
-        return $facet;
-    }
 }

@@ -740,7 +740,7 @@ class SearchControllerTest extends IntegrationTest
      */
     protected function getIdContent($content, $id)
     {
-        if(strpos($content, $id) === false) {
+        if (strpos($content, $id) === false) {
             return '';
         }
         $dom = new \DOMDocument('1.0', 'UTF-8');
