@@ -78,13 +78,12 @@ class ResultPaginateController extends AbstractWidgetController
     }
 
     /**
-     * @param int $page
      * @return void
      */
-    public function indexAction($page = 1)
+    public function indexAction()
     {
         // set current page
-        $this->currentPage = $page;
+        $this->currentPage = $this->resultSet->getUsedPage() + 1;
         if ($this->currentPage < 1) {
             $this->currentPage = 1;
         }
