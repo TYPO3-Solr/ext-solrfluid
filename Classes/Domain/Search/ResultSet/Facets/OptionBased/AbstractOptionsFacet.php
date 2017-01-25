@@ -1,5 +1,5 @@
 <?php
-namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\QueryGroup;
+namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -14,7 +14,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBase
  * The TYPO3 project - inspiring people to share!
  */
 
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\AbstractOptionsFacet;
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 
 /**
@@ -24,15 +24,8 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
  * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\QueryGroupFacet
  */
-class QueryGroupFacet extends AbstractOptionsFacet
+class AbstractOptionsFacet extends AbstractFacet
 {
-    const TYPE_QUERY_GROUP = 'queryGroup';
-
-    /**
-     * String
-     * @var string
-     */
-    protected static $type = self::TYPE_QUERY_GROUP;
 
     /**
      * @var OptionCollection
@@ -51,5 +44,50 @@ class QueryGroupFacet extends AbstractOptionsFacet
     public function __construct(SearchResultSet $resultSet, $name, $field, $label = '', array $configuration = [])
     {
         parent::__construct($resultSet, $name, $field, $label, $configuration);
+        $this->options = new OptionCollection();
+    }
+
+    /**
+     * @return OptionCollection
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param OptionCollection $options
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * @param AbstractOptionFacetItem $option
+     */
+    public function addOption(AbstractOptionFacetItem $option)
+    {
+        $this->options->add($option);
+    }
+
+    /**
+     * The implementation of this method should return a "flatten" collection of all items.
+     *
+     * @return OptionCollection
+     */
+    public function getAllFacetItems()
+    {
+        return $this->options;
+    }
+
+    /**
+     * Get facet partial name used for rendering the facet
+     *
+     * @return string
+     */
+    public function getPartialName()
+    {
+        return !empty($this->configuration['partialName']) ? $this->configuration['partialName'] : 'Options';
     }
 }

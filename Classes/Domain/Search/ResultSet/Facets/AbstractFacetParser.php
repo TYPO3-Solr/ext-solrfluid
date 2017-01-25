@@ -14,6 +14,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets;
  * The TYPO3 project - inspiring people to share!
  */
 
+use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\AbstractOptionsFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
@@ -133,5 +134,38 @@ abstract class AbstractFacetParser implements FacetParserInterface
             }
         }
         return $facetValueItemsToCreate;
+    }
+
+    /**
+     * @param AbstractOptionsFacet $facet
+     * @param array $facetConfiguration
+     * @return AbstractOptionsFacet
+     */
+    protected function applyManualSortOrder(AbstractOptionsFacet $facet, array $facetConfiguration)
+    {
+        if (!isset($facetConfiguration['manualSortOrder'])) {
+            return $facet;
+        }
+        $fields = GeneralUtility::trimExplode(',', $facetConfiguration['manualSortOrder']);
+        $sortedOptions = $facet->getOptions()->getManualSortedCopy($fields);
+        $facet->setOptions($sortedOptions);
+
+        return $facet;
+    }
+
+    /**
+     * @param AbstractOptionsFacet $facet
+     * @param array $facetConfiguration
+     * @return AbstractOptionsFacet
+     */
+    protected function applyReverseOrder(AbstractOptionsFacet $facet, array $facetConfiguration)
+    {
+        if (empty($facetConfiguration['reverseOrder'])) {
+            return $facet;
+        }
+
+        $facet->setOptions($facet->getOptions()->getReversedOrderCopy());
+
+        return $facet;
     }
 }

@@ -150,6 +150,117 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
     /**
      * @test
      */
+    public function canGetOptionsInExpectedOrder()
+    {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_multiple_fields_facets.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'facets.' => [
+                'type.' => [
+                    'label' => 'My Type',
+                    'field' => 'type_stringS',
+                ]
+            ]
+        ];
+
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        /** @var $optionFacet OptionsFacet */
+        $optionFacet = $searchResultSet->getFacets()->getByPosition(0);
+
+        /** @var $option1 Option */
+        $option1 = $optionFacet->getOptions()->getByPosition(0);
+        $this->assertSame('page', $option1->getValue());
+
+        /** @var $option2 Option */
+        $option2 = $optionFacet->getOptions()->getByPosition(1);
+        $this->assertSame('event', $option2->getValue());
+    }
+
+    /**
+     * @test
+     */
+    public function canGetOptionsInExpectedOrderWhenReversOrderIsApplied()
+    {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_multiple_fields_facets.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'facets.' => [
+                'type.' => [
+                    'reverseOrder' => 1,
+                    'label' => 'My Type',
+                    'field' => 'type_stringS',
+                ]
+            ]
+        ];
+
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        /** @var $optionFacet OptionsFacet */
+        $optionFacet = $searchResultSet->getFacets()->getByPosition(0);
+
+        /** @var $option1 Option */
+        $option1 = $optionFacet->getOptions()->getByPosition(0);
+        $this->assertSame('event', $option1->getValue());
+
+        /** @var $option2 Option */
+        $option2 = $optionFacet->getOptions()->getByPosition(1);
+        $this->assertSame('page', $option2->getValue());
+    }
+
+
+    /**
+     * @test
+     */
+    public function canGetOptionsInExpectedOrderWhenManualSortOrderIsApplied()
+    {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_multiple_fields_facets.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'facets.' => [
+                'type.' => [
+                    'manualSortOrder' => 'event,page',
+                    'label' => 'My Type',
+                    'field' => 'type_stringS',
+                ]
+            ]
+        ];
+
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        /** @var $optionFacet OptionsFacet */
+        $optionFacet = $searchResultSet->getFacets()->getByPosition(0);
+
+        /** @var $option1 Option */
+        $option1 = $optionFacet->getOptions()->getByPosition(0);
+        $this->assertSame('event', $option1->getValue());
+
+        /** @var $option2 Option */
+        $option2 = $optionFacet->getOptions()->getByPosition(1);
+        $this->assertSame('page', $option2->getValue());
+    }
+
+    /**
+     * @test
+     */
     public function canReconstituteFacetModelsWithSameFieldNameFromResponse()
     {
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_multiple_fields_facets.json');
@@ -596,6 +707,140 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
         $this->assertInstanceOf(QueryGroupFacet::class, $facet);
 
         $this->assertCount(3, $facet->getOptions());
+    }
+
+    /**
+     * @test
+     */
+    public function canGetOptionsInExpectedOrderForQueryGroupFacet()
+    {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_query_fields_facets.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'facets.' => [
+                'age.' => [
+                    'type' => 'queryGroup',
+                    'label' => 'Age',
+                    'field' => 'created',
+                    'queryGroup.' => [
+                        'week' => ['query' => '[NOW/DAY-7DAYS TO *]'],
+                        'month' => ['query' => '[NOW/DAY-1MONTH TO NOW/DAY-7DAYS]'],
+                        'halfYear' => ['query' => '[NOW/DAY-6MONTHS TO NOW/DAY-1MONTH]'],
+                        'year' => ['query' => '[NOW/DAY-1YEAR TO NOW/DAY-6MONTHS]'],
+                        'old' => ['query' => '[* TO NOW/DAY-1YEAR]']
+                    ]
+                ]
+            ]
+        ];
+
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        /** @var QueryGroupFacet $facet */
+        $facet = $searchResultSet->getFacets()->getByPosition(0);
+
+        $firstValue = $facet->getOptions()->getByPosition(0)->getValue();
+        $secondValue = $facet->getOptions()->getByPosition(1)->getValue();
+        $thirdValue = $facet->getOptions()->getByPosition(2)->getValue();
+
+        $this->assertSame('month', $firstValue, 'Could not get values in expected order from QueryGroupFacet');
+        $this->assertSame('halfYear', $secondValue, 'Could not get values in expected order from QueryGroupFacet');
+        $this->assertSame('old', $thirdValue, 'Could not get values in expected order from QueryGroupFacet');
+    }
+
+    /**
+     * @test
+     */
+    public function canGetOptionsInExpectedOrderForQueryGroupFacetWithManualSortOrder()
+    {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_query_fields_facets.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'facets.' => [
+                'age.' => [
+                    'type' => 'queryGroup',
+                    'manualSortOrder' => 'halfYear,month,old',
+                    'label' => 'Age',
+                    'field' => 'created',
+                    'queryGroup.' => [
+                        'week' => ['query' => '[NOW/DAY-7DAYS TO *]'],
+                        'month' => ['query' => '[NOW/DAY-1MONTH TO NOW/DAY-7DAYS]'],
+                        'halfYear' => ['query' => '[NOW/DAY-6MONTHS TO NOW/DAY-1MONTH]'],
+                        'year' => ['query' => '[NOW/DAY-1YEAR TO NOW/DAY-6MONTHS]'],
+                        'old' => ['query' => '[* TO NOW/DAY-1YEAR]']
+                    ]
+                ]
+            ]
+        ];
+
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        /** @var QueryGroupFacet $facet */
+        $facet = $searchResultSet->getFacets()->getByPosition(0);
+
+        $firstValue = $facet->getOptions()->getByPosition(0)->getValue();
+        $secondValue = $facet->getOptions()->getByPosition(1)->getValue();
+        $thirdValue = $facet->getOptions()->getByPosition(2)->getValue();
+
+        $this->assertSame('halfYear', $firstValue, 'Could not get values in expected order from QueryGroupFacet');
+        $this->assertSame('month', $secondValue, 'Could not get values in expected order from QueryGroupFacet');
+        $this->assertSame('old', $thirdValue, 'Could not get values in expected order from QueryGroupFacet');
+    }
+
+    /**
+     * @test
+     */
+    public function canGetOptionsInExpectedOrderForQueryGroupFacetWithReversOrder()
+    {
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse('fake_solr_response_with_query_fields_facets.json');
+
+        // before the reconstitution of the domain object from the response we expect that no facets
+        // are present
+        $this->assertEquals([], $searchResultSet->getFacets()->getArrayCopy());
+
+        $facetConfiguration = [
+            'facets.' => [
+                'age.' => [
+                    'type' => 'queryGroup',
+                    'label' => 'Age',
+                    'field' => 'created',
+                    'reverseOrder' => 1,
+                    'queryGroup.' => [
+                        'week' => ['query' => '[NOW/DAY-7DAYS TO *]'],
+                        'month' => ['query' => '[NOW/DAY-1MONTH TO NOW/DAY-7DAYS]'],
+                        'halfYear' => ['query' => '[NOW/DAY-6MONTHS TO NOW/DAY-1MONTH]'],
+                        'year' => ['query' => '[NOW/DAY-1YEAR TO NOW/DAY-6MONTHS]'],
+                        'old' => ['query' => '[* TO NOW/DAY-1YEAR]']
+                    ]
+                ]
+            ]
+        ];
+
+        $configuration = $this->getConfigurationArrayFromFacetConfigurationArray($facetConfiguration);
+        $processor = $this->getConfiguredReconstitutionProcessor($configuration, $searchResultSet);
+        $processor->process($searchResultSet);
+
+        /** @var QueryGroupFacet $facet */
+        $facet = $searchResultSet->getFacets()->getByPosition(0);
+
+        $firstValue = $facet->getOptions()->getByPosition(0)->getValue();
+        $secondValue = $facet->getOptions()->getByPosition(1)->getValue();
+        $thirdValue = $facet->getOptions()->getByPosition(2)->getValue();
+
+        $this->assertSame('old', $firstValue, 'Could not get values in expected order from QueryGroupFacet');
+        $this->assertSame('halfYear', $secondValue, 'Could not get values in expected order from QueryGroupFacet');
+        $this->assertSame('month', $thirdValue, 'Could not get values in expected order from QueryGroupFacet');
     }
 
     /**
