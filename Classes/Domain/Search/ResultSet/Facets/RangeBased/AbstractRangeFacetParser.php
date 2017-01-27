@@ -77,7 +77,9 @@ abstract class AbstractRangeFacetParser extends AbstractFacetParser
             $fromDate = $this->parseRequestValue($rawFrom);
             $toDate = $this->parseRequestValue($rawTo);
 
-            $gap = $valuesFromResponse['gap'];
+            $type = isset($facetConfiguration['type']) ? $facetConfiguration['type'] : 'numericRange';
+            $gap = isset($facetConfiguration[$type.'.']['gap']) ? $facetConfiguration[$type.'.']['gap'] : 1;
+
             $range = new $facetItemClass($facet, $fromDate, $toDate, $fromInResponse, $toInResponse, $gap, $allCount, $rangeCounts, true);
             $facet->setRange($range);
         }

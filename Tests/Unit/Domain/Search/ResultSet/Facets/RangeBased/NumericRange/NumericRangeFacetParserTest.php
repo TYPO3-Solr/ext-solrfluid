@@ -37,6 +37,12 @@ class NumericRangeFacetParserTest extends AbstractFacetParserTest
                 'type' => 'numericRange',
                 'label' => 'Pids',
                 'field' => 'pid',
+                'numericRange.' => [
+                    'start' => 1,
+                    'end' => 100,
+                    'gap' => 2
+
+                ]
             ]
         ];
 
@@ -66,5 +72,8 @@ class NumericRangeFacetParserTest extends AbstractFacetParserTest
 
         $this->assertSame($facet->getRange()->getEndInResponse(), 100);
         $this->assertSame($facet->getRange()->getStartInResponse(), 0);
+        $this->assertSame($facet->getRange()->getGap(), 2);
+        $this->assertSame((int) $facet->getRange()->getStartRequested(), 10);
+        $this->assertSame((int) $facet->getRange()->getEndRequested(), 98);
     }
 }
