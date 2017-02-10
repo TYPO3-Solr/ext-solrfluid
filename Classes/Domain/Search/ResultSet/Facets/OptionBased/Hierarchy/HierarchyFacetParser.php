@@ -110,7 +110,6 @@ class HierarchyFacetParser extends AbstractFacetParser
             }
             $activeFacetValues[] = $valueFromRequest;
         }
-
         return $activeFacetValues;
     }
 }
