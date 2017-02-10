@@ -87,4 +87,34 @@ class Node extends AbstractOptionFacetItem
     {
         return $this->childNodes;
     }
+
+    /**
+     * @return Node|null
+     */
+    public function getParentNode()
+    {
+        return $this->parentNode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHasParentNode()
+    {
+        return $this->parentNode !== null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHasChildNodeSelected()
+    {
+        /** @var Node $childNode */
+        foreach ($this->childNodes as $childNode) {
+            if ($childNode->getSelected()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
