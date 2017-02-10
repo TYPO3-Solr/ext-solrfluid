@@ -251,8 +251,7 @@ in "Configuration/TypoScript/Examples/DateRange" you see that for the jQueryUi i
 
     page.includeJSFooterlibs {
         solr-jquery = EXT:solr/Resources/JavaScript/JQuery/jquery.min.js
-        solr-ui = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.core.min.js
-        solr-datepicker = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.datepicker.min.js
+        solr-ui = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.min.js
         solr-daterange = EXT:solrfluid/Resources/Public/JavaScript/facet_daterange.js
     }
 

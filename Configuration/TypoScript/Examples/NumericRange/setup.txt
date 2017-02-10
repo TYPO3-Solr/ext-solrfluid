@@ -16,8 +16,7 @@ plugin.tx_solr.search.faceting.facets {
 # Load js files
 page.includeJSFooterlibs {
     solr-jquery = EXT:solr/Resources/JavaScript/JQuery/jquery.min.js
-    solr-ui = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.core.min.js
-    solr-slider = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.slider.min.js
+    solr-ui = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.min.js
 
     solr-numericrange = EXT:solrfluid/Resources/Public/JavaScript/facet_numericrange_controller.js
 }
