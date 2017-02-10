@@ -48,15 +48,9 @@ class NumericRangeFacetParserTest extends AbstractFacetParserTest
 
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse(
             'fake_solr_response_with_numericRange_facet.json',
-            $facetConfiguration
+            $facetConfiguration,
+            ['myPids:10-98']
         );
-        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getActiveFacetValuesByName')->will(
-            $this->returnCallback(function ($name) {
-                return $name == 'myPids' ? ['10-98'] : [];
-
-            })
-        );
-
 
         /** @var $parser NumericRangeFacetParser */
         $parser = $this->getInitializedParser(NumericRangeFacetParser::class);

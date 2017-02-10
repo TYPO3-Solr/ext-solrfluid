@@ -58,8 +58,9 @@ class HierarchyFacetParserTest extends AbstractFacetParserTest
         $this->assertSame(1, $facet->getChildNodes()->getCount());
         $this->assertSame(8, $facet->getChildNodes()->getByPosition(0)->getChildNodes()->getCount());
 
-        $this->assertSame('/1/14/', $facet->getChildNodes()->getByPosition(0)->getChildNodes()->getByPosition(0)->getValue());
-        $this->assertSame('14', $facet->getChildNodes()->getByPosition(0)->getChildNodes()->getByPosition(0)->getKey());
+        $firstNode = $facet->getChildNodes()->getByPosition(0)->getChildNodes()->getByPosition(0);
+        $this->assertSame('/1/14/', $firstNode->getValue());
+        $this->assertSame('14', $firstNode->getKey());
     }
 
     /**
@@ -84,5 +85,38 @@ class HierarchyFacetParserTest extends AbstractFacetParserTest
         $parser = $this->getInitializedParser(HierarchyFacetParser::class);
         $facet = $parser->parse($searchResultSet, 'pageHierarchy', $facetConfiguration['pageHierarchy.']);
         $this->assertFalse($facet->getIsUsed());
+    }
+
+    /**
+     * @test
+     */
+    public function facetIsActive()
+    {
+        $facetConfiguration = [
+            'pageHierarchy.' => [
+                'type' => 'hierarchy',
+                'label' => 'Rootline',
+                'field' => 'rootline',
+            ]
+        ];
+
+        $searchResultSet = $this->initializeSearchResultSetFromFakeResponse(
+            'fake_solr_response_with_hierarchy_facet.json',
+            $facetConfiguration,
+            ['pageHierarchy:/1/14/']
+        );
+
+        /** @var $parser HierarchyFacetParser */
+        $parser = $this->getInitializedParser(HierarchyFacetParser::class);
+        $facet = $parser->parse($searchResultSet, 'pageHierarchy', $facetConfiguration['pageHierarchy.']);
+
+        $selectedFacetByUrl = $facet->getChildNodes()->getByPosition(0)->getChildNodes()->getByPosition(0);
+        $this->assertTrue($facet->getIsUsed());
+
+        $valueSelectedItem = $selectedFacetByUrl->getLabel();
+        $this->assertSame('14', $valueSelectedItem, 'Unpexcted value for selected item');
+
+        $subItemCountOfSelectedFacet = $selectedFacetByUrl->getChildNodes()->count();
+        $this->assertSame(15, $subItemCountOfSelectedFacet, 'Expected to have 15 sub items below path /1/14/');
     }
 }

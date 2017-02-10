@@ -41,13 +41,8 @@ class DateRangeFacetParserTest extends AbstractFacetParserTest
 
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse(
             'fake_solr_response_with_dateRange_facet.json',
-            $facetConfiguration
-        );
-        $searchResultSet->getUsedSearchRequest()->expects($this->any())->method('getActiveFacetValuesByName')->will(
-            $this->returnCallback(function ($name) {
-                return $name == 'myCreated' ? ['201506020000-201706020000'] : [];
-
-            })
+            $facetConfiguration,
+            ['myCreated:201506020000-201706020000']
         );
 
         /** @var $parser DateRangeFacetParser */

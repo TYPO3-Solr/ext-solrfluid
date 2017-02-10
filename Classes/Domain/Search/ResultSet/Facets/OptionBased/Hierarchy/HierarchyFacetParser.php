@@ -39,7 +39,6 @@ class HierarchyFacetParser extends AbstractFacetParser
         $label = $this->getPlainLabelOrApplyCObject($facetConfiguration);
         $optionsFromSolrResponse = isset($response->facet_counts->facet_fields->{$fieldName}) ? get_object_vars($response->facet_counts->facet_fields->{$fieldName}) : [];
         $optionsFromRequest = $this->getActiveFacetValuesFromRequest($resultSet, $facetName);
-
         $hasOptionsInResponse = !empty($optionsFromSolrResponse);
         $hasSelectedOptionsInRequest = count($optionsFromRequest) > 0;
         $hasNoOptionsToShow = !$hasOptionsInResponse && !$hasSelectedOptionsInRequest;
@@ -90,5 +89,28 @@ class HierarchyFacetParser extends AbstractFacetParser
         return array_map(function ($item) {
             return str_replace('@@@', '/', $item);
         }, $segments);
+    }
+
+    /**
+     * Retrieves the active facetValue for a facet from the search request.
+     * @param SearchResultSet $resultSet
+     * @param string $facetName
+     * @return array
+     */
+    protected function getActiveFacetValuesFromRequest(SearchResultSet $resultSet, $facetName)
+    {
+        $activeFacetValues = [];
+        $values = $resultSet->getUsedSearchRequest()->getActiveFacetValuesByName($facetName);
+
+        foreach (is_array($values) ? $values : [] as $valueFromRequest) {
+            // Attach the 'depth' param again to the value
+            if (strpos($valueFromRequest, '-') === false) {
+                $valueFromRequest = trim($valueFromRequest, '/');
+                $valueFromRequest = (count(explode('/', $valueFromRequest)) - 1) . '-' . $valueFromRequest . '/';
+            }
+            $activeFacetValues[] = $valueFromRequest;
+        }
+
+        return $activeFacetValues;
     }
 }

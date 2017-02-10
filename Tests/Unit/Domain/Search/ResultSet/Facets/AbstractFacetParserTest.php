@@ -42,7 +42,7 @@ abstract class AbstractFacetParserTest extends UnitTest
         $httpResponseMock = $this->getDumbMock('\Apache_Solr_HttpTransport_Response');
         $httpResponseMock->expects($this->any())->method('getBody')->will($this->returnValue($fakeResponseJson));
 
-        $searchRequestMock = $this->getDumbMock(SearchRequest::class);
+        $searchRequestMock = $this->getMockBuilder(SearchRequest::class)->setMethods(['getActiveFacetNames','getContextTypoScriptConfiguration','getActiveFacets'])->getMock();
 
         $fakeResponse = new \Apache_Solr_Response($httpResponseMock);
 
@@ -60,11 +60,11 @@ abstract class AbstractFacetParserTest extends UnitTest
         foreach ($activeFilters as $filter) {
             list($facetName, $value) = explode(':', $filter, 2);
             $activeFacetNames[] = $facetName;
-            $activeFacetValueMap[] = [$facetName, $value, true];
+            $activeFacetValueMap[] = $filter;
         }
 
         $searchRequestMock->expects($this->any())->method('getActiveFacetNames')->will($this->returnValue($activeFacetNames));
-        $searchRequestMock->expects($this->any())->method('getHasFacetValue')->will($this->returnValueMap($activeFacetValueMap));
+        $searchRequestMock->expects($this->any())->method('getActiveFacets')->will($this->returnValue($activeFacetValueMap));
 
         return $searchResultSet;
     }
