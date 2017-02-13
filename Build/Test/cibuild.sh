@@ -22,7 +22,12 @@ if [ $? -eq "0" ]; then
 fi
 
 echo "Run unit tests"
-.Build/bin/phpunit --colors -c Build/Test/UnitTests.xml --coverage-html=../../../coverage-unit-solrfluid/
+UNIT_BOOTSTRAP=".Build/vendor/typo3/cms/typo3/sysext/core/Build/UnitTestsBootstrap.php"
+if [[ $TYPO3_VERSION == "dev-master" ]]; then
+    UNIT_BOOTSTRAP=".Build/vendor/typo3/cms/components/testing_framework/Resources/Core/Build/UnitTestsBootstrap.php"
+fi
+
+.Build/bin/phpunit --colors -c Build/Test/UnitTests.xml --coverage-html=../../../coverage-unit-solrfluid/ --bootstrap=$UNIT_BOOTSTRAP
 
 echo "Run integration tests"
 
@@ -58,4 +63,9 @@ else
 	exit 1
 fi
 
-.Build/bin/phpunit --colors -c Build/Test/IntegrationTests.xml --coverage-html=../../../coverage-integration-solrfluid/
+INTEGRATION_BOOTSTRAP=".Build/vendor/typo3/cms/typo3/sysext/core/Build/FunctionalTestsBootstrap.php"
+if [[ $TYPO3_VERSION == "dev-master" ]]; then
+    INTEGRATION_BOOTSTRAP=".Build/vendor/typo3/cms/components/testing_framework/Resources/Core/Build/FunctionalTestsBootstrap.php"
+fi
+
+.Build/bin/phpunit --colors -c Build/Test/IntegrationTests.xml --coverage-html=../../../coverage-integration-solrfluid/ --bootstrap=$INTEGRATION_BOOTSTRAP

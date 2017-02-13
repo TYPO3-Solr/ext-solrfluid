@@ -44,8 +44,15 @@ composer require --dev --prefer-source typo3/cms="$TYPO3_VERSION"
 composer require --dev apache-solr-for-typo3/solr="$EXT_SOLR_VERSION"
 
 export TYPO3_PATH_WEB=$SCRIPTPATH/.Build/Web
-
 mkdir -p $TYPO3_PATH_WEB/uploads $TYPO3_PATH_WEB/typo3temp
+
+if [[ $TYPO3_VERSION == "dev-master" ]]; then
+    # For dev-master we need to use the new testing framework
+    # after dropping 7.x support we need to change this in the patched files
+    sed  -i 's/Core\Tests\FunctionalTestCase as TYPO3IntegrationTest/Components\TestingFramework\Core\FunctionalTestCase as TYPO3IntegrationTest/g' .Build/Web/typo3conf/ext/solr/Tests/Integration/IntegrationTest.php
+    sed  -i 's/Core\Tests\UnitTestCase as TYPO3UnitTest/Components\TestingFramework\Core\UnitTestCase as TYPO3UnitTest/g' .Build/Web/typo3conf/ext/solr/Tests/Unit/UnitTest.php
+    ln -s  ../vendor/typo3/cms/components .Build/Web/components
+fi
 
 # Setup Solr using install script
 chmod 775 $EXTENSION_ROOTPATH/.Build/Web/typo3conf/ext/solr/Resources/Private/Install/*.sh
