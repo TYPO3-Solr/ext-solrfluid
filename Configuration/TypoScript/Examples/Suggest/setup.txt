@@ -12,8 +12,7 @@ plugin.tx_solr.search {
 # Load js files
 page.includeJSFooterlibs {
     solr-jquery = EXT:solr/Resources/JavaScript/JQuery/jquery.min.js
-    solr-ui = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.core.min.js
-    solr-autocomplete = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.autocomplete.min.js
+    solr-ui = EXT:solr/Resources/JavaScript/JQuery/jquery-ui.min.js
     solr-suggest = EXT:solrfluid/Resources/Public/JavaScript/suggest_controller.js
 }
 
