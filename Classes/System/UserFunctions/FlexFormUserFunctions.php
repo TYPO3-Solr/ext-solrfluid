@@ -42,28 +42,46 @@ class FlexFormUserFunctions
     {
         $pageRecord = $parentInformation['flexParentDatabaseRow'];
         $configuredFacets = $this->getConfiguredFacetsForPage($pageRecord['pid']);
-        $newItems = [];
 
-        array_map(function ($fieldName) use (&$newItems, $configuredFacets) {
-                $value = $fieldName;
-                $label = $fieldName;
+        if (!is_array($pageRecord)) {
+            $parentInformation['items'] = [];
+            return;
+        }
 
-                $facetNameFilter    = function ($facet) use ($fieldName) {
-                    return ($facet['field'] === $fieldName);
-                };
-                $configuredFacets   = array_filter($configuredFacets, $facetNameFilter);
-                if (!empty($configuredFacets)) {
-                    $configuredFacet = array_values($configuredFacets);
-                    $label = $configuredFacet[0]['label'];
-                }
-
-                $newItems[$label] = [$label, $value];
-            }, $this->getFieldNamesFromSolrMetaDataForPage($pageRecord));
-
-        ksort($newItems, SORT_NATURAL);
+        $newItems = $this->getParsedSolrFieldsFromSchema($configuredFacets, $pageRecord);
         $parentInformation['items'] = $newItems;
     }
 
+    /**
+     * This method parses the solr schema fields into the required format for the backend flexform.
+     *
+     * @param array $configuredFacets
+     * @param array $pageRecord
+     * @return mixed
+     */
+    protected function getParsedSolrFieldsFromSchema($configuredFacets, $pageRecord)
+    {
+        $newItems = [];
+
+        array_map(function ($fieldName) use (&$newItems, $configuredFacets) {
+            $value = $fieldName;
+            $label = $fieldName;
+
+            $facetNameFilter = function ($facet) use ($fieldName) {
+                return ($facet['field'] === $fieldName);
+            };
+            $configuredFacets = array_filter($configuredFacets, $facetNameFilter);
+            if (!empty($configuredFacets)) {
+                $configuredFacet = array_values($configuredFacets);
+                $label = $configuredFacet[0]['label'];
+            }
+
+            $newItems[$label] = [$label, $value];
+        }, $this->getFieldNamesFromSolrMetaDataForPage($pageRecord));
+
+        ksort($newItems, SORT_NATURAL);
+        return $newItems;
+    }
     /**
      * Retrieves the configured facets for a page.
      *
@@ -91,10 +109,10 @@ class FlexFormUserFunctions
     /**
      * Retrieves all fieldnames that occure in the solr schema for one page.
      *
-     * @param $pageRecord
+     * @param array $pageRecord
      * @return array
      */
-    protected function getFieldNamesFromSolrMetaDataForPage($pageRecord)
+    protected function getFieldNamesFromSolrMetaDataForPage(array $pageRecord)
     {
         return array_keys((array)$this->getConnection($pageRecord)->getFieldsMetaData());
     }

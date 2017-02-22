@@ -42,7 +42,7 @@ abstract class AbstractFacetParserTest extends UnitTest
         $httpResponseMock = $this->getDumbMock('\Apache_Solr_HttpTransport_Response');
         $httpResponseMock->expects($this->any())->method('getBody')->will($this->returnValue($fakeResponseJson));
 
-        $searchRequestMock = $this->getMockBuilder(SearchRequest::class)->setMethods(['getActiveFacetNames','getContextTypoScriptConfiguration','getActiveFacets'])->getMock();
+        $searchRequestMock = $this->getMockBuilder(SearchRequest::class)->setMethods(['getActiveFacetNames', 'getContextTypoScriptConfiguration', 'getActiveFacets'])->getMock();
 
         $fakeResponse = new \Apache_Solr_Response($httpResponseMock);
 

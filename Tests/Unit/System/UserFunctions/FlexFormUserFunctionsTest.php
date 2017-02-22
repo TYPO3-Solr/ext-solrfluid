@@ -89,4 +89,28 @@ class FlexFormUserFunctionsTest extends UnitTest
         $this->assertCount(3, $parentInformation['items']);
         $this->assertEquals('The type', $parentInformation['items']['The type'][0]);
     }
+
+    /**
+     * @test
+     */
+    public function passingNullRowReturnsEmptyItems()
+    {
+        /** @var FlexFormUserFunctions $userFunc */
+        $userFunc = $this->getMockBuilder(FlexFormUserFunctions::class)
+            ->setMethods(['getConfiguredFacetsForPage'])->getMock();
+
+        $userFunc->expects($this->once())->method('getConfiguredFacetsForPage')->will($this->returnValue([
+            'myType.' => [
+                'field' => 'type',
+                'label' => 'The type'
+            ]
+        ]));
+
+        $parentInformation = [
+            'flexParentDatabaseRow' => null
+        ];
+
+        $userFunc->getFacetFieldsFromSchema($parentInformation);
+        $this->assertCount(0, $parentInformation['items']);
+    }
 }
