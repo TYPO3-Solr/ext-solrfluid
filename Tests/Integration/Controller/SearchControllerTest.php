@@ -586,7 +586,7 @@ class SearchControllerTest extends IntegrationTest
         $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
 
         $contentObjectRendererMock = $this->getMockBuilder(ContentObjectRenderer::class)->disableOriginalConstructor()->getMock();
-        $flexFormData = $this->getFixtureContent('fakedFlexFormData.xml');
+        $flexFormData = $this->getFixtureContentByName('fakedFlexFormData.xml');
         $contentObjectRendererMock->data = ['pi_flexform' => $flexFormData];
         $this->searchController->setContentObjectRenderer($contentObjectRendererMock);
 

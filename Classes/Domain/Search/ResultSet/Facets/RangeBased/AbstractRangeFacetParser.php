@@ -14,11 +14,8 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased
  * The TYPO3 project - inspiring people to share!
  */
 
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\AbstractFacetParser;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserInterface;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class NumericRangeFacetParser
@@ -70,17 +67,21 @@ abstract class AbstractRangeFacetParser extends AbstractFacetParser
             $fromInResponse = $this->parseResponseValue($valuesFromResponse['start']);
             $toInResponse = $this->parseResponseValue($valuesFromResponse['end']);
 
-            $rawValues = explode('-', $activeValue[0]);
-            $rawFrom = $rawValues[0];
-            $rawTo = $rawValues[1];
+            if (preg_match('/(-?\d*?)-(-?\d*)/', $activeValue[0], $rawValues) == 1) {
+                $rawFrom = $rawValues[1];
+                $rawTo = $rawValues[2];
+            } else {
+                $rawFrom = 0;
+                $rawTo = 0;
+            }
 
-            $fromDate = $this->parseRequestValue($rawFrom);
-            $toDate = $this->parseRequestValue($rawTo);
+            $from = $this->parseRequestValue($rawFrom);
+            $to = $this->parseRequestValue($rawTo);
 
             $type = isset($facetConfiguration['type']) ? $facetConfiguration['type'] : 'numericRange';
             $gap = isset($facetConfiguration[$type.'.']['gap']) ? $facetConfiguration[$type.'.']['gap'] : 1;
 
-            $range = new $facetItemClass($facet, $fromDate, $toDate, $fromInResponse, $toInResponse, $gap, $allCount, $rangeCounts, true);
+            $range = new $facetItemClass($facet, $from, $to, $fromInResponse, $toInResponse, $gap, $allCount, $rangeCounts, true);
             $facet->setRange($range);
         }
 
