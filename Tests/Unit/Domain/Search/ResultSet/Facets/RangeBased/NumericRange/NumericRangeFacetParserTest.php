@@ -14,7 +14,6 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets\Range
  * The TYPO3 project - inspiring people to share!
  */
 
-use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\NumericRange\NumericRange;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\NumericRange\NumericRangeFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\RangeBased\NumericRange\NumericRangeFacetParser;
@@ -28,33 +27,59 @@ use ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets\AbstractFac
 class NumericRangeFacetParserTest extends AbstractFacetParserTest
 {
     /**
-     * @test
+     * Returns a basic facet configuration
+     *
+     * @param int $start
+     * @param int $end
+     * @param int $gap
+     * @return string
      */
-    public function facetIsCreated()
+    protected function getPageIdFacetConfiguration($start = -100, $end = 100, $gap = 2)
     {
-        $facetConfiguration = [
+        return [
             'myPids.' => [
                 'type' => 'numericRange',
                 'label' => 'Pids',
                 'field' => 'pid',
                 'numericRange.' => [
-                    'start' => 1,
-                    'end' => 100,
-                    'gap' => 2
+                    'start' => (int) $start,
+                    'end' => (int) $end,
+                    'gap' => (int) $gap
 
                 ]
             ]
         ];
+    }
 
+    /**
+     * Returns the numeric range facet
+     *
+     * @param array $facetConfiguration
+     * @param array $filters
+     * @param string $facetName
+     * @return NumericRangeFacet
+     */
+    protected function getNumericRangeFacet($facetConfiguration, $filters, $facetName)
+    {
         $searchResultSet = $this->initializeSearchResultSetFromFakeResponse(
             'fake_solr_response_with_numericRange_facet.json',
             $facetConfiguration,
-            ['myPids:10-98']
+            $filters,
+            $facetName
         );
 
         /** @var $parser NumericRangeFacetParser */
         $parser = $this->getInitializedParser(NumericRangeFacetParser::class);
-        $facet = $parser->parse($searchResultSet, 'myPids', $facetConfiguration['myPids.']);
+        return $parser->parse($searchResultSet, $facetName, $facetConfiguration[$facetName . '.']);
+    }
+
+    /**
+     * @test
+     */
+    public function facetIsCreated()
+    {
+        $facetConfiguration = $this->getPageIdFacetConfiguration();
+        $facet = $this->getNumericRangeFacet($facetConfiguration, ['myPids:10-98'], 'myPids');
 
         $this->assertInstanceOf(NumericRangeFacet::class, $facet);
         $this->assertSame($facet->getConfiguration(), $facetConfiguration['myPids.'], 'Configuration was not passed to new facets');
@@ -62,12 +87,52 @@ class NumericRangeFacetParserTest extends AbstractFacetParserTest
 
         $this->assertEquals('10-98', $facet->getRange()->getLabel());
         $this->assertEquals(25, $facet->getRange()->getDocumentCount());
-        $this->assertCount(4, $facet->getRange()->getRangeCounts(), 'We expected that there are three count items attached');
+        $this->assertCount(4, $facet->getRange()->getRangeCounts(), 'We expected that there are four count items attached');
 
         $this->assertSame($facet->getRange()->getEndInResponse(), 100);
-        $this->assertSame($facet->getRange()->getStartInResponse(), 0);
+        $this->assertSame($facet->getRange()->getStartInResponse(), -100);
         $this->assertSame($facet->getRange()->getGap(), 2);
         $this->assertSame((int) $facet->getRange()->getStartRequested(), 10);
         $this->assertSame((int) $facet->getRange()->getEndRequested(), 98);
+    }
+
+    /**
+     * Test the parsing of the active range values
+     *
+     * @dataProvider canParseActiveFacetValuesProvider
+     * @param int $startRequested
+     * @param int $endRequested
+     * @test
+     */
+    public function canParseActiveFacetValues($startRequested, $endRequested)
+    {
+        $facetConfiguration = $this->getPageIdFacetConfiguration();
+        $facet = $this->getNumericRangeFacet($facetConfiguration, ['myPids:' . $startRequested . '-' . $endRequested], 'myPids');
+
+        $this->assertSame((int) $facet->getRange()->getStartRequested(), $startRequested);
+        $this->assertSame((int) $facet->getRange()->getEndRequested(), $endRequested);
+    }
+
+    /**
+     * Data provider for testing the parsing of the active range values
+     *
+     * @return array
+     */
+    public function canParseActiveFacetValuesProvider()
+    {
+        return [
+            [
+                'startRequested' => 10,
+                'endRequested' => 98
+            ],
+            [
+                'startRequested' => -10,
+                'endRequested' => 98
+            ],
+            [
+                'startRequested' => -50,
+                'endRequested' => -1
+            ]
+        ];
     }
 }
