@@ -16,7 +16,6 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\Controller;
 
 use ApacheSolrForTypo3\Solrfluid\Widget\AbstractWidgetController;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
@@ -87,7 +86,7 @@ class ResultPaginateController extends AbstractWidgetController
         if ($this->currentPage < 1) {
             $this->currentPage = 1;
         }
-        $this->view->assign('contentArguments', array($this->widgetConfiguration['as'] => $this->resultSet->getUsedSearch()->getResultDocumentsEscaped(), 'pagination' => $this->buildPagination()));
+        $this->view->assign('contentArguments', array($this->widgetConfiguration['as'] => $this->getDocuments(), 'pagination' => $this->buildPagination()));
         $this->view->assign('configuration', $this->configuration);
     }
 
@@ -136,5 +135,18 @@ class ResultPaginateController extends AbstractWidgetController
             $pagination['previousPage'] = $this->currentPage - 1;
         }
         return $pagination;
+    }
+
+    /**
+     * @return \Apache_Solr_Document[]
+     */
+    protected function getDocuments()
+    {
+        $extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+        if (!empty($extbaseFrameworkConfiguration['features']['useRawDocuments'])) {
+            return $this->resultSet->getUsedSearch()->getResultDocumentsRaw();
+        } else {
+            return $this->resultSet->getUsedSearch()->getResultDocumentsEscaped();
+        }
     }
 }

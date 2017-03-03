@@ -11,6 +11,7 @@ plugin.tx_solrfluid {
 
 	features {
 		requireCHashArgumentForActionArguments = 0
+		useRawDocuments = 1
 	}
 }
 
