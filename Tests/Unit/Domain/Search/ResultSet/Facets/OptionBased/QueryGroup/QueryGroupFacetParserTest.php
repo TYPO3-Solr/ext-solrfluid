@@ -39,7 +39,7 @@ class QueryGroupFacetParserTest extends AbstractFacetParserTest
      */
     protected function initializeSearchResultSetFromFakeResponse($fixtureFile, $facetConfiguration, array $activeFilters = [])
     {
-        $fakeResponseJson = $this->getFixtureContent($fixtureFile);
+        $fakeResponseJson = $this->getFixtureContentByName($fixtureFile);
         $httpResponseMock = $this->getDumbMock('\Apache_Solr_HttpTransport_Response');
         $httpResponseMock->expects($this->any())->method('getBody')->will($this->returnValue($fakeResponseJson));
 
