@@ -77,4 +77,15 @@ class OptionsFacetTest extends UnitTest
 
         $this->assertEquals('MyPartial', $queryGroupFacet->getPartialName());
     }
+
+    /**
+     * @test
+     */
+    public function getType()
+    {
+        $resultSetMock = $this->getDumbMock(SearchResultSet::class);
+        $myFacet = new OptionsFacet($resultSetMock, 'myFacet', 'myFacetFieldName', 'myTitle', ['partialName' => 'MyPartial']);
+
+        $this->assertEquals('options', $myFacet->getType());
+    }
 }
