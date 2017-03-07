@@ -160,7 +160,7 @@ abstract class AbstractFacet
      */
     public function getType()
     {
-        return self::$type;
+        return static::$type;
     }
 
     /**
