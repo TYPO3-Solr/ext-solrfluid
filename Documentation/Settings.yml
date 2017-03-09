@@ -8,6 +8,11 @@ conf.py:
   project: EXT:solrfluid Fluid Rendering for ApacheSolrForTypo3
   version: 2.0.0
   release: 2.0.0
+  extensions:
+    - sphinx.ext.intersphinx
+    - t3sphinx.ext.t3extras
+    - t3sphinx.ext.t3tablerows
+    - t3sphinx.ext.targets
   intersphinx_mapping:
     t3tsref:
     - https://docs.typo3.org/typo3cms/TyposcriptReference/
@@ -15,4 +20,14 @@ conf.py:
     t3api:
     - https://docs.typo3.org/typo3cms/CoreApiReference/
     - null
+  latex_documents:
+  - - Index
+    - ExtSolr.tex
+    - Apache Solr for TYPO3 - Enterprise search meets enterprise CMS
+    - Ingo Renner, Timo Hund, Markus Friedrich
+    - manual
+  latex_elements:
+    papersize: a4paper
+    pointsize: 10pt
+    preamble: \usepackage{typo3}
 ...
