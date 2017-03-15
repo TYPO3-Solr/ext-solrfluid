@@ -1,5 +1,5 @@
 <?php
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
     'title' => 'Apache Solr for TYPO3 - Fluid Frontend Rendering',
     'description' => 'This addon provides the fluid templating for EXT:solr',
     'version' => '2.0.0-dev',
@@ -13,23 +13,23 @@ $EM_CONF[$_EXTKEY] = array(
     'createDirs' => '',
     'modify_tables' => '',
     'clearCacheOnLoad' => 0,
-    'constraints' => array(
-        'depends' => array(
+    'constraints' => [
+        'depends' => [
             'scheduler' => '',
             'solr' => '6.1.0',
             'extbase' => '7.6.0-8.0.99',
             'fluid' => '7.6.0-8.0.99',
             'typo3' => '7.6.0-8.0.99'
-        ),
-        'conflicts' => array(),
-        'suggests' => array(
+        ],
+        'conflicts' => [],
+        'suggests' => [
             'devlog' => '',
-        ),
-    ),
-    'autoload' => array(
-        'psr-4' => array(
+        ],
+    ],
+    'autoload' => [
+        'psr-4' => [
             'ApacheSolrForTypo3\\Solrfluid\\' => 'Classes/',
             'ApacheSolrForTypo3\\Solrfluid\\Tests\\' => 'Tests/'
-        )
-    )
-);
+        ]
+    ]
+];

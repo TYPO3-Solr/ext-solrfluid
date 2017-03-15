@@ -34,7 +34,7 @@ class AbstractWidgetController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidg
     /**
      * @var array
      */
-    protected $supportedRequestTypes = array('ApacheSolrForTypo3\\Solrfluid\\Widget\\WidgetRequest');
+    protected $supportedRequestTypes = ['ApacheSolrForTypo3\\Solrfluid\\Widget\\WidgetRequest'];
 
     /**
      * @var ConfigurationManager

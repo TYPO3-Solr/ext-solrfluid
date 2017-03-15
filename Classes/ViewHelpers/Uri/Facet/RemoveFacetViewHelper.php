@@ -34,9 +34,9 @@ class RemoveFacetViewHelper extends AbstractUriViewHelper implements CompilableI
     public function render($facet)
     {
         return static::renderStatic(
-            array(
+            [
                 'facet' => $facet,
-            ),
+            ],
             $this->buildRenderChildrenClosure(),
             $this->renderingContext
         );

@@ -89,7 +89,7 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
      * @param bool $addSuggestUrl
      * @return string
      */
-    public function render($pageUid = null, $additionalFilters = null, array $additionalParams = array(), $noCache = false, $pageType = 0, $noCacheHash = false, $section = '', $absolute = false, $addQueryString = false, array $argumentsToBeExcludedFromQueryString = array(), $addQueryStringMethod = null, $addSuggestUrl = true)
+    public function render($pageUid = null, $additionalFilters = null, array $additionalParams = [], $noCache = false, $pageType = 0, $noCacheHash = false, $section = '', $absolute = false, $addQueryString = false, array $argumentsToBeExcludedFromQueryString = [], $addQueryStringMethod = null, $addSuggestUrl = true)
     {
         if ($pageUid === null && !empty($this->getTypoScriptConfiguration()->getSearchTargetPage())) {
             $pageUid = $this->getTypoScriptConfiguration()->getSearchTargetPage();

@@ -59,11 +59,11 @@ class SearchController extends AbstractBaseController
         $this->controllerContext->setSearchResultSet($searchResultSet);
 
         $this->view->assignMultiple(
-            array(
+            [
                 'hasSearched' => $this->searchService->getHasSearched(),
                 'additionalFilters' => $this->searchService->getAdditionalFilters(),
                 'resultSet' => $searchResultSet
-            )
+            ]
         );
     }
 
@@ -108,10 +108,10 @@ class SearchController extends AbstractBaseController
     public function formAction()
     {
         $this->view->assignMultiple(
-            array(
+            [
                 'search' => $this->searchService->getSearch(),
                 'additionalFilters' => $this->searchService->getAdditionalFilters()
-            )
+            ]
         );
     }
 
@@ -126,11 +126,11 @@ class SearchController extends AbstractBaseController
         $this->controllerContext->setSearchResultSet($searchResultSet);
 
         $this->view->assignMultiple(
-            array(
+            [
                 'hasSearched' => $this->searchService->getHasSearched(),
                 'additionalFilters' => $this->searchService->getAdditionalFilters(),
                 'resultSet' => $searchResultSet
-            )
+            ]
         );
     }
 

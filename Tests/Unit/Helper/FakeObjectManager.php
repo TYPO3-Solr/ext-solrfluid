@@ -60,7 +60,7 @@ class FakeObjectManager implements ObjectManagerInterface
     {
         $arguments = func_get_args();
 
-        $instance = call_user_func_array(array(\TYPO3\CMS\Core\Utility\GeneralUtility::class, 'makeInstance'), $arguments);
+        $instance = call_user_func_array([\TYPO3\CMS\Core\Utility\GeneralUtility::class, 'makeInstance'], $arguments);
         if (method_exists($instance, 'injectObjectManager')) {
             $instance->injectObjectManager($this);
         }

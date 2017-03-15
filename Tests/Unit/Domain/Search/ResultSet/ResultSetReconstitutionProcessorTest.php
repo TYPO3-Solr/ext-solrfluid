@@ -918,7 +918,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
      */
     protected function getConfigurationArrayFromFacetConfigurationArray($facetConfiguration)
     {
-        $configuration = array();
+        $configuration = [];
         $configuration['plugin.']['tx_solr.']['search.']['faceting.'] = $facetConfiguration;
         return $configuration;
     }
@@ -944,9 +944,9 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
      */
     protected function fakeTSFEToUseCObject()
     {
-        $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], array('TEXT' => \TYPO3\CMS\Frontend\ContentObject\TextContentObject::class, 'CASE' => \TYPO3\CMS\Frontend\ContentObject\CaseContentObject::class, ));
+        $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], ['TEXT' => \TYPO3\CMS\Frontend\ContentObject\TextContentObject::class, 'CASE' => \TYPO3\CMS\Frontend\ContentObject\CaseContentObject::class, ]);
 
-        $TSFE = GeneralUtility::makeInstance(TypoScriptFrontendController::class, array(), 1, 0);
+        $TSFE = GeneralUtility::makeInstance(TypoScriptFrontendController::class, [], 1, 0);
         $TSFE->cObjectDepthCounter = 5;
         $GLOBALS['TSFE'] = $TSFE;
         $GLOBALS['TT'] = $this->getMockBuilder(TimeTracker::class)->disableOriginalConstructor()->getMock();

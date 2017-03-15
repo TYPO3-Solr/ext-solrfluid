@@ -84,7 +84,7 @@ class SearchUriBuilderTest extends UnitTest
         $this->extBaseUriBuilderMock->expects($this->once())->method('build')->with()->will($this->returnValue($result));
 
         $configurationMock = $this->getDumbMock(TypoScriptConfiguration::class);
-        $configurationMock->expects($this->once())->method('getSearchFacetingFacetLinkUrlParametersAsArray')->will($this->returnValue(array('foo=bar')));
+        $configurationMock->expects($this->once())->method('getSearchFacetingFacetLinkUrlParametersAsArray')->will($this->returnValue(['foo=bar']));
         $previousRequest =  new SearchRequest([], 1, 0, $configurationMock);
         $result = $this->searchUrlBuilder->getAddFacetValueUri($previousRequest, 'option', 'value');
 

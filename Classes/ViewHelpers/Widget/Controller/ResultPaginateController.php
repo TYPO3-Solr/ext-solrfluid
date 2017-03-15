@@ -31,7 +31,7 @@ class ResultPaginateController extends AbstractWidgetController
     /**
      * @var array
      */
-    protected $configuration = array('insertAbove' => true, 'insertBelow' => true, 'maximumNumberOfLinks' => 10, 'addQueryStringMethod' => '');
+    protected $configuration = ['insertAbove' => true, 'insertBelow' => true, 'maximumNumberOfLinks' => 10, 'addQueryStringMethod' => ''];
 
     /**
      * @var \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet
@@ -86,7 +86,7 @@ class ResultPaginateController extends AbstractWidgetController
         if ($this->currentPage < 1) {
             $this->currentPage = 1;
         }
-        $this->view->assign('contentArguments', array($this->widgetConfiguration['as'] => $this->getDocuments(), 'pagination' => $this->buildPagination()));
+        $this->view->assign('contentArguments', [$this->widgetConfiguration['as'] => $this->getDocuments(), 'pagination' => $this->buildPagination()]);
         $this->view->assign('configuration', $this->configuration);
     }
 
@@ -123,11 +123,11 @@ class ResultPaginateController extends AbstractWidgetController
     protected function buildPagination()
     {
         $this->calculateDisplayRange();
-        $pages = array();
+        $pages = [];
         for ($i = $this->displayRangeStart; $i <= $this->displayRangeEnd; $i++) {
-            $pages[] = array('number' => $i, 'isCurrent' => $i === $this->currentPage);
+            $pages[] = ['number' => $i, 'isCurrent' => $i === $this->currentPage];
         }
-        $pagination = array('pages' => $pages, 'current' => $this->currentPage, 'numberOfPages' => $this->numberOfPages, 'displayRangeStart' => $this->displayRangeStart, 'displayRangeEnd' => $this->displayRangeEnd, 'hasLessPages' => $this->displayRangeStart > 2, 'hasMorePages' => $this->displayRangeEnd + 1 < $this->numberOfPages);
+        $pagination = ['pages' => $pages, 'current' => $this->currentPage, 'numberOfPages' => $this->numberOfPages, 'displayRangeStart' => $this->displayRangeStart, 'displayRangeEnd' => $this->displayRangeEnd, 'hasLessPages' => $this->displayRangeStart > 2, 'hasMorePages' => $this->displayRangeEnd + 1 < $this->numberOfPages];
         if ($this->currentPage < $this->numberOfPages) {
             $pagination['nextPage'] = $this->currentPage + 1;
         }

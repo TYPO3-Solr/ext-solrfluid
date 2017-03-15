@@ -38,9 +38,9 @@ class ResultPageViewHelper extends AbstractUriViewHelper implements CompilableIn
     public function render($page = 0)
     {
         return self::renderStatic(
-            array(
+            [
                 'page' => $page
-            ),
+            ],
             $this->buildRenderChildrenClosure(),
             $this->renderingContext
         );
