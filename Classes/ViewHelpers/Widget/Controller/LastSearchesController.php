@@ -38,6 +38,6 @@ class LastSearchesController extends AbstractWidgetController
         $tsfe = $GLOBALS['TSFE'];
         $typoScriptConfiguration = $this->controllerContext->getTypoScriptConfiguration();
         $lastSearchesService = GeneralUtility::makeInstance(LastSearchesService::class, $typoScriptConfiguration, $tsfe, $databaseConnection);
-        $this->view->assign('contentArguments', array('lastSearches' => $lastSearchesService->getLastSearches()));
+        $this->view->assign('contentArguments', ['lastSearches' => $lastSearchesService->getLastSearches()]);
     }
 }

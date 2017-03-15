@@ -3,31 +3,31 @@
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'ApacheSolrForTypo3.solrfluid',
     'pi_result',
-    array(
+    [
         'Search' => 'results,form,detail'
-    ),
-    array(
+    ],
+    [
         'Search' => 'results'
-    )
+    ]
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'ApacheSolrForTypo3.solrfluid',
     'pi_search',
-    array(
+    [
         'Search' => 'form'
-    )
+    ]
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'ApacheSolrForTypo3.solrfluid',
     'pi_frequentlySearched',
-    array(
+    [
         'Search' => 'frequentlySearched'
-    ),
-    array(
+    ],
+    [
         'Search' => 'frequentlySearched'
-    )
+    ]
 );
 
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['solr']['searchResultClassName '] = 'ApacheSolrForTypo3\\Solrfluid\\Domain\\Search\\ResultSet\\SearchResult';

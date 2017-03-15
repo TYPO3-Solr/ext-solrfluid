@@ -41,10 +41,10 @@ class GroupViewHelper extends AbstractViewHelper implements CompilableInterface
     public function render(FacetCollection $facets, $groupName = 'main')
     {
         return self::renderStatic(
-            array(
+            [
                 'facets' => $facets,
                 'groupName' => $groupName
-            ),
+            ],
             $this->buildRenderChildrenClosure(),
             $this->renderingContext
         );

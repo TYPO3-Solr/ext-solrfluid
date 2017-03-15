@@ -44,11 +44,11 @@ class HighlightResultViewHelper extends AbstractViewHelper implements Compilable
     public function render(SearchResultSet $resultSet, \Apache_Solr_Document $document, $fieldName)
     {
         return self::renderStatic(
-            array(
+            [
                 'resultSet' => $resultSet,
                 'document' => $document,
                 'fieldName' => $fieldName
-            ),
+            ],
             $this->buildRenderChildrenClosure(),
             $this->renderingContext
         );
@@ -68,7 +68,7 @@ class HighlightResultViewHelper extends AbstractViewHelper implements Compilable
         $document = $arguments['document'];
 
         $fragmentSeparator = $resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration()->getSearchResultsHighlightingFragmentSeparator();
-        $content = call_user_func(array($document, 'get' . $fieldName));
+        $content = call_user_func([$document, 'get' . $fieldName]);
         $highlightedContent = $resultSet->getUsedSearch()->getHighlightedContent();
         if (!empty($highlightedContent->{$document->getId()}->{$fieldName}[0])) {
             $content = implode(' ' . $fragmentSeparator . ' ', $highlightedContent->{$document->getId()}->{$fieldName});

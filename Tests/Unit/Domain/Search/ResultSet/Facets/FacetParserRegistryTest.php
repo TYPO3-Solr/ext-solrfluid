@@ -30,10 +30,10 @@ class FacetParserRegistryTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      * @param array $createsParserInstances
      * @return \PHPUnit_Framework_MockObject_MockObject|FacetParserRegistry
      */
-    protected function getTestFacetParserRegistry(array $createsParserInstances = array())
+    protected function getTestFacetParserRegistry(array $createsParserInstances = [])
     {
         $facetParserRegistry = $this->getMockBuilder(FacetParserRegistry::class)
-            ->setMethods(array('createParserInstance'))
+            ->setMethods(['createParserInstance'])
             ->getMock();
 
         if (!empty($createsParserInstances)) {

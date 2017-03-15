@@ -44,10 +44,10 @@ class RelevanceViewHelper extends AbstractViewHelper implements CompilableInterf
     public function render(SearchResultSet $resultSet, \Apache_Solr_Document $document)
     {
         return self::renderStatic(
-            array(
+            [
                 'resultSet' => $resultSet,
                 'document' => $document
-            ),
+            ],
             $this->buildRenderChildrenClosure(),
             $this->renderingContext
         );

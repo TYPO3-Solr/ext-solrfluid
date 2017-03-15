@@ -43,11 +43,11 @@ abstract class AbstractValueViewHelper extends AbstractUriViewHelper
     public function render($facet, $facetItem = null, $facetItemValue = null)
     {
         return static::renderStatic(
-            array(
+            [
                 'facet' => $facet,
                 'facetItem' => $facetItem,
                 'facetItemValue' => $facetItemValue
-            ),
+            ],
             $this->buildRenderChildrenClosure(),
             $this->renderingContext
         );

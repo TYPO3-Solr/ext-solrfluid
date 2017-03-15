@@ -62,7 +62,7 @@ class SearchControllerTest extends IntegrationTest
     /**
      * @var array
      */
-    protected $testExtensionsToLoad = array('typo3conf/ext/solr', 'typo3conf/ext/solrfluid');
+    protected $testExtensionsToLoad = ['typo3conf/ext/solr', 'typo3conf/ext/solrfluid'];
 
     public function setUp()
     {
@@ -90,8 +90,8 @@ class SearchControllerTest extends IntegrationTest
     public function canShowSearchForm()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
-        $this->indexPages(array(1, 2));
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
+        $this->indexPages([1, 2]);
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
         $content = $this->searchResponse->getContent();
         $this->assertContains('id="tx-solr-search-form-pi-results"', $content, 'Response did not contain search css selector');
@@ -104,8 +104,8 @@ class SearchControllerTest extends IntegrationTest
     {
         $_GET['q'] = 'prices';
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
-        $this->indexPages(array(1, 2, 3));
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
+        $this->indexPages([1, 2, 3]);
 
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
         $result = $this->searchResponse->getContent();
@@ -120,9 +120,9 @@ class SearchControllerTest extends IntegrationTest
     public function canDoAPaginatedSearch()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
         $_GET['q'] = '*';
 
@@ -139,8 +139,8 @@ class SearchControllerTest extends IntegrationTest
     public function canOpenSecondPageOfPaginatedSearch()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
         //now we jump to the second page
         $_GET['q'] = '*';
@@ -159,9 +159,9 @@ class SearchControllerTest extends IntegrationTest
     public function canGetADidYouMeanProposalForATypo()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
         //not in the content but we expect to get shoes suggested
         $_GET['q'] = 'shoo';
@@ -179,9 +179,9 @@ class SearchControllerTest extends IntegrationTest
     public function canRenderAFacetWithFluid()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2));
+        $this->indexPages([1, 2]);
 
         //not in the content but we expect to get shoes suggested
         $_GET['q'] = '*';
@@ -201,13 +201,13 @@ class SearchControllerTest extends IntegrationTest
     public function removeOptionLinkWillBeShownWhenFacetWasSelected()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
         //not in the content but we expect to get shoes suggested
         $_GET['q'] = '*';
-        $this->searchRequest->setArgument('filter', array('type:pages'));
+        $this->searchRequest->setArgument('filter', ['type:pages']);
 
         // since we overwrite the configuration in the testcase from outside we want to avoid that it will be resetted
         $this->searchController->setResetConfigurationBeforeInitialize(false);
@@ -224,13 +224,13 @@ class SearchControllerTest extends IntegrationTest
     public function removeOptionLinkWillIsAlsoShownWhenAFacetIsNotInTheResponse()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
         //not in the content but we expect to get shoes suggested
         $_GET['q'] = '*';
-        $this->searchRequest->setArgument('filter', array('type:my_jobs'));
+        $this->searchRequest->setArgument('filter', ['type:my_jobs']);
 
         // since we overwrite the configuration in the testcase from outside we want to avoid that it will be resetted
         $this->searchController->setResetConfigurationBeforeInitialize(false);
@@ -251,12 +251,12 @@ class SearchControllerTest extends IntegrationTest
         $this->setExpectedExceptionRegExp(InvalidTemplateResourceException::class, '#(.*The partial files.*NotFound.*|.*The Fluid template files .*NotFound.*)#');
 
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
         // now we set the facet type for "type" facet to fluid and expect that we get a rendered facet
-        $overwriteConfiguration = array();
+        $overwriteConfiguration = [];
         $overwriteConfiguration['search.']['faceting.']['facets.']['type.']['partialName'] = 'NotFound';
 
         /** @var $configurationManager ConfigurationManager */
@@ -277,10 +277,10 @@ class SearchControllerTest extends IntegrationTest
     public function canRenderAScoreAnalysisWhenBackendUserIsLoggedIn()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
 
-        $this->indexPages(array(1, 2));
+        $this->indexPages([1, 2]);
 
         //not in the content but we expect to get shoes suggested
         $_GET['q'] = '*';
@@ -299,7 +299,7 @@ class SearchControllerTest extends IntegrationTest
     public function canSortFacetsByLex()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
         $womanPages = [4,5,8];
         $menPages = [2];
@@ -310,7 +310,7 @@ class SearchControllerTest extends IntegrationTest
         $_GET['q'] = '*';
 
         // when we sort by lex "men" should appear before "woman" even when only one option is available
-        $overwriteConfiguration = array();
+        $overwriteConfiguration = [];
         $overwriteConfiguration['search.']['faceting.']['facets.']['subtitle.']['sortBy'] = 'lex';
 
 
@@ -340,7 +340,7 @@ class SearchControllerTest extends IntegrationTest
     public function canSortFacetsByOptionCountWhenNothingIsConfigured()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
         $womanPages = [4,5,8];
         $menPages = [2];
@@ -372,7 +372,7 @@ class SearchControllerTest extends IntegrationTest
     public function canRenderQueryGroupFacet()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
         $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
@@ -395,7 +395,7 @@ class SearchControllerTest extends IntegrationTest
     public function canDefineAManualSortOrder()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
         $womanPages = [4,5,8];
         $menPages = [2];
@@ -406,7 +406,7 @@ class SearchControllerTest extends IntegrationTest
         $_GET['q'] = '*';
 
         // when we sort by lex "men" should appear before "woman" even when only one option is available
-        $overwriteConfiguration = array();
+        $overwriteConfiguration = [];
         $overwriteConfiguration['search.']['faceting.']['facets.']['subtitle.']['manualSortOrder'] = 'men, woman';
 
 
@@ -437,9 +437,9 @@ class SearchControllerTest extends IntegrationTest
     public function canSeeTheParsedQueryWhenABackendUserIsLoggedIn()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2));
+        $this->indexPages([1, 2]);
 
         //not in the content but we expect to get shoes suggested
         $_GET['q'] = '*';
@@ -458,9 +458,9 @@ class SearchControllerTest extends IntegrationTest
     public function frontendWillRenderErrorMessageWhenSolrIsNotAvailable()
     {
         $this->importDataSetFromFixture('can_render_error_message_when_solr_unavailable.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1));
+        $this->indexPages([1]);
 
         $this->searchRequest->setControllerActionName('solrNotAvailable');
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
@@ -476,9 +476,9 @@ class SearchControllerTest extends IntegrationTest
     public function canShowLastSearchesFromSessionInResponse()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
         //not in the content but we expect to get shoes suggested
         $_GET['q'] = 'shoe';
@@ -499,9 +499,9 @@ class SearchControllerTest extends IntegrationTest
     public function canChangeResultsPerPage()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
         //not in the content but we expect to get shoes suggested
         $_GET['q'] = '*';
@@ -521,11 +521,11 @@ class SearchControllerTest extends IntegrationTest
     public function canShowLastSearchesFromDatabaseInResponse()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
-        $overwriteConfiguration = array();
+        $overwriteConfiguration = [];
         $overwriteConfiguration['search.']['lastSearches.']['mode'] = 'global';
 
         /** @var $configurationManager ConfigurationManager */
@@ -551,11 +551,11 @@ class SearchControllerTest extends IntegrationTest
     public function canNotStoreQueyStringInLastSearchesWhenQueryDoesNotReturnAResult()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
-        $overwriteConfiguration = array();
+        $overwriteConfiguration = [];
         $overwriteConfiguration['search.']['lastSearches.']['mode'] = 'global';
 
         /** @var $configurationManager ConfigurationManager */
@@ -581,9 +581,9 @@ class SearchControllerTest extends IntegrationTest
     public function canOverwriteAFilterWithTheFlexformSettings()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
         $contentObjectRendererMock = $this->getMockBuilder(ContentObjectRenderer::class)->disableOriginalConstructor()->getMock();
         $flexFormData = $this->getFixtureContentByName('fakedFlexFormData.xml');
@@ -603,11 +603,11 @@ class SearchControllerTest extends IntegrationTest
     public function canRenderDateRangeFacet()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
-        $overwriteConfiguration = array();
+        $overwriteConfiguration = [];
         $overwriteConfiguration['search.']['faceting.']['facets.']['myCreatedFacet.'] = [
             'label' => 'Created Between',
             'field' => 'created',
@@ -631,7 +631,7 @@ class SearchControllerTest extends IntegrationTest
     public function formActionIsRenderingTheForm()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
         $formRequest = $this->getPreparedRequest('form');
         $formResponse = $this->getPreparedResponse();
@@ -647,9 +647,9 @@ class SearchControllerTest extends IntegrationTest
     public function searchingAndRenderingFrequentSearchesIsShowingTheTermAsFrequentSearch()
     {
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1));
+        $this->indexPages([1]);
 
         $searchRequest = $this->getPreparedRequest('frequentlySearched', 'pi_frequentlySearched');
         $searchResponse = $this->getPreparedResponse();
@@ -669,9 +669,9 @@ class SearchControllerTest extends IntegrationTest
         $request->setArgument('documentId', 'b8c8d04e66c58f01283ef81a4ded197f26ab402a/pages/1/0/0/0');
 
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
-        $this->indexPages(array(1, 2));
+        $this->indexPages([1, 2]);
         $this->searchController->processRequest($request, $this->searchResponse);
         $this->assertContains("Products", $this->searchResponse->getContent());
     }
@@ -684,7 +684,7 @@ class SearchControllerTest extends IntegrationTest
         $request = $this->getPreparedRequest('form', 'pi_search');
 
         $this->importDataSetFromFixture('can_render_search_controller.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
 
         $this->searchController->processRequest($request, $this->searchResponse);
         $this->assertContains('id="tx-solr-search-form-pi-results"', $this->searchResponse->getContent());
@@ -697,8 +697,8 @@ class SearchControllerTest extends IntegrationTest
     {
         $_GET['q'] = '*';
         $this->importDataSetFromFixture('can_render_search_customTemplate.xml');
-        $GLOBALS['TSFE'] = $this->getConfiguredTSFE(array(), 1);
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
         $this->searchRequest->setArgument('resultsPerPage', 5);
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
         $result = $this->searchResponse->getContent();
@@ -715,7 +715,7 @@ class SearchControllerTest extends IntegrationTest
         GeneralUtility::_GETset('q', '*');
         $this->importDataSetFromFixture('can_render_search_customTemplate.xml');
         $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
-        $this->indexPages(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $this->indexPages([1, 2, 3, 4, 5, 6, 7, 8]);
 
 
         $overwriteConfiguration = [];
@@ -792,7 +792,7 @@ class SearchControllerTest extends IntegrationTest
     protected function indexPages($importPageIds)
     {
         foreach ($importPageIds as $importPageId) {
-            $fakeTSFE = $this->getConfiguredTSFE(array(), $importPageId);
+            $fakeTSFE = $this->getConfiguredTSFE([], $importPageId);
             $GLOBALS['TSFE'] = $fakeTSFE;
             $fakeTSFE->newCObj();
             PageGenerator::pagegenInit();

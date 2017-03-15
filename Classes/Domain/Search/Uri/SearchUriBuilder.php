@@ -45,7 +45,7 @@ class SearchUriBuilder
     /**
      * @var array
      */
-    protected static $preCompiledLinks = array();
+    protected static $preCompiledLinks = [];
 
     /**
      * @var integer
@@ -60,7 +60,7 @@ class SearchUriBuilder
     /**
      * @var array
      */
-    protected static $additionalArgumentsCache = array();
+    protected static $additionalArgumentsCache = [];
 
     /**
      * @param UriBuilder $uriBuilder
@@ -198,7 +198,7 @@ class SearchUriBuilder
         $contextSystemLanguage = $previousSearchRequest->getContextSystemLanguageUid();
         $contextPageUid = $previousSearchRequest->getContextPageUid();
 
-        $request = GeneralUtility::makeInstance(SearchRequest::class, array(), $contextPageUid, $contextSystemLanguage, $contextConfiguration);
+        $request = GeneralUtility::makeInstance(SearchRequest::class, [], $contextPageUid, $contextSystemLanguage, $contextConfiguration);
         $arguments = $request->setRawQueryString($queryString)->getAsArray();
 
         $pageUid = $this->getTargetPageUidFromRequestConfiguration($previousSearchRequest);
@@ -291,7 +291,7 @@ class SearchUriBuilder
      */
     protected function buildLinkWithInMemoryCache($pageUid, array $arguments)
     {
-        $values = array();
+        $values = [];
         $structure = $arguments;
         $this->getSubstitution($structure, $values);
         $hash = md5($pageUid . json_encode($structure));
@@ -343,7 +343,7 @@ class SearchUriBuilder
      * @param $values
      * @param array $branch
      */
-    protected function getSubstitution(array &$structure, array  &$values, array $branch = array())
+    protected function getSubstitution(array &$structure, array  &$values, array $branch = [])
     {
         foreach ($structure as $key => &$value) {
             $branch[] = $key;

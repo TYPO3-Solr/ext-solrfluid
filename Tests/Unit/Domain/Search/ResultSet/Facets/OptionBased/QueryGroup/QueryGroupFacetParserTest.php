@@ -51,7 +51,7 @@ class QueryGroupFacetParserTest extends AbstractFacetParserTest
         $searchResultSet->setUsedSearchRequest($searchRequestMock);
         $searchResultSet->setResponse($fakeResponse);
 
-        $configuration = array();
+        $configuration = [];
         $configuration['plugin.']['tx_solr.']['search.']['faceting.']['facets.'] = $facetConfiguration;
         $typoScriptConfiguration = new TypoScriptConfiguration($configuration);
         $searchRequestMock->expects($this->any())->method('getContextTypoScriptConfiguration')->will($this->returnValue($typoScriptConfiguration));

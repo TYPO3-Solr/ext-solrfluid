@@ -66,7 +66,7 @@ class FrequentlySearchedController extends AbstractWidgetController
         $minimumSize = $configuration->getSearchFrequentSearchesMinSize();
         $maximumSize = $configuration->getSearchFrequentSearchesMaxSize();
 
-        $this->view->assign('contentArguments', array('frequentSearches' => $this->enrichFrequentSearchesInfo($frequentSearches, $minimumSize, $maximumSize)));
+        $this->view->assign('contentArguments', ['frequentSearches' => $this->enrichFrequentSearchesInfo($frequentSearches, $minimumSize, $maximumSize)]);
     }
 
     /**
@@ -79,7 +79,7 @@ class FrequentlySearchedController extends AbstractWidgetController
      */
     protected function enrichFrequentSearchesInfo(array $frequentSearchTerms, $minimumSize, $maximumSize)
     {
-        $frequentSearches = array();
+        $frequentSearches = [];
         if (count($frequentSearchTerms)) {
             $maximumHits = max(array_values($frequentSearchTerms));
             $minimumHits = min(array_values($frequentSearchTerms));
@@ -88,7 +88,7 @@ class FrequentlySearchedController extends AbstractWidgetController
 
             foreach ($frequentSearchTerms as $term => $hits) {
                 $size = round($minimumSize + (($hits - $minimumHits) * $step));
-                $frequentSearches[] = array('q' => htmlspecialchars_decode($term), 'hits' => $hits, 'style' => 'font-size: ' . $size . 'px', 'class' => 'tx-solr-frequent-term-' . $size, 'size' => $size,);
+                $frequentSearches[] = ['q' => htmlspecialchars_decode($term), 'hits' => $hits, 'style' => 'font-size: ' . $size . 'px', 'class' => 'tx-solr-frequent-term-' . $size, 'size' => $size,];
             }
         }
 

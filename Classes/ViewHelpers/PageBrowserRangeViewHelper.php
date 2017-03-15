@@ -38,11 +38,11 @@ class PageBrowserRangeViewHelper extends AbstractViewHelper implements Compilabl
     public function render($from = 'from', $to = 'to', $total = 'total')
     {
         return self::renderStatic(
-            array(
+            [
                 'from' => $from,
                 'to' => $to,
                 'total' => $total
-            ),
+            ],
             $this->buildRenderChildrenClosure(),
             $this->renderingContext
         );
