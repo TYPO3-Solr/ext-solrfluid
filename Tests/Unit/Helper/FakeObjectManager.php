@@ -1,9 +1,6 @@
 <?php
 namespace ApacheSolrForTypo3\Solrfluid\Tests\Unit\Helper;
 
-use Doctrine\Instantiator\Exception\InvalidArgumentException;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -27,6 +24,9 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Doctrine\Instantiator\Exception\InvalidArgumentException;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
  * This class is a light weight fake object manager that just dispatches the creation
@@ -60,7 +60,7 @@ class FakeObjectManager implements ObjectManagerInterface
     {
         $arguments = func_get_args();
 
-        $instance = call_user_func_array([\TYPO3\CMS\Core\Utility\GeneralUtility::class, 'makeInstance'], $arguments);
+        $instance = call_user_func_array([GeneralUtility::class, 'makeInstance'], $arguments);
         if (method_exists($instance, 'injectObjectManager')) {
             $instance->injectObjectManager($this);
         }

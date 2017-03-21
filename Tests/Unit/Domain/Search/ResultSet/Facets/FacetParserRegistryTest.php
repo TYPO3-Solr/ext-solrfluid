@@ -16,13 +16,14 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet\Facets;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserInterface;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserRegistry;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\Options\OptionsFacetParser;
+use TYPO3\CMS\Core\Tests\UnitTestCase;
 
 /**
  * Testcases for the Facet parser registry
  *
  * @author Frans Saris <frans@beech.it>
  */
-class FacetParserRegistryTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+class FacetParserRegistryTest extends UnitTestCase
 {
     /**
      * Initialize a RendererRegistry and mock createRendererInstance()

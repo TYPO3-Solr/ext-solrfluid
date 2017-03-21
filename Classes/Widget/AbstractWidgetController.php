@@ -19,7 +19,9 @@ use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetService;
 use ApacheSolrForTypo3\Solr\Search;
 use ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager;
 use ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext;
+use ApacheSolrForTypo3\Solrfluid\Widget\WidgetRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController as CoreAbstractWidgetController;
 
 /**
  * Class AbstractWidgetController
@@ -28,13 +30,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Widget
  */
-class AbstractWidgetController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController
+class AbstractWidgetController extends CoreAbstractWidgetController
 {
 
     /**
      * @var array
      */
-    protected $supportedRequestTypes = ['ApacheSolrForTypo3\\Solrfluid\\Widget\\WidgetRequest'];
+    protected $supportedRequestTypes = [WidgetRequest::class];
 
     /**
      * @var ConfigurationManager

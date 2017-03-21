@@ -306,8 +306,12 @@ class SearchUriBuilder
             self::$preCompiledLinks[$hash] = $template;
         }
 
-        $keys = array_map(function ($value) { return urlencode($value); }, array_keys($values));
-        $values = array_map(function ($value) { return urlencode($value); }, $values);
+        $keys = array_map(function ($value) {
+            return urlencode($value);
+        }, array_keys($values));
+        $values = array_map(function ($value) {
+            return urlencode($value);
+        }, $values);
         $uri = str_replace($keys, $values, $template);
         return $uri;
     }
