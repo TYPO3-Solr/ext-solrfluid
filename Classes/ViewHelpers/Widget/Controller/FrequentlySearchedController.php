@@ -15,12 +15,11 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\Controller;
  */
 
 use ApacheSolrForTypo3\Solr\Domain\Search\FrequentSearches\FrequentSearchesService;
-use ApacheSolrForTypo3\Solr\Util;
 use ApacheSolrForTypo3\Solrfluid\Widget\AbstractWidgetController;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Class FrequentlySearchedController
@@ -40,7 +39,7 @@ class FrequentlySearchedController extends AbstractWidgetController
     {
         $cacheIdentifier = 'tx_solr';
         try {
-            $cacheInstance = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')->getCache($cacheIdentifier);
+            $cacheInstance = GeneralUtility::makeInstance(CacheManager::class)->getCache($cacheIdentifier);
         } catch (NoSuchCacheException $e) {
             /** @var t3lib_cache_Factory $typo3CacheFactory */
             $typo3CacheFactory = $GLOBALS['typo3CacheFactory'];

@@ -27,7 +27,6 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\Domain\Search\ResultSet;
 use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
 use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
-use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserRegistry;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\Options\Option;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\Options\OptionsFacet;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\OptionBased\QueryGroup\QueryGroupFacet;
@@ -37,6 +36,8 @@ use ApacheSolrForTypo3\Solrfluid\Tests\Unit\Helper\FakeObjectManager;
 use TYPO3\CMS\Core\TimeTracker\TimeTracker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Frontend\ContentObject\CaseContentObject;
+use TYPO3\CMS\Frontend\ContentObject\TextContentObject;
 
 /**
  * Unit test case for the ObjectReconstitutionProcessor.
@@ -944,7 +945,7 @@ class ResultSetReconstitutionProcessorTest extends UnitTest
      */
     protected function fakeTSFEToUseCObject()
     {
-        $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], ['TEXT' => \TYPO3\CMS\Frontend\ContentObject\TextContentObject::class, 'CASE' => \TYPO3\CMS\Frontend\ContentObject\CaseContentObject::class, ]);
+        $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], ['TEXT' => TextContentObject::class, 'CASE' => CaseContentObject::class, ]);
 
         $TSFE = GeneralUtility::makeInstance(TypoScriptFrontendController::class, [], 1, 0);
         $TSFE->cObjectDepthCounter = 5;

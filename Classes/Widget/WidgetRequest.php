@@ -14,6 +14,8 @@ namespace ApacheSolrForTypo3\Solrfluid\Widget;
      * The TYPO3 project - inspiring people to share!
      */
 
+use TYPO3\CMS\Fluid\Core\Widget\WidgetRequest as CoreWidgetRequest;
+
 /**
  * Class WidgetRequest
  *
@@ -21,7 +23,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Widget;
  * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Widget
  */
-class WidgetRequest extends \TYPO3\CMS\Fluid\Core\Widget\WidgetRequest
+class WidgetRequest extends CoreWidgetRequest
 {
 
     /**

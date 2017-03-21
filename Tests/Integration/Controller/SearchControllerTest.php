@@ -24,14 +24,14 @@ namespace ApacheSolrForTypo3\Solr\Tests\Integration\Plugin\Results;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use ApacheSolrForTypo3\Solr\Site;
+use ApacheSolrForTypo3\Solr\Typo3PageIndexer;
 use ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager;
 use ApacheSolrForTypo3\Solr\Tests\Integration\IntegrationTest;
 use ApacheSolrForTypo3\Solrfluid\Controller\SearchController;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\TimeTracker\TimeTracker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Request;
-use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;
 use TYPO3\CMS\Fluid\View\Exception\InvalidTemplateResourceException;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -260,7 +260,7 @@ class SearchControllerTest extends IntegrationTest
         $overwriteConfiguration['search.']['faceting.']['facets.']['type.']['partialName'] = 'NotFound';
 
         /** @var $configurationManager ConfigurationManager */
-        $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
         $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
 
         //not in the content but we expect to get shoes suggested
@@ -315,7 +315,7 @@ class SearchControllerTest extends IntegrationTest
 
 
         /** @var $configurationManager ConfigurationManager */
-        $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
         $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
 
         // since we overwrite the configuration in the testcase from outside we want to avoid that it will be resetted
@@ -411,7 +411,7 @@ class SearchControllerTest extends IntegrationTest
 
 
         /** @var $configurationManager ConfigurationManager */
-        $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
         $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
 
         // since we overwrite the configuration in the testcase from outside we want to avoid that it will be resetted
@@ -529,7 +529,7 @@ class SearchControllerTest extends IntegrationTest
         $overwriteConfiguration['search.']['lastSearches.']['mode'] = 'global';
 
         /** @var $configurationManager ConfigurationManager */
-        $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
         $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
         $this->searchController->setResetConfigurationBeforeInitialize(false);
 
@@ -559,7 +559,7 @@ class SearchControllerTest extends IntegrationTest
         $overwriteConfiguration['search.']['lastSearches.']['mode'] = 'global';
 
         /** @var $configurationManager ConfigurationManager */
-        $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
         $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
         $this->searchController->setResetConfigurationBeforeInitialize(false);
 
@@ -615,7 +615,7 @@ class SearchControllerTest extends IntegrationTest
         ];
 
         /** @var $configurationManager ConfigurationManager */
-        $configurationManager = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\System\Configuration\ConfigurationManager');
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
         $configurationManager->getTypoScriptConfiguration()->mergeSolrConfiguration($overwriteConfiguration);
         $this->searchController->setResetConfigurationBeforeInitialize(false);
 
@@ -798,12 +798,12 @@ class SearchControllerTest extends IntegrationTest
             PageGenerator::pagegenInit();
             PageGenerator::renderContent();
             /** @var $pageIndexer \ApacheSolrForTypo3\Solr\Typo3PageIndexer */
-            $pageIndexer = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Typo3PageIndexer', $fakeTSFE);
+            $pageIndexer = GeneralUtility::makeInstance(Typo3PageIndexer::class, $fakeTSFE);
             $pageIndexer->indexPage();
         }
 
         /** @var $beUser  \TYPO3\CMS\Core\Authentication\BackendUserAuthentication */
-        $beUser = GeneralUtility::makeInstance('TYPO3\CMS\Core\Authentication\BackendUserAuthentication');
+        $beUser = GeneralUtility::makeInstance(BackendUserAuthentication::class);
         $GLOBALS['BE_USER'] = $beUser;
         $this->waitToBeVisibleInSolr();
     }

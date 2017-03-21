@@ -13,7 +13,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
+use ApacheSolrForTypo3\Solr\Domain\Search\LastSearches\LastSearchesService;
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSet as SolrSearchResultSet;
 use ApacheSolrForTypo3\Solr\Domain\Search\ResultSet\SearchResultSetProcessor;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Facets\FacetParserRegistry;
@@ -260,7 +260,7 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
         }
 
         /** @var $lastSearchesService \ApacheSolrForTypo3\Solr\Domain\Search\LastSearches\LastSearchesService */
-        $lastSearchesService = GeneralUtility::makeInstance('ApacheSolrForTypo3\Solr\Domain\Search\LastSearches\LastSearchesService',
+        $lastSearchesService = GeneralUtility::makeInstance(LastSearchesService::class,
             $resultSet->getUsedSearchRequest()->getContextTypoScriptConfiguration(),
             $GLOBALS['TSFE'],
             $GLOBALS['TYPO3_DB']);
