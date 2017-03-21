@@ -24,7 +24,9 @@ use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper as AbstractCoreWidgetVi
 use TYPO3\CMS\Fluid\Core\Widget\AjaxWidgetContextHolder;
 use TYPO3\CMS\Fluid\Core\Widget\Exception\MissingControllerException;
 use TYPO3\CMS\Fluid\Core\Widget\WidgetRequest as CoreWidgetRequest;
-use TYPO3\CMS\Fluid\Core\Widget\WidgetContext;;
+use TYPO3\CMS\Fluid\Core\Widget\WidgetContext;
+
+;
 
 
 /**
