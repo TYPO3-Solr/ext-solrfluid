@@ -16,6 +16,7 @@ namespace ApacheSolrForTypo3\Solrfluid\Controller;
 
 use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
+use TYPO3\CMS\Extbase\Mvc\Web\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -155,7 +156,7 @@ class SearchController extends AbstractBaseController
      */
     public function solrNotAvailableAction()
     {
-        if ($this->response instanceof \TYPO3\CMS\Extbase\Mvc\Web\Response) {
+        if ($this->response instanceof Response) {
             $this->response->setStatus(503);
         }
     }
