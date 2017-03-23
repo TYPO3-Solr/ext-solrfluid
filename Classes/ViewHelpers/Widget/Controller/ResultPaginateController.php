@@ -16,7 +16,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\Controller;
 
 use ApacheSolrForTypo3\Solrfluid\Widget\AbstractWidgetController;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
  * Class ResultPaginateController
@@ -142,7 +142,7 @@ class ResultPaginateController extends AbstractWidgetController
      */
     protected function getDocuments()
     {
-        $extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+        $extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
         if (!empty($extbaseFrameworkConfiguration['features']['useRawDocuments'])) {
             return $this->resultSet->getUsedSearch()->getResultDocumentsRaw();
         } else {

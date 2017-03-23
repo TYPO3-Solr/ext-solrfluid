@@ -14,7 +14,7 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelper as CoreTranslateViewHelper;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
 
 /**
@@ -24,7 +24,7 @@ use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
  * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\ViewHelpers
  */
-class TranslateViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\TranslateViewHelper
+class TranslateViewHelper extends CoreTranslateViewHelper
 {
     /**
      * @var bool
