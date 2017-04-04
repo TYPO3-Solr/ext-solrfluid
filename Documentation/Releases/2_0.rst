@@ -1,0 +1,159 @@
+================================
+EXT:solrfluid Releasenotes 2.0.0
+================================
+
+This release is a follow up release of EXT:solr 6.1 and the last release for TYPO3 CMS LTS 7.
+
+1. Add implementation of facetOptions reverseOrder
+--------------------------------------------------
+
+Added tests
+Refactored code structure to have AbstractOptionsFacet
+Allow to use manualSortOrder and reverseOrder for Options and QueryGroup facets
+
+2. [BUGFIX] Default value for cHash on Paginator
+------------------------------------------------
+
+3. [BUGFIX] Use gap from facet and data from configuration
+----------------------------------------------------------
+
+In the template no gap was rendered, because it was read from the wrong object.
+
+This change:
+
+  * Adjusts the template to call getGap from the range object
+  * Uses the gap from the settings instead from the solr response
+  * Adds some assertions to the NumericRangeParserTest
+
+4. Increase version of jQuery to v3.1.1
+---------------------------------------
+
+5.  [BUGFIX] Fix hierarchy facet
+--------------------------------
+
+  * Fix parsing of hierarchy facet
+  * Add testcase to reproduce bug
+
+6. [FEATURE] Add parentNode and childNodeSelected getters to Node
+-----------------------------------------------------------------
+
+  * The following new Methods to the Node class:
+    * getParentNode
+    * getHasParentNode
+    * getHasChildNodeSelected
+
+7. [BUGFIX] Fatal in backend when 'flexParentDatabaseRow' is not set
+--------------------------------------------------------------------
+
+8. [BUGFIX] Fix numeric range support
+-------------------------------------
+
+Negative numeric ranges were not supported since the parser fails to
+split active filter values correctly if there are negative values in it.
+This commit adapts the parsing of the active filter values and fixes
+this issue.
+
+9. [BUGFIX] Don't escape document values (breaking change)
+----------------------------------------------------------
+
+As we use fluid to render all data and fluid has build-in escaping
+of all values we don't need to escaped all values during "building"
+of the document object.
+
+As this could be a breaking change when you depend on the
+escaping in your templates of you already "fixed" it your self
+by using `{document.title -> f:format.raw()}` this behaviour
+is only enabled when you set:
+
+plugin.tx_solrfluid.features.useRawDocuments = 1
+
+This is now part of the default typoscript setup
+
+Outlook
+=======
+
+In the next releases of EXT:solr this extension will be a part of EXT:solr.
+
+Thanks
+======
+
+Thanks to all contributors:
+
+* Andreas Allacher
+* Markus Friedrich
+* Sascha Nowak
+* Sascha Egerer
+* Timo Hund
+* Frans Saris
+* Rafael Kähm
+
+In addition we also want to say "thank you" to all of our EB Partners that subscribed a new partnership for 2016:
+
+* Arrabiata Solutions GmbH & Co. KG
+* avonis
+* Bank CIC AG
+* Bitmotion GmbH
+* Citkomm services GmbH
+* cron IT
+* CS2 AG
+* Cosmoblonde GmbH
+* Daniz online markting
+* datenwerk innovationsagentur gmbh
+* Die Medialen GmbH
+* die_schnittsteller GmbH
+* E-magineurs
+* Fernando Hernáez Lopez
+* Future Connection AG
+* Gernot Leitgab
+* .hausformat
+* Hirsch & Wölfl GmbH
+* hs-digital GmbH
+* IHK Neubrandenburg
+* internezzo AG
+* jweiland.net
+* L.N. Schaffrath DigitalMedien GmbH
+* mehrwert intermediale kommunikation GmbH
+* netlogix GmbH & Co. KG
+* Pixel Ink
+* Pixelpark AG
+* pixolith GmbH & Co. KG
+* polargold GmbH
+* portrino GmbH
+* Q3i GmbH & Co. KG
+* raphael gmbh
+* RUAG Corporate Services AG
+* sitegeist media solutions GmbH
+* ST3 Elkartea
+* Star Finanz-Software Entwicklung und Vertriebs GmbH
+* Stefan Galinski Interndienstleistungen
+* Speedpartner GmbH
+* sunzinet AG
+* Systime A/S
+* SYZYGY Deutschland GmbH
+* tecsis GmbH
+* web-vision GmbH
+* websedit AG - Internetagentur
+* Webstobe GmbH
+* werkraum GmbH
+* WIND Internet
+* wow! solution
+* zdreicon AG
+
+Thanks also to our partners who already singed up for a 2017 partnership (EB2017):
+
+* Amedick & Sommer Neue Medien GmbH
+* cron IT GmbH
+* b:dreizehn GmbH
+* Die Medialen GmbH
+* Leibniz Universität IT Services, Hannover
+* LOUIS INTERNET
+* polargold GmbH
+* Mercedes-AMG GmbH
+* Triplesense Reply GmbH
+* zdreicom AG
+
+Thanks to everyone who helped in creating this release!
+
+Support us in 2017 by becoming an EB partner:
+
+http://www.typo3-solr.com/en/contact/
