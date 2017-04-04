@@ -25,7 +25,7 @@ fi
 echo "Run unit tests"
 UNIT_BOOTSTRAP=".Build/vendor/typo3/cms/typo3/sysext/core/Build/UnitTestsBootstrap.php"
 if [[ $TYPO3_VERSION == "dev-master" ]]; then
-    UNIT_BOOTSTRAP=".Build/vendor/typo3/cms/components/testing_framework/Resources/Core/Build/UnitTestsBootstrap.php"
+    UNIT_BOOTSTRAP=".Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTestsBootstrap.php"
 fi
 
 .Build/bin/phpunit --colors -c Build/Test/UnitTests.xml --coverage-html=../../../coverage-unit-solrfluid/ --bootstrap=$UNIT_BOOTSTRAP
@@ -66,7 +66,7 @@ fi
 
 INTEGRATION_BOOTSTRAP=".Build/vendor/typo3/cms/typo3/sysext/core/Build/FunctionalTestsBootstrap.php"
 if [[ $TYPO3_VERSION == "dev-master" ]]; then
-    INTEGRATION_BOOTSTRAP=".Build/vendor/typo3/cms/components/testing_framework/Resources/Core/Build/FunctionalTestsBootstrap.php"
+    INTEGRATION_BOOTSTRAP=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTestsBootstrap.php"
 fi
 
 .Build/bin/phpunit --colors -c Build/Test/IntegrationTests.xml --coverage-html=../../../coverage-integration-solrfluid/ --bootstrap=$INTEGRATION_BOOTSTRAP
