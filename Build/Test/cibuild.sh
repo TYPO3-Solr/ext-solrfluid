@@ -2,7 +2,8 @@
 
 echo "PWD: $(pwd)"
 
-export TYPO3_PATH_WEB=$(pwd)/.Build/Web
+export TYPO3_PATH_WEB="$(pwd)/.Build/Web"
+export TYPO3_PATH_PACKAGES="$(pwd)/.Build/vendor/"
 
 if [ $TRAVIS ]; then
     # Travis does not have composer's bin dir in $PATH
