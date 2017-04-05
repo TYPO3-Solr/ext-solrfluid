@@ -24,7 +24,7 @@ fi
 
 echo "Run unit tests"
 UNIT_BOOTSTRAP=".Build/vendor/typo3/cms/typo3/sysext/core/Build/UnitTestsBootstrap.php"
-if [[ $TYPO3_VERSION == "dev-master" ]]; then
+if [[ $TYPO3_VERSION == "~8.7.0" ]]; then
     UNIT_BOOTSTRAP=".Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTestsBootstrap.php"
 fi
 
@@ -65,7 +65,7 @@ else
 fi
 
 INTEGRATION_BOOTSTRAP=".Build/vendor/typo3/cms/typo3/sysext/core/Build/FunctionalTestsBootstrap.php"
-if [[ $TYPO3_VERSION == "dev-master" ]]; then
+if [[ $TYPO3_VERSION == "~8.7.0" ]]; then
     INTEGRATION_BOOTSTRAP=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTestsBootstrap.php"
 fi
 
