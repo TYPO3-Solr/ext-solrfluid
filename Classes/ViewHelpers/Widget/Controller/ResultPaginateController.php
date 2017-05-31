@@ -77,6 +77,16 @@ class ResultPaginateController extends AbstractWidgetController
     }
 
     /**
+     * return \ApacheSolrForTypo3\Solrfluid\Mvc\Controller\SolrControllerContext
+     */
+    protected function buildControllerContext()
+    {
+        $controllerContext = parent::buildControllerContext();
+        $controllerContext->setSearchResultSet($this->resultSet);
+        return $controllerContext;
+    }
+
+    /**
      * @return void
      */
     public function indexAction()
