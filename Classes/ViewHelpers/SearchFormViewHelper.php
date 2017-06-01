@@ -64,6 +64,7 @@ class SearchFormViewHelper extends AbstractTagBasedViewHelper
      */
     public function initializeArguments()
     {
+        parent::initializeArguments();
         $this->registerTagAttribute('enctype', 'string', 'MIME type with which the form is submitted');
         $this->registerTagAttribute('method', 'string', 'Transfer type (GET or POST)', false, 'get');
         $this->registerTagAttribute('name', 'string', 'Name of form');
