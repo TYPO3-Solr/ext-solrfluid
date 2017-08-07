@@ -15,7 +15,6 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Debug;
  */
 
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 
@@ -58,7 +57,7 @@ class QueryViewHelper extends AbstractViewHelper implements CompilableInterface
         $content = '';
         $resultSet = $renderingContext->getControllerContext()->getSearchResultSet();
         if (!empty($GLOBALS['TSFE']->beUserLogin) && $resultSet && $resultSet->getUsedSearch() !== null) {
-            $content = '<br><strong>Parsed Query:</strong><br>' . $resultSet->getUsedSearch()->getDebugResponse()->parsedquery;
+            $content = '<br><strong>Parsed Query:</strong><br>' . htmlspecialchars($resultSet->getUsedSearch()->getDebugResponse()->parsedquery);
         }
         return $content;
     }
