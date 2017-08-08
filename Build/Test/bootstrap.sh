@@ -4,11 +4,11 @@ SCRIPTPATH=$( cd $(dirname $0) ; pwd -P )
 EXTENSION_ROOTPATH="$SCRIPTPATH/../../"
 
 if [[ $* == *--local* ]]; then
-    echo -n "Choose a TYPO3 Version (e.g. dev-master,~6.2.17,~7.6.5): "
+    echo -n "Choose a TYPO3 Version (e.g. ^8.7,~6.2.17,~7.6.5): "
     read typo3Version
     export TYPO3_VERSION=$typo3Version
 
-    echo -n "Choose a EXT:solr Version (e.g. dev-master,~3.1.1): "
+    echo -n "Choose a EXT:solr Version (e.g. dev-release-6.1.x,~3.1.1): "
     read extSolrVersion
     export EXT_SOLR_VERSION=$extSolrVersion
 
@@ -30,7 +30,7 @@ if [[ $* == *--local* ]]; then
 fi
 
 if [ -z $TYPO3_VERSION ]; then
-	echo "Must set env var TYPO3_VERSION (e.g. dev-master or ~7.6.0)"
+	echo "Must set env var TYPO3_VERSION (e.g. ^8.7 or ~7.6.0)"
 	exit 1
 fi
 
@@ -47,8 +47,8 @@ echo "Using extension path $EXTENSION_ROOTPATH"
 echo "Using package path $TYPO3_PATH_PACKAGES"
 echo "Using web path $TYPO3_PATH_WEB"
 
-if [[ $TYPO3_VERSION == "dev-master" ]]; then
-    # For dev-master we need to use the new testing framework
+if [[ $TYPO3_VERSION == "^8.7" ]]; then
+    # For ^8.7 we need to use the new testing framework
     # after dropping 7.x support we need to change this in the patched files
     composer require --dev typo3/cms="$TYPO3_VERSION"
     composer require --dev --prefer-source typo3/testing-framework="1.0.1"
