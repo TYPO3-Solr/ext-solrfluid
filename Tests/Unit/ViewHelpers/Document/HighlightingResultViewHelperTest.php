@@ -38,51 +38,71 @@ use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
  */
 class HighlightingResultViewHelperTest extends UnitTest
 {
+    /**
+     * @return array
+     */
+    public function canRenderCreateHighlightSnippedDataProvider() {
+        return [
+            [
+                ['hello <em>world</em>','hi <em>world</em>'],
+                'hello <em>world</em> ### hi <em>world</em>',
+                '<em>|</em>'
+            ],
+            [
+                ['hello <em>world</em>','hi <em>world</em> <h1>somethingelse</h1>'],
+                'hello <em>world</em> ### hi <em>world</em> &lt;h1&gt;somethingelse&lt;/h1&gt;',
+                '<em>|</em>'
+            ],
+            [
+                ['hello <em>world</em>','hi <em>world</em> <h1>somethingelse</h1>'],
+                'hello &lt;em&gt;world&lt;/em&gt; ### hi &lt;em&gt;world&lt;/em&gt; &lt;h1&gt;somethingelse&lt;/h1&gt;',
+                ' '
+            ]
+        ];
+    }
 
     /**
+     * @dataProvider canRenderCreateHighlightSnippedDataProvider
      * @test
      */
-    public function canRenderCreateHighlightSnipped()
+    public function canRenderCreateHighlightSnipped(array $input, $expectedOutput, $configuredWrap)
     {
         $renderingContextMock = $this->getDumbMock(RenderingContextInterface::class);
-        $viewHelper = new HighlightResultViewHelper();
-        $viewHelper->setRenderingContext($renderingContextMock);
-
         $configurationMock = $this->getDumbMock(TypoScriptConfiguration::class);
         $configurationMock->expects($this->once())->method('getSearchResultsHighlightingFragmentSeparator')->will(
             $this->returnValue('###')
         );
-
+        $configurationMock->expects($this->once())->method('getSearchResultsHighlightingWrap')->will(
+            $this->returnValue($configuredWrap)
+        );
         $searchRequestMock = $this->getDumbMock(SearchRequest::class);
-        $searchRequestMock->expects($this->once())->method('getContextTypoScriptConfiguration')->will(
+        $searchRequestMock->expects($this->any())->method('getContextTypoScriptConfiguration')->will(
             $this->returnValue($configurationMock)
         );
-
-
         $fakeHighlightedContent = new \stdClass();
         $fakeHighlightedContent->foo = new \stdClass();
-        $fakeHighlightedContent->foo->content = ['hello <em>world</em>','hi <em>world</em>'];
-
+        $fakeHighlightedContent->foo->content = $input;
         $searchMock = $this->getDumbMock(Search::class);
         $searchMock->expects($this->once())->method('getHighlightedContent')->will(
             $this->returnValue($fakeHighlightedContent)
         );
-
-
         $resultSetMock = $this->getDumbMock(SearchResultSet::class);
-        $resultSetMock->expects($this->once())->method('getUsedSearchRequest')->will($this->returnValue(
-           $searchRequestMock
+        $resultSetMock->expects($this->any())->method('getUsedSearchRequest')->will($this->returnValue(
+            $searchRequestMock
         ));
-
-        $resultSetMock->expects($this->once())->method('getUsedSearch')->will($this->returnValue(
-           $searchMock
+        $resultSetMock->expects($this->any())->method('getUsedSearch')->will($this->returnValue(
+            $searchMock
         ));
-
         $documentMock = $this->getDumbMock(SearchResult::class);
         $documentMock->expects($this->any())->method('getId')->will($this->returnValue("foo"));
-
-        $output = $viewHelper->render($resultSetMock, $documentMock, 'content');
-
-        $this->assertSame('hello <em>world</em> ### hi <em>world</em>', $output);
+        $viewHelper = new HighlightResultViewHelper();
+        $viewHelper->setRenderingContext($renderingContextMock);
+        $viewHelper->setArguments([
+                'resultSet' => $resultSetMock,
+                'document' => $documentMock,
+                'fieldName' => 'content']
+        );
+        $output = $viewHelper->render();
+        $this->assertSame($expectedOutput, $output);
     }
 }
