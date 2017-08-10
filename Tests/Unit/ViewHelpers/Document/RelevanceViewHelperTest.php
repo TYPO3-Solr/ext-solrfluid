@@ -24,18 +24,12 @@ namespace ApacheSolrForTypo3\Solrfluid\Test\ViewHelpers\Facet\Uri;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use ApacheSolrForTypo3\Solr\Domain\Search\SearchRequest;
 use ApacheSolrForTypo3\Solr\Search;
-use ApacheSolrForTypo3\Solr\System\Configuration\TypoScriptConfiguration;
 use ApacheSolrForTypo3\Solr\Tests\Unit\UnitTest;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResult;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document\RelevanceViewHelper;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
-use TYPO3\CMS\Fluid\Core\ViewHelper\TemplateVariableContainer;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * @author Timo Hund <timo.hund@dkd.de>
@@ -52,17 +46,14 @@ class RelevanceViewHelperTest extends UnitTest
         $searchMock->expects($this->once())->method('getMaximumResultScore')->will($this->returnValue(5.5));
         $resultSetMock = $this->getDumbMock(SearchResultSet::class);
         $resultSetMock->expects($this->any())->method('getUsedSearch')->will($this->returnValue($searchMock));
-
         $documentMock = $this->getDumbMock(SearchResult::class);
         $documentMock->expects($this->once())->method('getScore')->will($this->returnValue(0.55));
-
         $arguments = [
             'resultSet' => $resultSetMock,
             'document' => $documentMock
         ];
         $renderingContextMock = $this->getDumbMock(RenderingContextInterface::class);
         $score = RelevanceViewHelper::renderStatic($arguments, function () {}, $renderingContextMock);
-
         $this->assertEquals(10.0, $score, 'Unexpected score');
     }
 }

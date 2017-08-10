@@ -14,7 +14,6 @@ namespace ApacheSolrForTypo3\Solrfluid\ViewHelpers\Document;
  * The TYPO3 project - inspiring people to share!
  */
 
-use ApacheSolrForTypo3\Solr\Search;
 use ApacheSolrForTypo3\Solrfluid\ViewHelpers\AbstractViewHelper;
 use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
@@ -29,25 +28,30 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
  */
 class RelevanceViewHelper extends AbstractViewHelper implements CompilableInterface
 {
+
     /**
-     * @var bool
+     * Initializes the arguments
      */
-    protected $escapeOutput = false;
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('resultSet', SearchResultSet::class, 'The context searchResultSet', true);
+        $this->registerArgument('document', \Apache_Solr_Document::class, 'The document to highlight', true);
+    }
 
     /**
      * Get document relevance percentage
      *
-     * @param SearchResultSet $resultSet
-     * @param \Apache_Solr_Document $document
-     * @return int
+     * Default render method - simply calls renderStatic() with a
+     * prepared set of arguments.
+     *
+     * @return string Rendered string
+     * @api
      */
-    public function render(SearchResultSet $resultSet, \Apache_Solr_Document $document)
+    public function render()
     {
-        return self::renderStatic(
-            [
-                'resultSet' => $resultSet,
-                'document' => $document
-            ],
+        return static::renderStatic(
+            $this->arguments,
             $this->buildRenderChildrenClosure(),
             $this->renderingContext
         );
@@ -55,7 +59,7 @@ class RelevanceViewHelper extends AbstractViewHelper implements CompilableInterf
 
     /**
      * @param array $arguments
-     * @param callable $renderChildrenClosure
+     * @param \Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
      * @return string
      */
@@ -63,23 +67,18 @@ class RelevanceViewHelper extends AbstractViewHelper implements CompilableInterf
     {
         /** @var $document \Apache_Solr_Document */
         $document = $arguments['document'];
-
-            /** @var $resultSet SearchResultSet */
+        /** @var $resultSet SearchResultSet */
         $resultSet = $arguments['resultSet'];
-
-        $maximumScore = $document->__solr_grouping_groupMaximumScore ? : $resultSet->getUsedSearch()->getMaximumResultScore();
+        $maximumScore = $document->__solr_grouping_groupMaximumScore ?: $resultSet->getUsedSearch()->getMaximumResultScore();
         $content = 0;
-
         if ($maximumScore <= 0) {
             return $content;
         }
-
         $documentScore = $document->getScore();
         $score = floatval($documentScore);
         $multiplier = 100 / $maximumScore;
         $scorePercentage = round($score * $multiplier);
         $content = $scorePercentage;
-
         return $content;
     }
 }
