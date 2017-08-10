@@ -268,7 +268,7 @@
                         spellchecking {
                             wrap = |<div class="spelling-suggestions">###LLL:didYouMean### |</div>|
                             searchUsingSpellCheckerSuggestion = 0
-                            numberOfSuggestionsToTry = 0
+                            numberOfSuggestionsToTry = 1
                         }
 
                         lastSearches = 1

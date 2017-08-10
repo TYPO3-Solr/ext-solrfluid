@@ -30,8 +30,6 @@ use ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\Spellchecking\Suggestio
  *  - Facets
  *  - Spellchecking suggestions
  *
- * @todo: the logic in this class can be added to the SearchResultSet after adding EXT:solrfluid to EXT:solr
- *
  * @author Frans Saris <frans@beech.it>
  * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet
@@ -59,7 +57,22 @@ class SearchResultSet extends SolrSearchResultSet
     protected $sortings = null;
 
     /**
-     * @return \ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet\SearchResultSet
+     * @var bool
+     */
+    protected $isAutoCorrected = false;
+
+    /**
+     * @var string
+     */
+    protected $initialQueryString = '';
+
+    /**
+     * @var string
+     */
+    protected $correctedQueryString = '';
+
+    /**
+     * SearchResultSet constructor.
      */
     public function __construct()
     {
@@ -145,5 +158,53 @@ class SearchResultSet extends SolrSearchResultSet
     public function getSortings()
     {
         return $this->sortings;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsAutoCorrected()
+    {
+        return $this->isAutoCorrected;
+    }
+
+    /**
+     * @param bool $wasAutoCorrected
+     */
+    public function setIsAutoCorrected($wasAutoCorrected)
+    {
+        $this->isAutoCorrected = $wasAutoCorrected;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInitialQueryString()
+    {
+        return $this->initialQueryString;
+    }
+
+    /**
+     * @param string $initialQueryString
+     */
+    public function setInitialQueryString($initialQueryString)
+    {
+        $this->initialQueryString = $initialQueryString;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCorrectedQueryString()
+    {
+        return $this->correctedQueryString;
+    }
+
+    /**
+     * @param string $correctedQueryString
+     */
+    public function setCorrectedQueryString($correctedQueryString)
+    {
+        $this->correctedQueryString = $correctedQueryString;
     }
 }
