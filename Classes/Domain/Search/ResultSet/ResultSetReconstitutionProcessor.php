@@ -27,9 +27,6 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
  * This processor is used to transform the solr response into a
  * domain object hierarchy that can be used in the application (controller and view).
  *
- * @todo: the logic in this class can go into the SearchResultSetService after moving the
- * code of EXT:solrfluid to EXT:solr
- *
  * @author Frans Saris <frans@beech.it>
  * @author Timo Hund <timo.hund@dkd.de>
  * @package ApacheSolrForTypo3\Solrfluid\Domain\Search\ResultSet
@@ -59,7 +56,6 @@ class ResultSetReconstitutionProcessor implements SearchResultSetProcessor
     {
         $this->objectManager = $objectManager;
     }
-
 
     /**
      * @return FacetParserRegistry
