@@ -726,8 +726,8 @@ class SearchControllerTest extends IntegrationTest
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
         $result = $this->searchResponse->getContent();
 
-        $this->assertContains('Custom Integration Test Search Template', $result, 'Could not find page 3 in result set');
-        $this->assertContains('Custom Integration Test Pagination Template', $result, 'Could not find page 2 in result set');
+        $this->assertContains('Custom Integration Test Search Template', $result, 'Can not render custom template');
+        $this->assertContains('Custom Integration Test Pagination Template', $result, 'Can not render custom template');
     }
 
     /**

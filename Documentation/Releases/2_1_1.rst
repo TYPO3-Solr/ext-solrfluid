@@ -40,9 +40,7 @@ Thanks
 
 Thanks to all contributors:
 
-* Georg Ringer
-* Markus Friedrich
-* Rafael Kähm
+* Thomas Löffler
 * Timo Hund
 
 Thanks to all EB 2017 partners:
