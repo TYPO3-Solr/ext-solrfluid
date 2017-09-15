@@ -26,9 +26,6 @@ use TYPO3\CMS\Fluid\Core\Widget\Exception\MissingControllerException;
 use TYPO3\CMS\Fluid\Core\Widget\WidgetRequest as CoreWidgetRequest;
 use TYPO3\CMS\Fluid\Core\Widget\WidgetContext;
 
-;
-
-
 /**
  * Class AbstractWidgetViewHelper
  *
@@ -81,16 +78,6 @@ abstract class AbstractWidgetViewHelper extends AbstractCoreWidgetViewHelper imp
      * @var \TYPO3\CMS\Fluid\Core\Widget\WidgetContext
      */
     private $widgetContext;
-
-    /**
-     * @var bool
-     */
-    protected $escapeChildren = false;
-
-    /**
-     * @var bool
-     */
-    protected $escapeOutput = false;
 
     /**
      * @param AjaxWidgetContextHolder $ajaxWidgetContextHolder

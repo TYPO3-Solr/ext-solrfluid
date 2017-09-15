@@ -689,7 +689,7 @@ class SearchControllerTest extends IntegrationTest
     public function canRenderDetailAction()
     {
         $request = $this->getPreparedRequest('detail');
-        $request->setArgument('documentId', 'b8c8d04e66c58f01283ef81a4ded197f26ab402a/pages/1/0/0/0');
+        $request->setArgument('documentId', '23c51a0d5cf548afecc043a7068902e8f82a22a0/pages/1/0/0/0');
 
         $this->importDataSetFromFixture('can_render_search_controller.xml');
         $GLOBALS['TSFE'] = $this->getConfiguredTSFE([], 1);
@@ -726,8 +726,8 @@ class SearchControllerTest extends IntegrationTest
         $this->searchController->processRequest($this->searchRequest, $this->searchResponse);
         $result = $this->searchResponse->getContent();
 
-        $this->assertContains('Custom Integration Test Search Template', $result, 'Could not find page 3 in result set');
-        $this->assertContains('Custom Integration Test Pagination Template', $result, 'Could not find page 2 in result set');
+        $this->assertContains('Custom Integration Test Search Template', $result, 'Can not render custom template');
+        $this->assertContains('Custom Integration Test Pagination Template', $result, 'Can not render custom template');
     }
 
     /**

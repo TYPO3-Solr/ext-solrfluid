@@ -16,12 +16,15 @@
         <config>
             <![CDATA[
                 config.disableAllHeaderCode = 1
-                config.tx_extbase {
+                module.tx_solrfluid {
                 	view {
                         templateRootPaths.10 = EXT:solrfluid/Tests/Integration/Controller/Fixtures/customTemplates/
                         widget.ApacheSolrForTypo3\Solrfluid\ViewHelpers\Widget\ResultPaginateViewHelper.templateRootPath = EXT:solrfluid/Tests/Integration/Controller/Fixtures/customTemplates/
                     }
                 }
+
+                # for TYPO3 7.6
+                config.tx_extbase.view < module.tx_solrfluid.view
 
                 page = PAGE
                 page.typeNum = 0
