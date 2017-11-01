@@ -17,6 +17,12 @@ if (!defined('TYPO3_MODE')) {
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
     'solrfluid',
+    'Configuration/TypoScript/Examples/OptionsPrefixGrouped/',
+    'Search - (Example) Fluid options grouped by prefix'
+);
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+    'solrfluid',
     'Configuration/TypoScript/Examples/QueryGroup/',
     'Search - (Example) Fluid queryGroup facet on the created field'
 );
